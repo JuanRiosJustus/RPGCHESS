@@ -1,0 +1,7 @@
+C:\Workspaces\visual_studio_workspace\RPGChess\RPGChess\RPGChess\obj\Debug\RPGChess.csprojResolveAssemblyReference.cache
+C:\Workspaces\visual_studio_workspace\RPGChess\RPGChess\RPGChess\obj\Debug\RPGChess.csproj.CoreCompileInputs.cache
+C:\Workspaces\visual_studio_workspace\RPGChess\RPGChess\RPGChess\bin\Debug\RPGChess.exe.config
+C:\Workspaces\visual_studio_workspace\RPGChess\RPGChess\RPGChess\bin\Debug\RPGChess.exe
+C:\Workspaces\visual_studio_workspace\RPGChess\RPGChess\RPGChess\bin\Debug\RPGChess.pdb
+C:\Workspaces\visual_studio_workspace\RPGChess\RPGChess\RPGChess\obj\Debug\RPGChess.exe
+C:\Workspaces\visual_studio_workspace\RPGChess\RPGChess\RPGChess\obj\Debug\RPGChess.pdb
