@@ -10,6 +10,20 @@ namespace RPGChess.Overworld
 {
     class Tile
     {
+        public class ScreenObject
+        {
+            private int X;
+            private int Y;
+            private int WH;
+
+            public int GetX() { return X; }
+            public int GetY() { return Y; }
+            public int GetWH() { return WH; }
+            public void SetX(int x) { X = x; }
+            public void SetY(int y) { Y = y; }
+            public void SetWH(int wh) { WH = wh; }
+        }
+
         public readonly int X;
         public readonly int Y;
         public int Height { get; private set; }
@@ -17,14 +31,60 @@ namespace RPGChess.Overworld
         public Item Loot { get; private set; }
         public Entity Occupant { get; private set; }
 
-        public Tile(int x, int y, int height, string biome, Entity occupant)
+        public ScreenObject Screen{ get; private set; }
+        
+        
+
+        public Tile(int x, int y, int height, Entity occupant)
         {
             X = x;
             Y = y;
-            Height = height;
-            Biome = biome;
+            //Height = height;
+            SetHeight(height);
             Occupant = occupant;
+            Screen = new ScreenObject();
         }
+        private void AdjustBiome()
+        {
+            if (this.Height <= -3)
+            {
+                // water
+                Biome = "WTR";
+            }
+            else if (this.Height > -3 && this.Height <= -1)
+            {
+                // lowlands
+                Biome = "LWL";
+            }
+            else if (this.Height > -1 && this.Height <= 2)
+            {
+                // Plains
+                Biome = "PLN";
+            }
+            else if (this.Height > 2 && this.Height <= 5)
+            {
+                // Hill
+                Biome = "HLL";
+            }
+            else if (this.Height > 5)
+            {
+                // Mountain
+                Biome = "MTN";
+            }
+        }
+        public void SetScreenXY(int x, int y)
+        {
+            // swapped values, for drawing only
+            Screen.SetX(y);
+            Screen.SetY(x);
+        }
+        public void SetSceenTileSize(int wh)
+        {
+            Screen.SetWH(wh);
+        }
+        public int GetScreenWH() { return Screen.GetWH(); }
+        public int GetScreenX() { return Screen.GetX(); }
+        public int GetScreenY() { return Screen.GetY(); }
 
         /// <summary>
         /// Sets the current occupant of the tile. Which also sets the
@@ -54,20 +114,13 @@ namespace RPGChess.Overworld
             return temp;
         }
         /// <summary>
-        /// Sets the biome of the current tile.
-        /// </summary>
-        /// <param name="biome"></param>
-        public void SetBiome(string biome)
-        {
-            Biome = biome;
-        }
-        /// <summary>
         /// Sets the height for the current tile.
         /// </summary>
         /// <param name="height"></param>
         public void SetHeight(int height)
         {
             Height = height;
+            AdjustBiome();
         }
         /// <summary>
         /// Returns true if and only if the current tile already has another occupant.
@@ -109,14 +162,17 @@ namespace RPGChess.Overworld
         {
             if (IsOccupied())
             {
-                return "[0]";
+                return "[XXX]";
             }
             else
             {
-                return ToLevel();
+                return ToBiome();
             }
         }
-
+        public string ToScreen()
+        {
+            return (IsOccupied() ? "[X]" : ToTopograph());
+        }
         public override string ToString()
         {
             return Height + "";

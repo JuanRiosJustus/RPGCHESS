@@ -1,4 +1,5 @@
 ﻿using RPGChess.Entities;
+using RPGChess.Entities.Essentials;
 using RPGChess.Overworld;
 using RPGChess.UserInterface;
 using RPGChess.Utility;
@@ -15,27 +16,26 @@ namespace RPGChess
     {
         static void Main(string[] args)
         {
-            //Application.EnableVisualStyles();
-            //Application.SetCompatibleTextRenderingDefault(false);
-            //Application.Run(new GameGUI());
+            Application.EnableVisualStyles();
+            Application.SetCompatibleTextRenderingDefault(false);
+            Application.Run(new GameGUI());
 
             
-            BoardStart();
+            //BoardStart();
             Console.ReadKey();
         }
 
         static void BoardStart()
         {
             Board board = new Board();
-            board.GenerateMap(15, "GRND");
             board.ToConsole(Board.View.Standard);
-            board.GenerateAcross(-9, Option.THREE, "WTR");
+            board.GenerateAcross(-9, Option.THREE);
             Console.WriteLine("-------------------------------------------------------------");
             board.ToConsole(Board.View.Level);
             Console.WriteLine("-------------------------------------------------------------");
             board.ToConsole(Board.View.Standard);
 
-            Character character = new Character("Eli", Class.ARCHER);
+            Character character = EntityFactory.BuildClass("mage", "Aystogon");
             Console.WriteLine(character.ToString());
             board.SetCharacter(character, 2, 5);
             board.ToConsole(Board.View.Standard);

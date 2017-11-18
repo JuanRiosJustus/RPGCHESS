@@ -40,40 +40,54 @@ namespace RPGChess.Overworld
 
         public void MoveCharacter(Character character, Direction direction)
         {
-           
+           // TODO
         }
         public Tile PromptUserForTilePick(Character character)
         {
             //TODO
             return null;
         }
+        public int GetBoardSize(int dimension)
+        {
+            return map.GetLength(dimension);
+        }
+
+        public Tile GetTile(int x, int y)
+        {
+            return map[x, y];
+        }
         /// <summary>
         /// Generates a basic and the default map given a size.
         /// </summary>
         /// <param name="mapsize"></param>
         /// <returns></returns>
-        public void GenerateMap(int mapsize, string biome)
+        public void GenerateMap(int map_rows, int map_cols)
         {
-            Tile[,] tiles = new Tile[mapsize, mapsize];
+            Tile[,] tiles = new Tile[map_rows, map_cols];
 
             for (int row = 0; row < tiles.GetLength(0); row++)
             {
                 for (int column = 0; column < tiles.GetLength(1); column++)
                 {
-                    tiles[column,row] = new Tile(column, row, random.Next(3), biome, null);
+                    int height = random.Next(-1, 1);
+                    tiles[row, column] = new Tile(row, column, height, null);
+                    tiles[row, column].SetScreenXY((tiles[row, column].X * Universal.XYSpacing) + 10, (tiles[row, column].Y * Universal.XYSpacing) + 10);
+                    tiles[row, column].SetSceenTileSize(Universal.BoxSize);
+                    Console.Write(tiles[row, column].Height + " ");
                 }
                 Console.WriteLine();
             }
             map = tiles;
         }
         
-        public void GenerateDevelopAt(int x, int y, int intensity, string biome)
+        public void GenerateDevelopAt(int row, int col, int intensity)
         {
-            BoardDesigner.DevelopAt(map, x, y, intensity, biome);
+            BoardDesigner.DevelopAt(map, row, col, intensity);
         }
-        public void GenerateAcross(int intensity, Option option, string biome)
+        [System.Obsolete("GenerateAcross() is deprecated, use GenerateDevelopAt().")]
+        public void GenerateAcross(int intensity, Option option)
         {
-            BoardDesigner.DevelopAcross(map, intensity, option, biome);
+            BoardDesigner.DevelopAcross(map, intensity, option);
         }
 
 

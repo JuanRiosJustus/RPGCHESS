@@ -9,10 +9,12 @@ namespace RPGChess.Entities
     class Class
     {
         public static readonly Class ARCHER = new Class("Archer", 0, 0, 0, 0, 0, 0);
+        public static readonly Class CLERIC = new Class("Cleric", 0, 0, 0, 0, 0, 0);
         public static readonly Class MAGE = new Class("Mage", 0, 0, 0, 0, 0, 0);
         public static readonly Class MONK = new Class("Monk", 0, 0, 0, 0, 0, 0);
         public static readonly Class ROGUE = new Class("Rogue", 0, 0, 0, 0, 0, 0);
         public static readonly Class WARRIOR = new Class("Warrior", 0, 0, 0, 0, 0, 0);
+
 
         public static readonly Class MONSTER = new Class("Monster", 0, 0, 0, 0, 0, 0);
         public static readonly Class MULTICLASS = new Class("Multiclass", 0, 0, 0, 0, 0, 0);
@@ -41,6 +43,7 @@ namespace RPGChess.Entities
             get
             {
                 yield return ARCHER;
+                yield return CLERIC;
                 yield return MAGE;
                 yield return MONK;
                 yield return ROGUE;

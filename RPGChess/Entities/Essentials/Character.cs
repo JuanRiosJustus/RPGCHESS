@@ -16,6 +16,7 @@ namespace RPGChess.Entities
 
         private Direction Character_Direction;
         private int Level;
+        private int StepsToLevel;
         private int Steps;
         private string Initials;
 
@@ -46,11 +47,49 @@ namespace RPGChess.Entities
         public void SetDamage(int damage) { Damage = damage; }
         public int GetDamage() { return Damage; }
 
+        public void CheckIfCanLevel()
+        {
+            if (Steps >= StepsToLevel)
+            {
+                Level++;
+                StepsToLevel = StepsToLevel * 2;
+                IncreaseStats();
+            }
+        }
+
+        private void IncreaseStats()
+        {
+            if (TYPE_OF_CLASS == Class.ARCHER)
+            {
+
+            }
+            else if (TYPE_OF_CLASS == Class.MAGE)
+            {
+
+            }
+            else if(TYPE_OF_CLASS == Class.MONK)
+            {
+
+            }
+            else if(TYPE_OF_CLASS == Class.ROGUE)
+            {
+
+            }
+            else if (TYPE_OF_CLASS == Class.WARRIOR)
+            {
+
+            }
+            else if (TYPE_OF_CLASS == Class.MONSTER)
+            {
+
+            }
+        }
+
         public string GetSurname() { return NAME_OF_ENTITY + " " + TYPE_OF_CLASS.ToString(); }
 
         public override string ToString()
         {
-            return "[N:" + NAME_OF_ENTITY.ToString() + "][L:" + Level + "][T:" + TYPE_OF_CLASS.Type + "]";
+            return "[N:" + NAME_OF_ENTITY.ToString() + "][L:" + Level + "][C:" + TYPE_OF_CLASS.Type + "]";
         }
     }
 }
