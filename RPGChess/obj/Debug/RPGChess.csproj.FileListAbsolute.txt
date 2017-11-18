@@ -5,3 +5,6 @@ C:\Workspaces\visual_studio_workspace\RPGChess\RPGChess\RPGChess\bin\Debug\RPGCh
 C:\Workspaces\visual_studio_workspace\RPGChess\RPGChess\RPGChess\bin\Debug\RPGChess.pdb
 C:\Workspaces\visual_studio_workspace\RPGChess\RPGChess\RPGChess\obj\Debug\RPGChess.exe
 C:\Workspaces\visual_studio_workspace\RPGChess\RPGChess\RPGChess\obj\Debug\RPGChess.pdb
+C:\Workspaces\visual_studio_workspace\RPGChess\RPGChess\RPGChess\obj\Debug\RPGChess.csproj.GenerateResource.Cache
+C:\Workspaces\visual_studio_workspace\RPGChess\RPGChess\RPGChess\obj\Debug\RPGChess.UserInterface.ControllerGUI.resources
+C:\Workspaces\visual_studio_workspace\RPGChess\RPGChess\RPGChess\obj\Debug\RPGChess.UserInterface.GameGUI.resources

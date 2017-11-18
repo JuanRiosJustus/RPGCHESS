@@ -1,4 +1,5 @@
 ﻿using RPGChess.Entities;
+using RPGChess.Entities.Item;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,6 +14,7 @@ namespace RPGChess.Overworld
         public readonly int Y;
         public int Height { get; private set; }
         public string Biome { get; private set; }
+        public Item Loot { get; private set; }
         public Entity Occupant { get; private set; }
 
         public Tile(int x, int y, int height, string biome, Entity occupant)
@@ -36,6 +38,20 @@ namespace RPGChess.Overworld
             {
                 Occupant.SetTile(this);
             }
+        }
+        /// <summary>
+        /// Sets the item of the tile.
+        /// </summary>
+        /// <param name="loot"></param>
+        public void SetLoot(Item loot)
+        {
+            Loot = loot;
+        }
+        public Item LootTile()
+        {
+            Item temp = Loot;
+            Loot = null;
+            return temp;
         }
         /// <summary>
         /// Sets the biome of the current tile.
@@ -62,19 +78,19 @@ namespace RPGChess.Overworld
             return (Occupant == null ? false : true);
         }
 
-        public string PrintCoordinate()
+        public string ToCoordinate()
         {
             return "[" + X + "," + Y + "]";
         }
-        public string PrintTopograph()
+        public string ToTopograph()
         {
             return "[" + Height + "]";
         }
-        public string PrintBiome()
+        public string ToBiome()
         {
             return "[" + Biome + "]";
         }
-        public string PrintStandard()
+        public string ToLevel()
         {
             if (Height < 0)
             {
@@ -88,7 +104,17 @@ namespace RPGChess.Overworld
             {
                 return "[" + "H" + "]";
             }
-            //return "[" + Height + Biome[0] + (IsOccupied() ? "X" : "O") + "]";
+        }
+        public string ToStandard()
+        {
+            if (IsOccupied())
+            {
+                return "[0]";
+            }
+            else
+            {
+                return ToLevel();
+            }
         }
 
         public override string ToString()
