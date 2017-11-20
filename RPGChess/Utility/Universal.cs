@@ -8,9 +8,13 @@ namespace RPGChess.Utility
 {
     class Universal
     {
-        public static readonly int BoxSize = 18;
-        public static readonly int XYSpacing = 40;
-        public static readonly int Columns = 32;
-        public static readonly int Rows = 18;
+        public static readonly int BoxSize = 10;
+        public static readonly int XYSpacing = 30;
+        public static readonly int Columns = 40;
+        public static readonly int Rows = 20;
+        // Climb allowed at the players current height
+        public static readonly int Allow = 2;
+        public static readonly int Client_x = 1200;
+        public static readonly int Client_y = 600;
     }
 }

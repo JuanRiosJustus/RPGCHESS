@@ -24,8 +24,8 @@ namespace RPGChess.Overworld
             public void SetWH(int wh) { WH = wh; }
         }
 
-        public readonly int X;
-        public readonly int Y;
+        public readonly int ROW;
+        public readonly int COL;
         public int Height { get; private set; }
         public string Biome { get; private set; }
         public Item Loot { get; private set; }
@@ -35,10 +35,10 @@ namespace RPGChess.Overworld
         
         
 
-        public Tile(int x, int y, int height, Entity occupant)
+        public Tile(int row, int col, int height, Entity occupant)
         {
-            X = x;
-            Y = y;
+            ROW = row;
+            COL = col;
             //Height = height;
             SetHeight(height);
             Occupant = occupant;
@@ -48,20 +48,25 @@ namespace RPGChess.Overworld
         {
             if (this.Height <= -3)
             {
-                // water
+                // Water
                 Biome = "WTR";
             }
             else if (this.Height > -3 && this.Height <= -1)
             {
-                // lowlands
+                // Lowlands
                 Biome = "LWL";
             }
-            else if (this.Height > -1 && this.Height <= 2)
+            else if (this.Height > -1 && this.Height <= 1)
             {
                 // Plains
                 Biome = "PLN";
             }
-            else if (this.Height > 2 && this.Height <= 5)
+            else if(this.Height > 1 && this.Height <= 3)
+            {
+                // Forest
+                Biome = "FRS";
+            }
+            else if (this.Height > 3 && this.Height <= 5)
             {
                 // Hill
                 Biome = "HLL";
@@ -133,7 +138,7 @@ namespace RPGChess.Overworld
 
         public string ToCoordinate()
         {
-            return "[" + X + "," + Y + "]";
+            return "[" + COL + "," + ROW + "]";
         }
         public string ToTopograph()
         {
@@ -175,7 +180,7 @@ namespace RPGChess.Overworld
         }
         public override string ToString()
         {
-            return Height + "";
+            return ToCoordinate();//Height + "";
         }
     }
 }

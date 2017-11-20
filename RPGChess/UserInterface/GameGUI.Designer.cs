@@ -1,4 +1,7 @@
-﻿namespace RPGChess.UserInterface
+﻿using RPGChess.Utility;
+using System.Windows.Forms;
+
+namespace RPGChess.UserInterface
 {
     partial class GameGUI
     {
@@ -21,7 +24,8 @@
         }
 
 
-        private System.Windows.Forms.Panel Display;
+        //private System.Windows.Forms.Panel Display;
+        private System.Windows.Forms.PictureBox Display;
 
         #region Windows Form Designer generated code
 
@@ -31,7 +35,8 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.Display = new System.Windows.Forms.Panel();
+            //this.Display = new System.Windows.Forms.Panel();
+            this.Display = new System.Windows.Forms.PictureBox();
             this.SuspendLayout();
             // 
             // Display
@@ -41,18 +46,22 @@
             this.Display.Name = "panel1";
             this.Display.Size = new System.Drawing.Size(774, 462);
             this.Display.TabIndex = 1;
-            this.Display.BackColor = System.Drawing.Color.SaddleBrown;
+            this.Display.BackColor = System.Drawing.Color.Black;
+            //this.Display.R
             this.Display.Paint += new System.Windows.Forms.PaintEventHandler(Canvas_Paint);
             // 
             // GameGUI
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
-            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1280, 720);
+            this.DoubleBuffered = true;
+            this.ClientSize = new System.Drawing.Size(Universal.Client_x, Universal.Client_y);
             this.Controls.Add(this.Display);
             this.Name = "GameGUI";
             this.Text = "Game";
+            this.KeyPreview = true;
+            this.KeyPress += new System.Windows.Forms.KeyPressEventHandler(GameGUI_Press);
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(Closing_Button);
             this.ResumeLayout(false);

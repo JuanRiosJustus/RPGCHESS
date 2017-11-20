@@ -1,4 +1,5 @@
 ﻿using RPGChess.Entities;
+using RPGChess.Entities.Essentials;
 using RPGChess.Utility;
 using System;
 using System.Collections;
@@ -22,25 +23,56 @@ namespace RPGChess.Overworld
 
         private Tile[,] map;
         private Random random = new Random();
-        private ArrayList list = new ArrayList();
-        
-        public void SetCharacter(Character character, int x, int y)
+        private SGLArrayList<Character> list = new SGLArrayList<Character>();
+
+        public SGLArrayList<Character> GetBoardedCharacters()
+        {
+            return list;
+        }
+        public void AddCharacter(Character character, int row, int col)
         {
             if (list.Contains(character) == false)
             {
+                Console.WriteLine("Adding new character: " + character.GetSurname());
                 list.Add(character);
             }
+            
+            Tile tile = map[row, col];
+            while(tile.IsOccupied() || tile.Biome.Equals("WTR"))
+            {
+                row = random.Next(Universal.Rows);
+                col = random.Next(Universal.Columns);
+                tile = map[row, col];
+            }
 
-            map[x, y].SetOccupant(character);
+            Console.WriteLine(character.GetSurname() + " was placed at: [" + col + "," + row + "]");
+            map[row, col].SetOccupant(character);
+            TileLogic.AddTraversableTilesToEntity(map, character);
+            Console.WriteLine("With a height of " + character.EntityTile.ToTopograph());
+            Console.WriteLine(character.TilesToString() + "    " + character.GetTileQuantity());
+            character.ClearTiles();
+            Console.WriteLine("    " + character.GetTileQuantity());
+        }
+        public void InitCharacter(string characterClass, string characterName, int row, int col)
+        {
+            Character charac = EntityFactory.BuildClass(characterClass, characterName);
+
+            Console.WriteLine(charac.GetSurname() + " has joined the field. AT@[" + col + "," + row + "]");
+
+            this.AddCharacter(charac, row, col);
         }
         public void DeleteCharacter(Character character)
         {
-            list.RemoveAt(list.IndexOf(character));
+            list.Delete(character);
+            //list.RemoveAt(list.IndexOf(character));
         }
 
         public void MoveCharacter(Character character, Direction direction)
         {
-           // TODO
+            // TODO
+            //Character charac = (Character)list[list.IndexOf(character)];
+            //charac.SetTile(map[4, 4]);
+
         }
         public Tile PromptUserForTilePick(Character character)
         {
@@ -71,11 +103,9 @@ namespace RPGChess.Overworld
                 {
                     int height = random.Next(-1, 1);
                     tiles[row, column] = new Tile(row, column, height, null);
-                    tiles[row, column].SetScreenXY((tiles[row, column].X * Universal.XYSpacing) + 10, (tiles[row, column].Y * Universal.XYSpacing) + 10);
+                    tiles[row, column].SetScreenXY((tiles[row, column].ROW * Universal.XYSpacing) + 10, (tiles[row, column].COL * Universal.XYSpacing) + 10);
                     tiles[row, column].SetSceenTileSize(Universal.BoxSize);
-                    Console.Write(tiles[row, column].Height + " ");
                 }
-                Console.WriteLine();
             }
             map = tiles;
         }

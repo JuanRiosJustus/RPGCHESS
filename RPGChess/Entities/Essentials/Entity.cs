@@ -23,7 +23,7 @@ namespace RPGChess.Entities
         /// Also sets the given tile's reference to this entity.
         /// </summary>
         /// <param name="tile"></param>
-        public void SetTile(Tile tile)
+        public virtual void SetTile(Tile tile)
         {
             this.EntityTile = tile;
             if (Object.ReferenceEquals(EntityTile.Occupant, this) == false)

@@ -1,4 +1,5 @@
-﻿using RPGChess.Utility;
+﻿using RPGChess.Overworld;
+using RPGChess.Utility;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -20,10 +21,13 @@ namespace RPGChess.Entities
         private int Steps;
         private string Initials;
 
+        private SGLArrayList<Tile> AvailableTiles;
+
         public Character(string name_of_entity, Class type_of_class) : base(name_of_entity, type_of_class)
         {
             NAME_OF_ENTITY = name_of_entity;
             TYPE_OF_CLASS = type_of_class;
+            AvailableTiles = new SGLArrayList<Tile>();
             Character_Direction = Direction.NORTH;
             CalculateBaseStats();
             Level = 1;
@@ -34,6 +38,36 @@ namespace RPGChess.Entities
             Health = TYPE_OF_CLASS.Health;
             Resist = TYPE_OF_CLASS.Resist;
             Damage = TYPE_OF_CLASS.Damage;
+        }
+
+        public void SetTile(Tile tile, Tile[,] map)
+        {
+            base.SetTile(tile);
+        }
+
+        public void AddTile(Tile tile)
+        {
+            if (AvailableTiles.Contains(tile) == false)
+            {
+                AvailableTiles.Add(tile);
+            }
+        }
+        public void ClearTiles()
+        {
+            int i = AvailableTiles.Length();
+            while( i > 0)
+            {
+                AvailableTiles.Delete(i);
+                i--;
+            }
+        }
+        public int GetTileQuantity()
+        {
+            return AvailableTiles.Length();
+        }
+        public string TilesToString()
+        {
+            return AvailableTiles.ToString();
         }
 
         public void SetDirection(Direction direction) { Character_Direction = direction; }
