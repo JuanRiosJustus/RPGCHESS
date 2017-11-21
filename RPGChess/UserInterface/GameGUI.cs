@@ -16,6 +16,8 @@ namespace RPGChess.UserInterface
     public partial class GameGUI : Form
     {
         //Board board = new Board();
+        //ControllerGUI player = new ControllerGUI();
+        Random random = new Random();
         Game game = new Game();
         Graphics g = null;
         private bool isHidden = false;
@@ -23,7 +25,7 @@ namespace RPGChess.UserInterface
         Font font = new Font("Times New Roman", 6.0f);
         public GameGUI()
         {
-            game.InitCharacter("Rogue", "Vess", 14, 24);
+            game.InitCharacter("Rogue", "Vess", random.Next(Universal.Rows), random.Next(Universal.Columns));
             InitializeComponent();
             
         }
@@ -66,9 +68,26 @@ namespace RPGChess.UserInterface
         {
             if (e.KeyChar == 'w' || e.KeyChar == 'W')
             {
-                Console.WriteLine(e.KeyChar + " is the string value.");
-                
+                // TODO MAKE PLAYER GO UP Direcion.North
+                //Console.WriteLine(e.KeyChar + " is the string value.");
+                game.MoveCharacter(this.Display, Direction.NORTH);
             }
+            else if(e.KeyChar == 's' || e.KeyChar == 'S')
+            {
+                game.MoveCharacter(this.Display, Direction.SOUTH);
+            } else if (e.KeyChar == 'a' || e.KeyChar == 'A')
+            {
+                game.MoveCharacter(this.Display, Direction.WEST);
+            }
+            else if (e.KeyChar == 'd' || e.KeyChar == 'D')
+            {
+                game.MoveCharacter(this.Display, Direction.EAST);
+            }
+
+
+
+
+                // To escape the game.
             if (e.KeyChar == (char)27)
             {
                 // When the escape key is pressed
@@ -95,7 +114,7 @@ namespace RPGChess.UserInterface
                     if (tile.IsOccupied())
                     {
                         //"[" + tile.Height + "]"
-                        g.DrawString(tile.ToTopograph(), font, Brushes.MediumVioletRed, tile.GetScreenX() - 7, tile.GetScreenY() - 5);
+                        g.DrawString(tile.Occupant.NAME_OF_ENTITY , font, Brushes.MediumVioletRed, tile.GetScreenX() - 7, tile.GetScreenY() - 5);
                         g.DrawString(tile.ToCoordinate(), font, Brushes.MediumVioletRed, tile.GetScreenX() - 7, tile.GetScreenY() + 5);
                     }
                     else
@@ -104,37 +123,37 @@ namespace RPGChess.UserInterface
                         {
                             case "WTR":
                                 {
-                                    g.DrawString(tile.ToTopograph(), font, Brushes.Blue, tile.GetScreenX() - 7, tile.GetScreenY() - 5);
+                                    g.DrawString(tile.ToStandard(), font, Brushes.Blue, tile.GetScreenX() - 7, tile.GetScreenY() - 5);
                                     g.DrawString(tile.ToCoordinate(), font, Brushes.Blue, tile.GetScreenX() - 7, tile.GetScreenY() + 5);
                                 }
                                 break;
                             case "LWL":
                                 {
-                                    g.DrawString(tile.ToTopograph(), font, Brushes.SkyBlue, tile.GetScreenX() - 7, tile.GetScreenY() - 5);
+                                    g.DrawString(tile.ToStandard(), font, Brushes.SkyBlue, tile.GetScreenX() - 7, tile.GetScreenY() - 5);
                                     g.DrawString(tile.ToCoordinate(), font, Brushes.SkyBlue, tile.GetScreenX() - 7, tile.GetScreenY() + 5);
                                 }
                                 break;
                             case "PLN":
                                 {
-                                    g.DrawString(tile.ToTopograph(), font, Brushes.Wheat, tile.GetScreenX() - 7, tile.GetScreenY() - 5);
+                                    g.DrawString(tile.ToStandard(), font, Brushes.Wheat, tile.GetScreenX() - 7, tile.GetScreenY() - 5);
                                     g.DrawString(tile.ToCoordinate(), font, Brushes.Wheat, tile.GetScreenX() - 7, tile.GetScreenY() + 5);
                                 }
                                 break;
                             case "FRS":
                                 {
-                                    g.DrawString(tile.ToTopograph(), font, Brushes.YellowGreen, tile.GetScreenX() - 7, tile.GetScreenY() - 5);
+                                    g.DrawString(tile.ToStandard(), font, Brushes.YellowGreen, tile.GetScreenX() - 7, tile.GetScreenY() - 5);
                                     g.DrawString(tile.ToCoordinate(), font, Brushes.YellowGreen, tile.GetScreenX() - 7, tile.GetScreenY() + 5);
                                 }
                                 break;
                             case "HLL":
                                 {
-                                    g.DrawString(tile.ToTopograph(), font, Brushes.Green, tile.GetScreenX() - 7, tile.GetScreenY() - 5);
+                                    g.DrawString(tile.ToStandard(), font, Brushes.Green, tile.GetScreenX() - 7, tile.GetScreenY() - 5);
                                     g.DrawString(tile.ToCoordinate(), font, Brushes.Green, tile.GetScreenX() - 7, tile.GetScreenY() + 5);
                                 }
                                 break;
                             case "MTN":
                                 {
-                                    g.DrawString(tile.ToTopograph(), font, Brushes.DarkGreen, tile.GetScreenX() - 7, tile.GetScreenY() - 5);
+                                    g.DrawString(tile.ToStandard(), font, Brushes.DarkGreen, tile.GetScreenX() - 7, tile.GetScreenY() - 5);
                                     g.DrawString(tile.ToCoordinate(), font, Brushes.DarkGreen, tile.GetScreenX() - 7, tile.GetScreenY() + 5);
                                 }
                                 break;

@@ -19,7 +19,7 @@ namespace RPGChess
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
             Application.Run(new GameGUI());
-            Application.Run(new ControllerGUI());
+            //Application.Run(new ControllerGUI());
 
             
             //BoardStart();

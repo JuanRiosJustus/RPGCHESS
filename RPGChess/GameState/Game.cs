@@ -8,6 +8,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Forms;
 
 namespace RPGChess.GameState
 {
@@ -15,6 +16,8 @@ namespace RPGChess.GameState
     {
         private Board board;
         private SGLArrayList<Character> list;
+        private Character CurrentCharacter;
+        private int CurrentCharacterIndex = 0;
 
 
         public Game()
@@ -24,18 +27,11 @@ namespace RPGChess.GameState
             board.GenerateMap(Universal.Rows, Universal.Columns);
 
             RandomBoard();
-
-            //heros.Add(EntityFactory.BuildClass("mage", "Aystogon"));
-            //heros.Add(EntityFactory.BuildClass("archer", "Angler"));
-            //Console.WriteLine(mage.To);
-            //board.AddCharacter((Character)heros[0], 5, 4);
-            //Random random = new Random();
-            //board.AddCharacter((Character)heros[1], random.Next(Universal.Rows), random.Next(Universal.Columns));
-
         }
-        public void MoveCharacter(Character cha, Direction dir)
+        public void MoveCharacter(Character character)
         {
 
+            //character.SetTile
             //board.MoveCharacter(archer, Direction.EAST);
         }
         public Tile GetBoardTile(int x, int y)
@@ -47,7 +43,39 @@ namespace RPGChess.GameState
             return board.GetBoardSize(dimension);
         }
         /// <summary>
-        /// Initializes the character to the boards at a particular location.
+        /// Moves the given character given a key.
+        /// </summary>
+        /// <param name="f"></param>
+        /// <param name="direction"></param>
+        public void MoveCharacter(PictureBox f, Direction direction)
+        {
+            SGLArrayList<Tile> tiles = new SGLArrayList<Tile>();
+            Tile userSelectedTile;
+            Character character = list.Get(CurrentCharacterIndex);
+            if (character.GetTileQuantity() < 0) { return; }
+            for (int i = 0; i < character.GetTileQuantity(); i++)
+            {
+                tiles.Add(character.GetTile(i));
+            }
+            
+            userSelectedTile = TileLogic.ListRespectingDirection(character.EntityTile,tiles,direction);
+            
+            
+            
+            //Console.WriteLine(tiles.ToString() + " are the available tiles");
+            // CALL THE CONTROLLER AND allow user to pick locatio with combo box
+
+            // THIS IS CHOSEN BY THE USER.
+            //Console.WriteLine(userSelectedTile.ToCoordinate() + " was chosen");
+            board.MoveCharacter(character, userSelectedTile);
+            f.Refresh();
+            f.Update();
+            //Console.WriteLine("Available tiles after: " + character.ListOfTiles());
+            //Console.WriteLine(character.GetSurname() + " was moved");
+            
+        }
+        /// <summary>
+        /// Initializes the character to the board at a particular location.
         /// </summary>
         /// <param name="characterClass"></param>
         /// <param name="characterName"></param>

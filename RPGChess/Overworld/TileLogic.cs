@@ -46,7 +46,67 @@ namespace RPGChess.Overworld
                 return DeniedSteps(movement - 1, count + 1) + 7 + (4 * (count - 1));
             }
         }
+        [System.Obsolete("UGHH, TODO NEED TO GET NEXT MOST TILE WHERE THE FDUFFERENCE IS ONLY ONE")]
+        public static Tile ListRespectingDirection(Tile currentTile, SGLArrayList<Tile> availableTiles, Direction direction)
+        {
+            Tile tile = null;
 
+            switch(direction)
+            {
+                case Direction.NORTH:
+                    {
+                        for (int i = 0; i < availableTiles.Length(); i++)
+                        {
+                            if (availableTiles.Get(i).ROW+1 == currentTile.ROW && availableTiles.Get(i).COL == currentTile.COL)
+                            {
+                                tile = availableTiles.Get(i);
+                            }
+                        }
+                    }
+                    break;
+                case Direction.EAST:
+                    {
+                        for (int i = 0; i < availableTiles.Length(); i++)
+                        {
+                            if (availableTiles.Get(i).COL == currentTile.COL+1 && availableTiles.Get(i).ROW == currentTile.ROW)
+                            {
+                                tile = availableTiles.Get(i);
+                            }
+                        }
+                    }
+                    break;
+                case Direction.SOUTH:
+                    {
+                        for (int i = 0; i < availableTiles.Length(); i++)
+                        {
+                            if (availableTiles.Get(i).ROW == currentTile.ROW+1 && availableTiles.Get(i).COL == currentTile.COL)
+                            {
+                                tile = availableTiles.Get(i);
+                            }
+                        }
+                    }
+                    break;
+                case Direction.WEST:
+                    {
+                        for (int i = 0; i < availableTiles.Length(); i++)
+                        {
+                            if (availableTiles.Get(i).COL == currentTile.COL-1 && availableTiles.Get(i).ROW == currentTile.ROW)
+                            {
+                                tile = availableTiles.Get(i);
+                            }
+                        }
+                    }
+                    break;
+            }
+
+            return tile;
+        }
+        /// <summary>
+        /// Finds the appropriate tiles for the selleted plaer to traverse
+        /// TODO CLASS MOEBVEMENT
+        /// </summary>
+        /// <param name="map"></param>
+        /// <param name="character"></param>
         public static void AddTraversableTilesToEntity(Tile[,] map, Character character)
         {
             //int moves = 8*1 + 1;//character.TYPE_OF_CLASS.Movement;

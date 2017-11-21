@@ -105,6 +105,13 @@ namespace RPGChess.Overworld
             }
         }
         /// <summary>
+        /// Removes the current occupant of tile.
+        /// </summary>
+        public void RemoveOccupant()
+        {
+            Occupant = null;
+        }
+        /// <summary>
         /// Sets the item of the tile.
         /// </summary>
         /// <param name="loot"></param>
@@ -181,6 +188,15 @@ namespace RPGChess.Overworld
         public override string ToString()
         {
             return ToCoordinate();//Height + "";
+        }
+        /// <summary>
+        /// Determines if this tile is equivalent to the given tile.
+        /// </summary>
+        /// <param name="obj"></param>
+        /// <returns></returns>
+        public bool Equals(Tile obj)
+        {
+            return obj.ROW == ROW && obj.COL == COL;
         }
     }
 }

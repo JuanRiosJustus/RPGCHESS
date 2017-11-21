@@ -23,6 +23,11 @@ namespace RPGChess.Entities
 
         private SGLArrayList<Tile> AvailableTiles;
 
+        /// <summary>
+        /// Constructor for the character object.
+        /// </summary>
+        /// <param name="name_of_entity"></param>
+        /// <param name="type_of_class"></param>
         public Character(string name_of_entity, Class type_of_class) : base(name_of_entity, type_of_class)
         {
             NAME_OF_ENTITY = name_of_entity;
@@ -39,10 +44,10 @@ namespace RPGChess.Entities
             Resist = TYPE_OF_CLASS.Resist;
             Damage = TYPE_OF_CLASS.Damage;
         }
-
-        public void SetTile(Tile tile, Tile[,] map)
+        
+        public String ListOfTiles()
         {
-            base.SetTile(tile);
+            return AvailableTiles.ToString();
         }
 
         public void AddTile(Tile tile)
@@ -64,6 +69,10 @@ namespace RPGChess.Entities
         public int GetTileQuantity()
         {
             return AvailableTiles.Length();
+        }
+        public Tile GetTile(int index)
+        {
+            return AvailableTiles.Get(index);
         }
         public string TilesToString()
         {

@@ -49,10 +49,15 @@ namespace RPGChess.Overworld
             map[row, col].SetOccupant(character);
             TileLogic.AddTraversableTilesToEntity(map, character);
             Console.WriteLine("With a height of " + character.EntityTile.ToTopograph());
-            Console.WriteLine(character.TilesToString() + "    " + character.GetTileQuantity());
-            character.ClearTiles();
-            Console.WriteLine("    " + character.GetTileQuantity());
+            Console.WriteLine(character.TilesToString() + " -> " + character.GetTileQuantity());
         }
+        /// <summary>
+        /// Used on game start to initialize a characte rand place them on board.
+        /// </summary>
+        /// <param name="characterClass"></param>
+        /// <param name="characterName"></param>
+        /// <param name="row"></param>
+        /// <param name="col"></param>
         public void InitCharacter(string characterClass, string characterName, int row, int col)
         {
             Character charac = EntityFactory.BuildClass(characterClass, characterName);
@@ -61,18 +66,27 @@ namespace RPGChess.Overworld
 
             this.AddCharacter(charac, row, col);
         }
+        /// <summary>
+        /// Removes the character from it's current tile and 
+        /// sets it to a new tile.
+        /// </summary>
+        /// <param name="character"></param>
+        /// <param name="newTile"></param>
+        public void MoveCharacter(Character character, Tile newTile)
+        {
+            if (newTile == null) { return; }
+            Tile tile = character.EntityTile;
+            tile.RemoveOccupant();
+
+            newTile.SetOccupant(character);
+            character.ClearTiles();
+            TileLogic.AddTraversableTilesToEntity(map, character);
+            //Console.WriteLine(character + " was moved to " + newTile.ToCoordinate());
+        }
         public void DeleteCharacter(Character character)
         {
             list.Delete(character);
             //list.RemoveAt(list.IndexOf(character));
-        }
-
-        public void MoveCharacter(Character character, Direction direction)
-        {
-            // TODO
-            //Character charac = (Character)list[list.IndexOf(character)];
-            //charac.SetTile(map[4, 4]);
-
         }
         public Tile PromptUserForTilePick(Character character)
         {

@@ -26,7 +26,7 @@ namespace RPGChess.Entities
         public virtual void SetTile(Tile tile)
         {
             this.EntityTile = tile;
-            if (Object.ReferenceEquals(EntityTile.Occupant, this) == false)
+            if (Object.ReferenceEquals(EntityTile.Occupant, this) == false && tile != null)
             {
                 EntityTile.SetOccupant(this);
             }

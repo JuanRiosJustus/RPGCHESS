@@ -16,5 +16,6 @@ namespace RPGChess.UserInterface
         {
             InitializeComponent();
         }
+        
     }
 }
