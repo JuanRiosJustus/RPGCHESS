@@ -20,6 +20,15 @@ class Entity
     /// </summary>
     protected internal Image IMAGE_OF_ENTITY;
     /// <summary>
+    /// Represents the x coordinate of the entity.
+    /// </summary>
+    protected internal int ScreenPositionX;
+    /// <summary>
+    /// Represents the y coordinate of the entity.
+    /// </summary>
+    protected internal int ScreenPositionY;
+
+    /// <summary>
     /// Constructor.
     /// </summary>
     /// <param name="name_of_entity">Name representing the entity.</param>
@@ -36,6 +45,9 @@ class Entity
     public virtual void SetTile(Tile tile)
     {
         this.TILE_OF_ENTITY = tile;
+        this.ScreenPositionX = tile.COL + 15;
+        this.ScreenPositionY = tile.ROW + 15;
+
         if (Object.ReferenceEquals(TILE_OF_ENTITY.Occupant, this) == false)
         {
             TILE_OF_ENTITY.SetOccupant(this);

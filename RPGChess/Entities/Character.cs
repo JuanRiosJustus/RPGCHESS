@@ -12,9 +12,12 @@ class Character : Entity
     private int CurrentHealth;
     private int CurrentResist;
     private int CurrentMax;
-    
-    private int Level;
+
+
+
+    private int CurrentLevel;
     private int StepsToLevel;
+
     private int Steps;
     private string Initials;
     
@@ -38,7 +41,7 @@ class Character : Entity
         OccuableTiles = new ArrayList();
         
         CalculateBaseStats();
-        Level = 1;
+        CurrentLevel = 1;
 
         IMAGE_OF_ENTITY = ImageManager.DetermineCharacterImage(CLASS_OF_ENTITY);
     }
@@ -73,28 +76,25 @@ class Character : Entity
     public int GetAttackableEntityQuantity() { return AttackableEntities.Count; }
     public Character GetAttackableEntity(int index) { return (Character)AttackableEntities[index]; }
 
-    public void SetMovement(int movement) { Movement = movement; }
-    public int GetMovement() { return Movement; }
-    public void SetHealth(int health) { Health = health; }
-    public int GetHealth() { return Health; }
-    public void SetResist(int resist) { Resist = resist; }
-    public int GetResist() { return Resist; }
-    public void SetDamage(int damage) { Damage = damage; }
-    public int GetDamage() { return Damage; }
-
     public void CheckIfCanLevel()
     {
         if (Steps >= StepsToLevel)
         {
-            Level++;
+            CurrentLevel++;
             StepsToLevel = StepsToLevel * 2;
         }
     }
 
-    public string GetSurname() { return NAME_OF_ENTITY + " " + CLASS_OF_ENTITY.ToString(); }
-
+    private string HealtStatus() { return "[HP: " + CurrentHealth + "/" + MaxHealth + "]"; }
+    private string EntityStatus() {  return "[NAME: " + NAME_OF_ENTITY + "]"; }
+    private string ArcheStatus() { return "[CLS: " + CLASS_OF_ENTITY.Type + "]"; }
+    private string LevelStatus() { return "[LVL: " + CurrentLevel + "]"; }
+    public string Status()
+    {
+        return LevelStatus() + EntityStatus() + "\t\t" + HealtStatus() + ArcheStatus(); 
+    }
     public override string ToString()
     {
-        return "[N:" + NAME_OF_ENTITY.ToString() + "][L:" + Level + "][C:" + CLASS_OF_ENTITY.Type + "]";
+        return "[N:" + NAME_OF_ENTITY.ToString() + "][L:" + CurrentLevel + "][C:" + CLASS_OF_ENTITY.Type + "]";
     }
 }
