@@ -1,17 +1,18 @@
-﻿using System.Collections.Generic;
+﻿using System.Collections;
+using System.Collections.Generic;
 
 class Archetype
 {
-    public static readonly Archetype ARCHER = new Archetype("Archer", 0, 0, 0, 0, 0, 0);
-    public static readonly Archetype CLERIC = new Archetype("Cleric", 0, 0, 0, 0, 0, 0);
-    public static readonly Archetype MAGE = new Archetype("Mage", 0, 0, 0, 0, 0, 0);
-    public static readonly Archetype MONK = new Archetype("Monk", 0, 0, 0, 0, 0, 0);
-    public static readonly Archetype ROGUE = new Archetype("Rogue", 0, 0, 0, 0, 0, 0);
-    public static readonly Archetype WARRIOR = new Archetype("Warrior", 0, 0, 0, 0, 0, 0);
+    public static readonly Archetype ARCHER = new Archetype("Archer", 2, 100, 1, 0, 0, 3);
+    public static readonly Archetype CLERIC = new Archetype("Cleric", 1, 100, 2, 0, 0, 3);
+    public static readonly Archetype MAGE = new Archetype("Mage", 1, 100, 1, 0, 0, 3);
+    public static readonly Archetype MONK = new Archetype("Monk", 3, 100, 2, 5, 0, 1);
+    public static readonly Archetype ROGUE = new Archetype("Rogue", 3, 100, 1, 0, 0, 1);
+    public static readonly Archetype WARRIOR = new Archetype("Warrior", 3, 100, 1, 10, 0, 1);
     
-    public static readonly Archetype MONSTER = new Archetype("Monster", 0, 0, 0, 0, 0, 0);
-    public static readonly Archetype GENERIC = new Archetype("Generic", 0, 0, 0, 0, 0, 0);
-
+    public static readonly Archetype MONSTER = new Archetype("Monster", 1, 50, 1, 0, 0, 2);
+    public static readonly Archetype GENERIC = new Archetype("Generic", 1, 50, 1, 0, 0, 2);
+    
     private readonly string CLASS_TYPE;
     private readonly int BASE_MOVEMENT;
     private readonly int BASE_HEALTH;

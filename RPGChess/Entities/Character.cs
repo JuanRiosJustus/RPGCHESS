@@ -53,6 +53,7 @@ class Character : Entity
         MaxDamage = CLASS_OF_ENTITY.Damage;
     }
     public void AddOccuableTile(Tile tile) { OccuableTiles.Add(tile); }
+    public void DeleteOccuableTile(int index) { OccuableTiles.RemoveAt(index); }
     public void ClearOccuableTiles() { OccuableTiles.Clear(); }
     public int GetOccuableTileQuantity() { return OccuableTiles.Count; }
     public Tile GetOccuableTile(int index) { return (Tile)OccuableTiles[index]; }
