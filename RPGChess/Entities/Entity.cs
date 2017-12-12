@@ -1,16 +1,21 @@
 ﻿using System;
 using System.Drawing;
 
-class Entity
+/// <summary>
+/// 
+/// Defines the most basic form of a tile occupant.
+/// 
+/// </summary>
+public class Entity
 {
     /// <summary>
     /// Represents the name of the entity.
     /// </summary>
-    protected internal string NAME_OF_ENTITY;
+    protected internal readonly string NAME_OF_ENTITY;
     /// <summary>
     /// Represents the class-archetype of the entity.
     /// </summary>
-    protected internal Archetype CLASS_OF_ENTITY;
+    protected internal readonly Archetype CLASS_OF_ENTITY;
     /// <summary>
     /// The tile associated with the entity.
     /// </summary>
@@ -19,6 +24,10 @@ class Entity
     /// The image associated with the entiy.
     /// </summary>
     protected internal Image IMAGE_OF_ENTITY;
+    /// <summary>
+    /// Represents if the entity is friendly or an enemy.
+    /// </summary>
+    protected internal readonly Relation RELATION_OF_ENTITY;
     /// <summary>
     /// Represents the x coordinate of the entity.
     /// </summary>
@@ -33,10 +42,11 @@ class Entity
     /// </summary>
     /// <param name="name_of_entity">Name representing the entity.</param>
     /// <param name="class_of_entity">Class represented by this entity.</param>
-    public Entity(string name_of_entity, Archetype class_of_entity)
+    public Entity(string name_of_entity, Archetype class_of_entity, Relation relation_of_enttiy)
     {
         NAME_OF_ENTITY = name_of_entity;
         CLASS_OF_ENTITY = class_of_entity;
+        RELATION_OF_ENTITY = relation_of_enttiy;
     }
     /// <summary>
     /// Associates the entity with the given tile.

@@ -1,7 +1,13 @@
 ﻿using System;
 using System.Collections;
 
-class Character : Entity
+/// <summary>
+/// 
+/// Defines an instance of a character.
+/// To be manipulated within the context of a <see cref="Game"/>.
+/// 
+/// </summary>
+public class Character : Entity
 {
     private int MaxMovement;
     private int MaxHealth;
@@ -12,52 +18,70 @@ class Character : Entity
     private int CurrentHealth;
     private int CurrentResist;
     private int CurrentMax;
-
-
-
+    
     private int CurrentLevel;
     private int StepsToLevel;
 
     private int Steps;
     private string Initials;
-    
-    /// <summary>
-    /// Represents the list of tiles available to the character.
-    /// </summary>
+
     private ArrayList OccuableTiles;
-    /// <summary>
-    /// Represents the list of attackable characters available to the character.
-    /// </summary>
-    private ArrayList AttackableEntities;
+    private ArrayList AttackableCharacters;
     private ArrayList CollectedItems;
 
+    /********** INITILIZATION LOGIC **********/
     /// <summary>
-    /// Constructor for the character object.
+    /// Constructor for an instance of a Character.
     /// </summary>
-    /// <param name="name_of_entity"></param>
-    /// <param name="class_of_entity"></param>
-    public Character(string name_of_entity, Archetype class_of_entity) : base(name_of_entity, class_of_entity)
+    /// <param name="name_of_entity">Defines the name of the character.</param>
+    /// <param name="class_of_entity">Defines the class/archetype of the character.</param>
+    public Character(string name_of_entity, Archetype class_of_entity, Relation relation) : base(name_of_entity, class_of_entity, relation)
     {
-        OccuableTiles = new ArrayList();
-        
-        CalculateBaseStats();
-        CurrentLevel = 1;
-
+        InitializeCharacter();
         IMAGE_OF_ENTITY = ImageManager.DetermineCharacterImage(CLASS_OF_ENTITY);
     }
-    private void CalculateBaseStats()
+    /// <summary>
+    /// Initializes all of the members of a character.
+    /// </summary>
+    private void InitializeCharacter()
     {
+        OccuableTiles = new ArrayList();
+        AttackableCharacters = new ArrayList();
+
         MaxMovement = CLASS_OF_ENTITY.Movement;
         MaxHealth = CLASS_OF_ENTITY.Health;
         MaxResist = CLASS_OF_ENTITY.Resist;
         MaxDamage = CLASS_OF_ENTITY.Damage;
-    }
-    public void AddOccuableTile(Tile tile) { OccuableTiles.Add(tile); }
-    public void DeleteOccuableTile(int index) { OccuableTiles.RemoveAt(index); }
-    public void ClearOccuableTiles() { OccuableTiles.Clear(); }
-    public int GetOccuableTileQuantity() { return OccuableTiles.Count; }
-    public Tile GetOccuableTile(int index) { return (Tile)OccuableTiles[index]; }
 
+        CurrentLevel = 1;
+    }
+
+    /********** TILE LOGIC **********/
+    /// <summary>
+    /// Adds a tile in which this character may traverse to.
+    /// </summary>
+    /// <param name="tile">Tile to be added.</param>
+    public void AddOccuableTile(Tile tile) { OccuableTiles.Add(tile); }
+    /// <summary>
+    /// Deletes a tile traversable by the character given an index.
+    /// </summary>
+    /// <param name="index">Index to delete.</param>
+    public void DeleteOccuableTile(int index) { OccuableTiles.RemoveAt(index); }
+    /// <summary>
+    /// Clears all tiles traversable by the character.
+    /// </summary>
+    public void ClearOccuableTiles() { OccuableTiles.Clear(); }
+    /// <summary>
+    /// Gets the quantity of tiles traversable by the character.
+    /// </summary>
+    /// <returns></returns>
+    public int GetOccuableTileQuantity() { return OccuableTiles.Count; }
+    /// <summary>
+    /// Gets a tile traversable by the character given an index.
+    /// </summary>
+    /// <param name="index">Index to retrieve the file from.</param>
+    /// <returns></returns>
+    public Tile GetOccuableTile(int index) { return (Tile)OccuableTiles[index]; }
     /// <summary>
     /// Returns a string format of available tiles from this character.
     /// </summary>
@@ -72,12 +96,33 @@ class Character : Entity
         return list;
     }
 
-    public void AddAttackableEntity(Character entity) { AttackableEntities.Add(entity); }
-    public void ClearAttackableEntities() { AttackableEntities.Clear(); }
-    public int GetAttackableEntityQuantity() { return AttackableEntities.Count; }
-    public Character GetAttackableEntity(int index) { return (Character)AttackableEntities[index]; }
 
-    public void CheckIfCanLevel()
+    /********** ATTACK LOGIC **********/
+    /// <summary>
+    /// Adds the given character to the list of attackable
+    /// characters of the character.
+    /// </summary>
+    /// <param name="character">Character to be added.</param>
+    public void AddAttackableCharacter(Character character) { AttackableCharacters.Add(character); }
+    /// <summary>
+    /// Clears the list of attackable characters of the character.
+    /// </summary>
+    public void ClearAttackableEntities() { AttackableCharacters.Clear(); }
+    /// <summary>
+    /// Gets the amount of attackable character of the character.
+    /// </summary>
+    /// <returns></returns>
+    public int GetAttackableCharacterQuantity() { return AttackableCharacters.Count; }
+    /// <summary>
+    /// Gets an attaackable character of characters the character can attack.
+    /// </summary>
+    /// <param name="index">Index of the character.</param>
+    /// <returns></returns>
+    public Character GetAttackableEntity(int index) { return (Character)AttackableCharacters[index]; }
+
+
+    /********** LEVELING LOGIC **********/
+    private void CheckIfCanLevel()
     {
         if (Steps >= StepsToLevel)
         {
@@ -86,6 +131,7 @@ class Character : Entity
         }
     }
 
+    /********** STRING VISUALIZATION LOGIC **********/
     private string HealtStatus() { return "[HP: " + CurrentHealth + "/" + MaxHealth + "]"; }
     private string EntityStatus() {  return "[NAME: " + NAME_OF_ENTITY + "]"; }
     private string ArcheStatus() { return "[CLS: " + CLASS_OF_ENTITY.Type + "]"; }

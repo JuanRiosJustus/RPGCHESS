@@ -1,5 +1,10 @@
 ﻿
-class EntityFactory
+/// <summary>
+/// 
+/// Basic factory design for classes deriving from entity.
+/// 
+/// </summary>
+public class EntityFactory
 {
     /// <summary>
     /// Factory for character creation.
@@ -7,7 +12,7 @@ class EntityFactory
     /// <param name="name">Name of the character to be created.</param>
     /// <param name="class_of_entity">Class of the character to be created.</param>
     /// <returns></returns>
-    public static Character BuildCharacter(string name, string class_of_entity)
+    public static Character BuildCharacter(string name, string class_of_entity, Relation relation)
     {
         switch (class_of_entity.ToLower())
         {
