@@ -3,23 +3,49 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Windows.Forms;
 
-class Game
+/// <summary>
+/// 
+/// The definition of a game.
+/// 
+/// </summary>
+public class Game
 {
     private Board Board;
     private ArrayList List;
     private Queue<Character> TurnQueue;
     private Character CurrentCharacter;
     private int CurrentCharacterIndex = 0;
+    private Player P1;
+    private Player P2;
+    private Queue<Player> TurnOrder;
+    private ControllerGUI Controller;
+    private PictureBox Visual;
 
-
-    public Game()
+    /// <summary>
+    /// Constructor for a game instance.
+    /// </summary>
+    /// <param name="p1">The first player and local player.</param>
+    /// <param name="p2">The second player and the remote player.</param>
+    /// <param name="Controller">Input used by the local player.</param>
+    public Game(Player p1, Player p2, ControllerGUI c, PictureBox v)
     {
         Board = new Board();
+        Controller = c;
+        Controller.CreateConnectionWithGame(this);
+        Visual = v;
+        P1 = p1;
+        P2 = p2;
+        TurnOrder = GameInitLogic.DecideTurnOrder(p1, p2);
+        GameInitLogic.SetCharactersOnBoard(p1, p2, Board);
+
         List = Board.GetBoardedCharacters();
-        Board.GenerateMap(Global.Rows, Global.Columns);
-        //Board.Mountainous();
-        Board.Oceanic();
+        Board.Mountainous();
+        //Board.Oceanic();
         TurnQueue = new Queue<Character>();
+
+
+        Controller.HardUpdate();
+        //InitializeBoard();
     }
     public Character GetCurrentCharacter()
     {
@@ -28,23 +54,23 @@ class Game
     /// <summary>
     /// Gets a tile at the given x,y coordinate.
     /// </summary>
-    /// <param name="x"></param>
-    /// <param name="y"></param>
+    /// <param name="x">X coordinate of the tile.</param>
+    /// <param name="y">Y coordinate of the tile</param>
     /// <returns></returns>
     public Tile GetBoardTile(int x, int y)
     {
         return Board.GetTile(x, y);
     }
-    /// <summary>
-    /// Initializes the character to the board at a particular location.
-    /// </summary>
-    /// <param name="name_of_entity"></param>
-    /// <param name="class_of_entity"></param>
-    /// <param name="row"></param>
-    /// <param name="col"></param>
-    public void InitCharacter(string name_of_entity, string class_of_entity, int row, int col)
+    public void InitializeCharacter(Character character, int row, int col)
     {
-        TurnQueue.Enqueue(Board.InitCharacter(name_of_entity, class_of_entity, row, col));
+        if (Board.AddCharacterToBoard(character, row, col))
+        {
+            //TurnQueue.Enqueue(Board.InitCharacter(name_of_entity, class_of_entity, row, col));
+        }
+        else
+        {
+            throw new Exception("ERROR: Character already added.");
+        }
         //CurrentCharacter = list.Get(CurrentCharacterIndex);
     }
     /// <summary>
@@ -61,27 +87,15 @@ class Game
     /// </summary>
     /// <param name="f"></param>
     /// <param name="direction"></param>
-    public void MoveCharacter(PictureBox f, Direction direction)
+    public void MoveCharacter(Character c, Tile newTile)
     {
-        ArrayList tiles = new ArrayList();
-        Tile userSelectedTile;
-        Character character = TurnQueue.Dequeue();
+        Board.MoveCharacter(c, newTile);
+        Visual.Update();
+        Visual.Refresh();
+    }
+    public void AttackCharacter()
+    {
 
-        if (character.GetOccuableTileQuantity() < 0) { return; }
-
-        for (int i = 0; i < character.GetOccuableTileQuantity(); i++)
-        {
-            tiles.Add(character.GetOccuableTile(i));
-        }
-
-        userSelectedTile = TileLogic.TileRespectingDirection(character.TILE_OF_ENTITY, tiles, direction);
-
-        Board.MoveCharacter(character, userSelectedTile);
-
-        f.Refresh();
-        f.Update();
-
-        TurnQueue.Enqueue(character);
     }
     private void SetTilesOnTileBox(ComboBox tile_box)
     {
@@ -93,8 +107,4 @@ class Game
         Console.WriteLine(TurnQueue.Peek().OccuableTilesToString());
     }
     //private void AdjustTeamDisplay()
-    public void UpdateController(ComboBox tileBox, TextBox teamDisplay)
-    {
-        SetTilesOnTileBox(tileBox);
-    }
 }

@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Drawing;
 
-class Tile
+public class Tile
 {
     /// <summary>
     /// Represents the row the tile is occupying.

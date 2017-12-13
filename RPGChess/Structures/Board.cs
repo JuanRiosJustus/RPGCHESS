@@ -2,63 +2,61 @@
 using Apocrypha;
 using System.Collections;
 
-class Board
+public class Board
 {
-    private Tile[,] map;
+    private Tile[,] Map;
     private Random random = new Random();
     private ArrayList list = new ArrayList();
 
+    public Board()
+    {
+        GenerateMap(Global.Rows, Global.Columns);
+    }
     public ArrayList GetBoardedCharacters()
     {
         return list;
     }
     /// <summary>
-    /// Adds a character to the list of characters contained by this board.
+    /// <para>Adds a character to the list of characters contained by this board.
+    /// If the list holds an instance of the given character, returns false
+    /// and does not do anything.</para>
+    /// 
+    /// <para> If the tile is not already occupied, tile is set to the character.
+    /// Otherwise, a random tile is selected.</para>
     /// </summary>
-    /// <param name="character"></param>
-    /// <param name="row"></param>
-    /// <param name="col"></param>
-    public void AddCharacter(Character character, int row, int col)
+    /// <param name="character">Character to be added.</param>
+    /// <param name="row">Row to add the character to.</param>
+    /// <param name="col">Column to add the character to.</param>
+    /// <returns></returns>
+    public bool AddCharacterToBoard(Character character, int row, int col)
     {
         if (list.Contains(character) == false)
         {
             list.Add(character);
+
+            Tile tile = Map[row, col];
+
+            while (tile.IsOccupied())
+            {
+                row = random.Next(Global.Rows);
+                col = random.Next(Global.Columns);
+                tile = Map[row, col];
+            }
+
+            tile.SetOccupant(character);
+            TileLogic.AddOccuableTilesToEntity(Map, character);
+            Console.WriteLine(character.NAME_OF_ENTITY + " was added at " + tile.ToCoordinate());
+            return true;
         }
 
-        Tile tile = map[row, col];
-        while (tile.IsOccupied() || tile.Biome.Equals("WTR"))
-        {
-            row = random.Next(Global.Rows);
-            col = random.Next(Global.Columns);
-            tile = map[row, col];
-        }
-        
-        map[row, col].SetOccupant(character);
-        TileLogic.AddOccuableTilesToEntity(map, character);
-    }
-    /// <summary>
-    /// Used on game start to initialize a characte rand place them on board.
-    /// </summary>
-    /// <param name="name_of_entity"></param>
-    /// <param name="class_of_entity"></param>
-    /// <param name="row"></param>
-    /// <param name="col"></param>
-    public Character InitCharacter(string name_of_entity, string class_of_entity, int row, int col)
-    {
-        Character charac = EntityFactory.BuildCharacter(name_of_entity, class_of_entity);
-
-        Console.WriteLine(charac.Status() + " has joined the field. AT@[" + col + "," + row + "]");
-
-        this.AddCharacter(charac, row, col);
-
-        return charac;
+        return false;
     }
     /// <summary>
     /// Removes the character from it's current tile and 
     /// sets it to a new tile.
     /// </summary>
-    /// <param name="character"></param>
-    /// <param name="newTile"></param>
+    /// <param name="character">Character to be moved.</param>
+    /// <param name="newTile">New tile to traverse to.</param>
     public void MoveCharacter(Character character, Tile newTile)
     {
         if (newTile == null) { return; }
@@ -67,7 +65,8 @@ class Board
 
         newTile.SetOccupant(character);
         character.ClearOccuableTiles();
-        TileLogic.AddOccuableTilesToEntity(map, character);
+        TileLogic.AddOccuableTilesToEntity(Map, character);
+        TileLogic.AddAttackableEntitiesToEntity(Map, character);
     }
     /// <summary>
     /// Gets the board size of the given dimension.
@@ -76,7 +75,7 @@ class Board
     /// <returns></returns>
     public int GetBoardSize(int dimension)
     {
-        return map.GetLength(dimension);
+        return Map.GetLength(dimension);
     }
     /// <summary>
     /// Retrieves the tile of the given x and y????
@@ -86,14 +85,14 @@ class Board
     /// <returns></returns>
     public Tile GetTile(int x, int y)
     {
-        return map[x, y];
+        return Map[x, y];
     }
     /// <summary>
     /// Generates a basic and the default map given a size.
     /// </summary>
     /// <param name="mapsize"></param>
     /// <returns></returns>
-    public void GenerateMap(int map_rows, int map_cols)
+    private void GenerateMap(int map_rows, int map_cols)
     {
         Tile[,] tiles = new Tile[map_rows, map_cols];
 
@@ -105,7 +104,7 @@ class Board
                 tiles[row, column] = new Tile(row, column, height);
             }
         }
-        map = tiles;
+        Map = tiles;
     }
     /// <summary>
     /// Develops terrain specifically at a given terrain
@@ -116,7 +115,7 @@ class Board
     /// <param name="intensity"></param>
     private void GenerateDevelopAt(int row, int col, int intensity)
     {
-        BoardDesigner.DevelopAt(map, row, col, intensity);
+        BoardDesigner.DevelopAt(Map, row, col, intensity);
     }
     /// <summary>
     /// Generates a mountainous board.

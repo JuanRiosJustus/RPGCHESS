@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-class Item
+public class Item
 {
     public static readonly Item ARCHMAGES_STAFF = new Item("Archmage's Staff", Archetype.MAGE, 0, 0, 0, 0, 0);
     public static readonly Item ARTYOMS_TRUEBLADE = new Item("Artyom's Trueblade", Archetype.WARRIOR, 0, 0, 0, 0, 0);

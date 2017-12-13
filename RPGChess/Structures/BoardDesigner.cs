@@ -1,4 +1,4 @@
-﻿class BoardDesigner
+﻿public class BoardDesigner
 {
     /// <summary>
     /// Develops the hight arount a certain cordinate on a given map.

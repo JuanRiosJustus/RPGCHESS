@@ -5,7 +5,7 @@ using System.Drawing.Drawing2D;
 using System.Drawing.Imaging;
 using System.Windows.Forms;
 
-static class ImageManager
+public static class ImageManager
 {
     private static readonly ArrayList BiomeTiles;
     private static readonly ArrayList ClassIcons;
@@ -53,35 +53,69 @@ static class ImageManager
         ClassIcons.Add(new Bitmap(AssetPath + @"Characters\NME\NMEgeneric.PNG"));
     }
 
-    public static Bitmap DetermineCharacterImage(Archetype class_type)
+    public static Bitmap DetermineCharacterImage(Archetype class_type, Relation relation)
     {
-        if (class_type.Equals(Archetype.ARCHER))
+        if (relation == Relation.Friendly)
         {
-            return (Bitmap)ClassIcons[0];
-        }
-        else if (class_type.Equals(Archetype.CLERIC))
-        {
-            return (Bitmap)ClassIcons[1];
-        }
-        else if (class_type.Equals(Archetype.MAGE))
-        {
-            return (Bitmap)ClassIcons[2];
-        }
-        else if (class_type.Equals(Archetype.MONK))
-        {
-            return (Bitmap)ClassIcons[3];
-        }
-        else if (class_type.Equals(Archetype.ROGUE))
-        {
-            return (Bitmap)ClassIcons[4];
-        }
-        else if (class_type.Equals(Archetype.WARRIOR))
-        {
-            return (Bitmap)ClassIcons[5];
+            if (class_type.Equals(Archetype.ARCHER))
+            {
+                return (Bitmap)ClassIcons[0];
+            }
+            else if (class_type.Equals(Archetype.CLERIC))
+            {
+                return (Bitmap)ClassIcons[1];
+            }
+            else if (class_type.Equals(Archetype.MAGE))
+            {
+                return (Bitmap)ClassIcons[2];
+            }
+            else if (class_type.Equals(Archetype.MONK))
+            {
+                return (Bitmap)ClassIcons[3];
+            }
+            else if (class_type.Equals(Archetype.ROGUE))
+            {
+                return (Bitmap)ClassIcons[4];
+            }
+            else if (class_type.Equals(Archetype.WARRIOR))
+            {
+                return (Bitmap)ClassIcons[5];
+            }
+            else
+            {
+                return (Bitmap)ClassIcons[6];
+            }
         }
         else
         {
-            return (Bitmap)ClassIcons[6];
+            if (class_type.Equals(Archetype.ARCHER))
+            {
+                return (Bitmap)ClassIcons[7];
+            }
+            else if (class_type.Equals(Archetype.CLERIC))
+            {
+                return (Bitmap)ClassIcons[8];
+            }
+            else if (class_type.Equals(Archetype.MAGE))
+            {
+                return (Bitmap)ClassIcons[9];
+            }
+            else if (class_type.Equals(Archetype.MONK))
+            {
+                return (Bitmap)ClassIcons[10];
+            }
+            else if (class_type.Equals(Archetype.ROGUE))
+            {
+                return (Bitmap)ClassIcons[11];
+            }
+            else if (class_type.Equals(Archetype.WARRIOR))
+            {
+                return (Bitmap)ClassIcons[12];
+            }
+            else
+            {
+                return (Bitmap)ClassIcons[13];
+            }
         }
     }
     /// <summary>
