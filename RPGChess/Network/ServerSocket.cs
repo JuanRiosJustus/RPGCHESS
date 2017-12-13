@@ -4,7 +4,7 @@ using System.Net.Sockets;
 using System.Text;
 using System.Threading;
 
-class ServerSocket
+public class ServerSocket
 {
     private byte[] Buffer;
     private Socket Connection;
@@ -33,7 +33,7 @@ class ServerSocket
             Buffer = new byte[2555];
             Sock.Receive(Buffer, 0, Buffer.Length, 0);
             Console.WriteLine("[RECIEVED]: " + Encoding.Default.GetString(Buffer));
-            Message = Encoding.Default.GetString(Buffer);
+            Message = Encoding.Default.GetString(Buffer).Trim();
         }
     }
     public void SentMessage(string msg)
@@ -44,7 +44,7 @@ class ServerSocket
     {
         String temp = Message;
         Message = "";
-        return temp;
+        return temp.Trim();
     }
     ~ServerSocket()
     {

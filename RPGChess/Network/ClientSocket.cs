@@ -3,7 +3,7 @@ using System.Net;
 using System.Net.Sockets;
 using System.Text;
 
-class ClientSocket
+public class ClientSocket
 {
     private byte[] Buffer;
     private byte[] Rebuff;
