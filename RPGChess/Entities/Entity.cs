@@ -27,7 +27,7 @@ public class Entity
     /// <summary>
     /// Represents if the entity is friendly or an enemy.
     /// </summary>
-    protected internal readonly Relation RELATION_OF_ENTITY;
+    protected internal Relation RELATION_OF_ENTITY;
     /// <summary>
     /// Represents the x coordinate of the entity.
     /// </summary>
@@ -42,11 +42,10 @@ public class Entity
     /// </summary>
     /// <param name="name_of_entity">Name representing the entity.</param>
     /// <param name="class_of_entity">Class represented by this entity.</param>
-    public Entity(string name_of_entity, Archetype class_of_entity, Relation relation_of_enttiy)
+    public Entity(string name_of_entity, Archetype class_of_entity)
     {
         NAME_OF_ENTITY = name_of_entity;
         CLASS_OF_ENTITY = class_of_entity;
-        RELATION_OF_ENTITY = relation_of_enttiy;
     }
     /// <summary>
     /// Associates the entity with the given tile.
@@ -62,6 +61,14 @@ public class Entity
         {
             TILE_OF_ENTITY.SetOccupant(this);
         }
+    }
+    /// <summary>
+    /// Sets the relation of enttiy.
+    /// </summary>
+    /// <param name="relation"></param>
+    public virtual void SetRelation(Relation relation)
+    {
+        this.RELATION_OF_ENTITY = relation;
     }
     /// <summary>
     /// Basic string representation of the entity.

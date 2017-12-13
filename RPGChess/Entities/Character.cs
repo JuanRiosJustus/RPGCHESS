@@ -11,13 +11,14 @@ public class Character : Entity
 {
     private int MaxMovement;
     private int MaxHealth;
-    private int MaxResist;
+    private int MaxArmor;
     private int MaxDamage;
 
     private int CurrentMovement;
     private int CurrentHealth;
-    private int CurrentResist;
+    private int CurrentArmor;
     private int CurrentMax;
+    private int CurrentDamage;
     
     private int CurrentLevel;
     private int StepsToLevel;
@@ -35,10 +36,11 @@ public class Character : Entity
     /// </summary>
     /// <param name="name_of_entity">Defines the name of the character.</param>
     /// <param name="class_of_entity">Defines the class/archetype of the character.</param>
-    public Character(string name_of_entity, Archetype class_of_entity, Relation relation) : base(name_of_entity, class_of_entity, relation)
+    public Character(string name_of_entity, Archetype class_of_entity, Relation relation) : base(name_of_entity, class_of_entity)
     {
         InitializeCharacter();
-        IMAGE_OF_ENTITY = ImageManager.DetermineCharacterImage(CLASS_OF_ENTITY);
+        RELATION_OF_ENTITY = relation;
+        IMAGE_OF_ENTITY = ImageManager.DetermineCharacterImage(CLASS_OF_ENTITY, RELATION_OF_ENTITY);
     }
     /// <summary>
     /// Initializes all of the members of a character.
@@ -50,8 +52,13 @@ public class Character : Entity
 
         MaxMovement = CLASS_OF_ENTITY.Movement;
         MaxHealth = CLASS_OF_ENTITY.Health;
-        MaxResist = CLASS_OF_ENTITY.Resist;
+        MaxArmor = CLASS_OF_ENTITY.Resist;
         MaxDamage = CLASS_OF_ENTITY.Damage;
+
+        CurrentMovement = CLASS_OF_ENTITY.Movement;
+        CurrentHealth = CLASS_OF_ENTITY.Health;
+        CurrentArmor = CLASS_OF_ENTITY.Resist;
+        CurrentDamage = CLASS_OF_ENTITY.Damage;
 
         CurrentLevel = 1;
     }
@@ -138,10 +145,11 @@ public class Character : Entity
     private string LevelStatus() { return "[LVL: " + CurrentLevel + "]"; }
     public string Status()
     {
-        return LevelStatus() + EntityStatus() + "\t\t" + HealtStatus() + ArcheStatus(); 
+        return "[HEALTH: " + CurrentHealth + "/" + MaxHealth + " ][DAMAGE: " + CurrentDamage + " ][ARMOR: " + CurrentArmor + "]";
     }
     public override string ToString()
     {
-        return "[N:" + NAME_OF_ENTITY.ToString() + "][L:" + CurrentLevel + "][C:" + CLASS_OF_ENTITY.Type + "]";
+        Tile t = TILE_OF_ENTITY;
+        return "[Lvl: " + CurrentLevel + " ][Name: " + NAME_OF_ENTITY.ToString() + " the " + CLASS_OF_ENTITY.Type + " ][ " +  t.COL + "," + t.ROW + " ]";
     }
 }
