@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections;
+using System.Collections.Generic;
 using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Drawing.Imaging;
@@ -7,26 +8,28 @@ using System.Windows.Forms;
 
 public static class ImageManager
 {
-    private static readonly ArrayList BiomeTiles;
-    private static readonly ArrayList ClassIcons;
+    private static readonly List<Bitmap> BiomeTiles;
+    private static readonly List<Bitmap> ClassIcons;
 
     private static readonly string AssetPath;
 
     public static readonly Bitmap hilite;
     public static readonly Bitmap MainBackground;
+    public static readonly Bitmap AuxBackground;
 
     /// <summary>
     /// Default constructor for the ImageManager.
     /// </summary>
     static ImageManager()
     {
-        BiomeTiles = new ArrayList();
-        ClassIcons = new ArrayList();
+        BiomeTiles = new List<Bitmap>();
+        ClassIcons = new List<Bitmap>();
 
         AssetPath = @"..\..\Assets\";
 
         hilite = new Bitmap(AssetPath + @"Tiles\hilite.PNG");
         MainBackground = new Bitmap(AssetPath + @"Backgrounds\MainBG.PNG");
+        AuxBackground = new Bitmap(AssetPath + @"Backgrounds\AuxBG.PNG");
 
         BiomeTiles.Add(new Bitmap(AssetPath + @"Tiles\water.PNG"));
         BiomeTiles.Add(new Bitmap(AssetPath + @"Tiles\swamp.PNG"));
@@ -59,62 +62,62 @@ public static class ImageManager
         {
             if (class_type.Equals(Archetype.ARCHER))
             {
-                return (Bitmap)ClassIcons[0];
+                return ClassIcons[0];
             }
             else if (class_type.Equals(Archetype.CLERIC))
             {
-                return (Bitmap)ClassIcons[1];
+                return ClassIcons[1];
             }
             else if (class_type.Equals(Archetype.MAGE))
             {
-                return (Bitmap)ClassIcons[2];
+                return ClassIcons[2];
             }
             else if (class_type.Equals(Archetype.MONK))
             {
-                return (Bitmap)ClassIcons[3];
+                return ClassIcons[3];
             }
             else if (class_type.Equals(Archetype.ROGUE))
             {
-                return (Bitmap)ClassIcons[4];
+                return ClassIcons[4];
             }
             else if (class_type.Equals(Archetype.WARRIOR))
             {
-                return (Bitmap)ClassIcons[5];
+                return ClassIcons[5];
             }
             else
             {
-                return (Bitmap)ClassIcons[6];
+                return ClassIcons[6];
             }
         }
         else
         {
             if (class_type.Equals(Archetype.ARCHER))
             {
-                return (Bitmap)ClassIcons[7];
+                return ClassIcons[7];
             }
             else if (class_type.Equals(Archetype.CLERIC))
             {
-                return (Bitmap)ClassIcons[8];
+                return ClassIcons[8];
             }
             else if (class_type.Equals(Archetype.MAGE))
             {
-                return (Bitmap)ClassIcons[9];
+                return ClassIcons[9];
             }
             else if (class_type.Equals(Archetype.MONK))
             {
-                return (Bitmap)ClassIcons[10];
+                return ClassIcons[10];
             }
             else if (class_type.Equals(Archetype.ROGUE))
             {
-                return (Bitmap)ClassIcons[11];
+                return ClassIcons[11];
             }
             else if (class_type.Equals(Archetype.WARRIOR))
             {
-                return (Bitmap)ClassIcons[12];
+                return ClassIcons[12];
             }
             else
             {
-                return (Bitmap)ClassIcons[13];
+                return ClassIcons[13];
             }
         }
     }
@@ -128,37 +131,37 @@ public static class ImageManager
         if (biome.Equals("WTR", StringComparison.CurrentCultureIgnoreCase))
         {
             // Water
-            return (Bitmap)BiomeTiles[0];
+            return BiomeTiles[0];
         }
         else if (biome.Equals("SWP", StringComparison.CurrentCultureIgnoreCase))
         {
             // Swamp
-            return (Bitmap)BiomeTiles[1];
+            return BiomeTiles[1];
         }
         else if (biome.Equals("PLN", StringComparison.CurrentCultureIgnoreCase))
         {
             // Plains
-            return (Bitmap)BiomeTiles[2];
+            return BiomeTiles[2];
         }
         else if (biome.Equals("FRS", StringComparison.CurrentCultureIgnoreCase))
         {
             // Forest
-            return (Bitmap)BiomeTiles[3];
+            return BiomeTiles[3];
         }
         else if (biome.Equals("HLL", StringComparison.CurrentCultureIgnoreCase))
         {
             // Hill
-            return (Bitmap)BiomeTiles[4];
+            return BiomeTiles[4];
         }
         else if (biome.Equals("MTN", StringComparison.CurrentCultureIgnoreCase))
         {
             // Mountain
-            return (Bitmap)BiomeTiles[5];
+            return BiomeTiles[5];
         }
         else
         {
             // Speecial, default, error tile.
-            return (Bitmap)BiomeTiles[6];
+            return BiomeTiles[6];
         }
     }
     /// <summary>

@@ -1,20 +1,20 @@
 ﻿using System;
 using Apocrypha;
 using System.Collections;
+using System.Collections.Generic;
 
 public class Board
 {
     private Tile[,] Map;
     private Random random = new Random();
-    private ArrayList list = new ArrayList();
-
-    public Board()
+    private List<Character> ListOfEveryCharacter = new List<Character>();
+    /// <summary>
+    /// Constructor for the board.
+    /// </summary>
+    public Board(List<Character> loec)
     {
+        loec = ListOfEveryCharacter;
         GenerateMap(Global.Rows, Global.Columns);
-    }
-    public ArrayList GetBoardedCharacters()
-    {
-        return list;
     }
     /// <summary>
     /// <para>Adds a character to the list of characters contained by this board.
@@ -30,9 +30,9 @@ public class Board
     /// <returns></returns>
     public bool AddCharacterToBoard(Character character, int row, int col)
     {
-        if (list.Contains(character) == false)
+        if (ListOfEveryCharacter.Contains(character) == false)
         {
-            list.Add(character);
+            ListOfEveryCharacter.Add(character);
 
             Tile tile = Map[row, col];
 
@@ -45,10 +45,10 @@ public class Board
 
             tile.SetOccupant(character);
             TileLogic.AddOccuableTilesToEntity(Map, character);
+            TileLogic.AddAttackableEntitiesToEntity(Map, character);
             Console.WriteLine(character.NAME_OF_ENTITY + " was added at " + tile.ToCoordinate());
             return true;
         }
-
         return false;
     }
     /// <summary>

@@ -11,7 +11,7 @@ using System.Windows.Forms;
 public class Game
 {
     private Board Board;
-    private ArrayList List;
+    private List<Character> ListOfEveryCharacter;
     private Queue<Character> TurnQueue;
     private Character CurrentCharacter;
     private int CurrentCharacterIndex = 0;
@@ -20,6 +20,7 @@ public class Game
     private Queue<Player> TurnOrder;
     private ControllerGUI Controller;
     private PictureBox Visual;
+    private BoardGUI board1;
 
     /// <summary>
     /// Constructor for a game instance.
@@ -27,9 +28,10 @@ public class Game
     /// <param name="p1">The first player and local player.</param>
     /// <param name="p2">The second player and the remote player.</param>
     /// <param name="Controller">Input used by the local player.</param>
-    public Game(Player p1, Player p2, ControllerGUI c, PictureBox v)
+    public Game(Player p1, Player p2, ControllerGUI c, PictureBox v, BoardGUI b)
     {
-        Board = new Board();
+        board1 = b;
+        Board = new Board(ListOfEveryCharacter);
         Controller = c;
         Controller.CreateConnectionWithGame(this);
         Visual = v;
@@ -37,14 +39,13 @@ public class Game
         P2 = p2;
         TurnOrder = GameInitLogic.DecideTurnOrder(p1, p2);
         GameInitLogic.SetCharactersOnBoard(p1, p2, Board);
-
-        List = Board.GetBoardedCharacters();
+        
         Board.Mountainous();
         //Board.Oceanic();
         TurnQueue = new Queue<Character>();
 
 
-        Controller.HardUpdate();
+        Controller.RefreshTeamTextBox();
         //InitializeBoard();
     }
     public Character GetCurrentCharacter()
@@ -60,18 +61,6 @@ public class Game
     public Tile GetBoardTile(int x, int y)
     {
         return Board.GetTile(x, y);
-    }
-    public void InitializeCharacter(Character character, int row, int col)
-    {
-        if (Board.AddCharacterToBoard(character, row, col))
-        {
-            //TurnQueue.Enqueue(Board.InitCharacter(name_of_entity, class_of_entity, row, col));
-        }
-        else
-        {
-            throw new Exception("ERROR: Character already added.");
-        }
-        //CurrentCharacter = list.Get(CurrentCharacterIndex);
     }
     /// <summary>
     /// Returns the lenght of the given board dimension.
@@ -93,6 +82,13 @@ public class Game
         Visual.Update();
         Visual.Refresh();
     }
+    /// <summary>
+    /// 
+    /// </summary>
+    public void ResetTurn()
+    {
+        board1.RRfresh();
+    }
     public void AttackCharacter()
     {
 
@@ -106,5 +102,4 @@ public class Game
         }
         Console.WriteLine(TurnQueue.Peek().OccuableTilesToString());
     }
-    //private void AdjustTeamDisplay()
 }
