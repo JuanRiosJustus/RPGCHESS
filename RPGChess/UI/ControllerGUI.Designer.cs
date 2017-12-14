@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Drawing;
 
 /// <summary>
 /// Defines the controls for interacting with the game.
@@ -26,19 +27,28 @@ partial class ControllerGUI
     #region Windows Form Designer generated code
 
     private System.Windows.Forms.Form AssociatedBoard;
+    
+    private System.Windows.Forms.TextBox SelectedUnitTextBox;
+    private System.Windows.Forms.Label UnitStatusLabel;
+    private System.Windows.Forms.TextBox UnitStatusLabelTextBox;
+    private System.Windows.Forms.Label FromTileLabel;
+    private System.Windows.Forms.TextBox FromTextBox;
+    private System.Windows.Forms.Label ToLabel;
+    private System.Windows.Forms.TextBox ToTextBox;
+    private System.Windows.Forms.Label DefendingUnitLabel;
+    private System.Windows.Forms.TextBox DefendingUnitTextBox;
+    private System.Windows.Forms.Label DefendingUnitStatusLabel;
+    private System.Windows.Forms.TextBox DefendingUnitStatusTextBox;
+    private System.Windows.Forms.Label SelectedUnitLabel;
 
-    private System.Windows.Forms.TextBox TeamTexbox;
-    private System.Windows.Forms.Label TeamLabel;
-    private System.Windows.Forms.Label CurrentLabel;
-    private System.Windows.Forms.Label MoveToLabel;
-    private System.Windows.Forms.Label AttackLabel;
-    private System.Windows.Forms.ComboBox TeamComboBox;
-    private System.Windows.Forms.ComboBox AttackComboBox;
-    private System.Windows.Forms.TextBox StatsTextbox;
-    private System.Windows.Forms.Label StatsLabel;
-    private System.Windows.Forms.Button EndButton;
-    private System.Windows.Forms.TextBox LogTextbox;
-    private System.Windows.Forms.ComboBox TilesComboBox;
+    private System.Windows.Forms.Label CombatResultLabel;
+    private System.Windows.Forms.TextBox CombatResultTextBox;
+    private System.Windows.Forms.Label UnitExpLabel;
+    private System.Windows.Forms.TextBox ExpTextBox;
+    private System.Windows.Forms.Button EndTurnButton;
+    private System.Windows.Forms.TextBox TeamTextBox;
+    private System.Windows.Forms.TextBox SelectedUnitDetail;
+    private System.Windows.Forms.TextBox GameLogBox;
 
     private Player Player1;
     private Game _Game;
@@ -50,162 +60,252 @@ partial class ControllerGUI
     /// </summary>
     private void InitializeComponent()
     {
-            this.AttackComboBox = new System.Windows.Forms.ComboBox();
-            this.TeamTexbox = new System.Windows.Forms.TextBox();
-            this.TeamLabel = new System.Windows.Forms.Label();
-            this.CurrentLabel = new System.Windows.Forms.Label();
-            this.MoveToLabel = new System.Windows.Forms.Label();
-            this.AttackLabel = new System.Windows.Forms.Label();
-            this.TeamComboBox = new System.Windows.Forms.ComboBox();
-            this.StatsTextbox = new System.Windows.Forms.TextBox();
-            this.StatsLabel = new System.Windows.Forms.Label();
-            this.EndButton = new System.Windows.Forms.Button();
-            this.LogTextbox = new System.Windows.Forms.TextBox();
-            this.TilesComboBox = new System.Windows.Forms.ComboBox();
-            this.SuspendLayout();
-            // 
-            // AttackComboBox
-            // 
-            this.AttackComboBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.AttackComboBox.FormattingEnabled = true;
-            this.AttackComboBox.Location = new System.Drawing.Point(396, 121);
-            this.AttackComboBox.Name = "AttackComboBox";
-            this.AttackComboBox.Size = new System.Drawing.Size(242, 21);
-            this.AttackComboBox.TabIndex = 14;
-            // 
-            // TeamTexbox
-            // 
-            this.TeamTexbox.Location = new System.Drawing.Point(12, 39);
-            this.TeamTexbox.Multiline = true;
-            this.TeamTexbox.Name = "TeamTexbox";
-            this.TeamTexbox.ReadOnly = true;
-            this.TeamTexbox.Size = new System.Drawing.Size(260, 136);
-            this.TeamTexbox.TabIndex = 8;
-            // 
-            // TeamLabel
-            // 
-            this.TeamLabel.AutoSize = true;
-            this.TeamLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.TeamLabel.Location = new System.Drawing.Point(125, 19);
-            this.TeamLabel.Name = "TeamLabel";
-            this.TeamLabel.Size = new System.Drawing.Size(46, 17);
-            this.TeamLabel.TabIndex = 9;
-            this.TeamLabel.Text = "TEAM";
-            // 
-            // CurrentLabel
-            // 
-            this.CurrentLabel.AutoSize = true;
-            this.CurrentLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.CurrentLabel.Location = new System.Drawing.Point(289, 40);
-            this.CurrentLabel.Name = "CurrentLabel";
-            this.CurrentLabel.Size = new System.Drawing.Size(96, 17);
-            this.CurrentLabel.TabIndex = 10;
-            this.CurrentLabel.Text = "CHARACTER:";
-            // 
-            // MoveToLabel
-            // 
-            this.MoveToLabel.AutoSize = true;
-            this.MoveToLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.MoveToLabel.Location = new System.Drawing.Point(289, 98);
-            this.MoveToLabel.Name = "MoveToLabel";
-            this.MoveToLabel.Size = new System.Drawing.Size(52, 17);
-            this.MoveToLabel.TabIndex = 12;
-            this.MoveToLabel.Text = "MOVE:";
-            // 
-            // AttackLabel
-            // 
-            this.AttackLabel.AutoSize = true;
-            this.AttackLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.AttackLabel.Location = new System.Drawing.Point(289, 125);
-            this.AttackLabel.Name = "AttackLabel";
-            this.AttackLabel.Size = new System.Drawing.Size(66, 17);
-            this.AttackLabel.TabIndex = 13;
-            this.AttackLabel.Text = "ATTACK:";
-            // 
-            // TeamComboBox
-            // 
-            this.TeamComboBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.TeamComboBox.FormattingEnabled = true;
-            this.TeamComboBox.Location = new System.Drawing.Point(396, 40);
-            this.TeamComboBox.Name = "TeamComboBox";
-            this.TeamComboBox.Size = new System.Drawing.Size(242, 21);
-            this.TeamComboBox.TabIndex = 15;
-            this.TeamComboBox.DropDownClosed += new System.EventHandler(this.CharacterComboBoxDropdownClosed);
-            // 
-            // StatsTextbox
-            // 
-            this.StatsTextbox.Location = new System.Drawing.Point(396, 67);
-            this.StatsTextbox.Name = "StatsTextbox";
-            this.StatsTextbox.ReadOnly = true;
-            this.StatsTextbox.Size = new System.Drawing.Size(242, 20);
-            this.StatsTextbox.TabIndex = 16;
-            // 
-            // StatsLabel
-            // 
-            this.StatsLabel.AutoSize = true;
-            this.StatsLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.StatsLabel.Location = new System.Drawing.Point(289, 70);
-            this.StatsLabel.Name = "StatsLabel";
-            this.StatsLabel.Size = new System.Drawing.Size(57, 17);
-            this.StatsLabel.TabIndex = 17;
-            this.StatsLabel.Text = "STATS:";
-            // 
-            // EndButton
-            // 
-            this.EndButton.Location = new System.Drawing.Point(292, 148);
-            this.EndButton.Name = "EndButton";
-            this.EndButton.Size = new System.Drawing.Size(346, 23);
-            this.EndButton.TabIndex = 18;
-            this.EndButton.Text = "END TURN";
-            this.EndButton.UseVisualStyleBackColor = true;
-            this.EndButton.Click += new System.EventHandler(this.EndTurnButtonClick);
-            // 
-            // LogTextbox
-            // 
-            this.LogTextbox.Location = new System.Drawing.Point(12, 182);
-            this.LogTextbox.Multiline = true;
-            this.LogTextbox.Name = "LogTextbox";
-            this.LogTextbox.ReadOnly = true;
-            this.LogTextbox.Size = new System.Drawing.Size(626, 131);
-            this.LogTextbox.TabIndex = 19;
-            // 
-            // TilesComboBox
-            // 
-            this.TilesComboBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.TilesComboBox.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.TilesComboBox.FormattingEnabled = true;
-            this.TilesComboBox.Location = new System.Drawing.Point(396, 93);
-            this.TilesComboBox.Name = "TilesComboBox";
-            this.TilesComboBox.Size = new System.Drawing.Size(242, 24);
-            this.TilesComboBox.TabIndex = 20;
-            this.TilesComboBox.DropDownClosed += new System.EventHandler(this.TileComboBoxDropdownClosed);
-            // 
-            // ControllerGUI
-            // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
-            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(650, 325);
-            this.Controls.Add(this.TilesComboBox);
-            this.Controls.Add(this.LogTextbox);
-            this.Controls.Add(this.EndButton);
-            this.Controls.Add(this.StatsLabel);
-            this.Controls.Add(this.StatsTextbox);
-            this.Controls.Add(this.TeamComboBox);
-            this.Controls.Add(this.AttackLabel);
-            this.Controls.Add(this.MoveToLabel);
-            this.Controls.Add(this.CurrentLabel);
-            this.Controls.Add(this.TeamLabel);
-            this.Controls.Add(this.TeamTexbox);
-            this.Controls.Add(this.AttackComboBox);
-            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
-            this.MaximizeBox = false;
-            this.MinimizeBox = false;
-            this.Name = "ControllerGUI";
-            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-            this.Text = "Controller";
-            this.ResumeLayout(false);
-            this.PerformLayout();
-
+        this.SelectedUnitTextBox = new System.Windows.Forms.TextBox();
+        this.UnitStatusLabel = new System.Windows.Forms.Label();
+        this.UnitStatusLabelTextBox = new System.Windows.Forms.TextBox();
+        this.FromTileLabel = new System.Windows.Forms.Label();
+        this.FromTextBox = new System.Windows.Forms.TextBox();
+        this.ToLabel = new System.Windows.Forms.Label();
+        this.ToTextBox = new System.Windows.Forms.TextBox();
+        this.DefendingUnitLabel = new System.Windows.Forms.Label();
+        this.DefendingUnitTextBox = new System.Windows.Forms.TextBox();
+        this.DefendingUnitStatusLabel = new System.Windows.Forms.Label();
+        this.DefendingUnitStatusTextBox = new System.Windows.Forms.TextBox();
+        this.SelectedUnitLabel = new System.Windows.Forms.Label();
+        this.CombatResultLabel = new System.Windows.Forms.Label();
+        this.CombatResultTextBox = new System.Windows.Forms.TextBox();
+        this.UnitExpLabel = new System.Windows.Forms.Label();
+        this.ExpTextBox = new System.Windows.Forms.TextBox();
+        this.EndTurnButton = new System.Windows.Forms.Button();
+        this.TeamTextBox = new System.Windows.Forms.TextBox();
+        this.SelectedUnitDetail = new System.Windows.Forms.TextBox();
+        this.GameLogBox = new System.Windows.Forms.TextBox();
+        this.SuspendLayout();
+        // 
+        // SelectedUnitTextBox
+        // 
+        this.SelectedUnitTextBox.Location = new System.Drawing.Point(411, 13);
+        this.SelectedUnitTextBox.Name = "SelectedUnitTextBox";
+        this.SelectedUnitTextBox.ReadOnly = true;
+        this.SelectedUnitTextBox.Size = new System.Drawing.Size(227, 20);
+        this.SelectedUnitTextBox.TabIndex = 26;
+        // 
+        // UnitStatusLabel
+        // 
+        this.UnitStatusLabel.AutoSize = true;
+        this.UnitStatusLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+        this.UnitStatusLabel.Location = new System.Drawing.Point(284, 69);
+        this.UnitStatusLabel.Name = "UnitStatusLabel";
+        this.UnitStatusLabel.Size = new System.Drawing.Size(103, 17);
+        this.UnitStatusLabel.TabIndex = 27;
+        this.UnitStatusLabel.Text = "UNIT STATUS:";
+        this.UnitStatusLabel.BackColor = Color.Transparent;
+        // 
+        // UnitStatusLabelTextBox
+        // 
+        this.UnitStatusLabelTextBox.Location = new System.Drawing.Point(411, 68);
+        this.UnitStatusLabelTextBox.Name = "UnitStatusLabelTextBox";
+        this.UnitStatusLabelTextBox.ReadOnly = true;
+        this.UnitStatusLabelTextBox.Size = new System.Drawing.Size(227, 20);
+        this.UnitStatusLabelTextBox.TabIndex = 28;
+        // 
+        // FromTileLabel
+        // 
+        this.FromTileLabel.AutoSize = true;
+        this.FromTileLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+        this.FromTileLabel.Location = new System.Drawing.Point(284, 95);
+        this.FromTileLabel.Name = "FromTileLabel";
+        this.FromTileLabel.Size = new System.Drawing.Size(52, 17);
+        this.FromTileLabel.TabIndex = 29;
+        this.FromTileLabel.Text = "FROM:";
+        this.FromTileLabel.BackColor = Color.Transparent;
+        // 
+        // FromTextBox
+        // 
+        this.FromTextBox.Location = new System.Drawing.Point(342, 94);
+        this.FromTextBox.Name = "FromTextBox";
+        this.FromTextBox.ReadOnly = true;
+        this.FromTextBox.Size = new System.Drawing.Size(100, 20);
+        this.FromTextBox.TabIndex = 30;
+        // 
+        // ToLabel
+        // 
+        this.ToLabel.AutoSize = true;
+        this.ToLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+        this.ToLabel.Location = new System.Drawing.Point(500, 95);
+        this.ToLabel.Name = "ToLabel";
+        this.ToLabel.Size = new System.Drawing.Size(32, 17);
+        this.ToLabel.TabIndex = 31;
+        this.ToLabel.Text = "TO:";
+        this.ToLabel.BackColor = Color.Transparent;
+        // 
+        // ToTextBox
+        // 
+        this.ToTextBox.Location = new System.Drawing.Point(538, 94);
+        this.ToTextBox.Name = "ToTextBox";
+        this.ToTextBox.ReadOnly = true;
+        this.ToTextBox.Size = new System.Drawing.Size(100, 20);
+        this.ToTextBox.TabIndex = 32;
+        // 
+        // DefendingUnitLabel
+        // 
+        this.DefendingUnitLabel.AutoSize = true;
+        this.DefendingUnitLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+        this.DefendingUnitLabel.Location = new System.Drawing.Point(284, 121);
+        this.DefendingUnitLabel.Name = "DefendingUnitLabel";
+        this.DefendingUnitLabel.Size = new System.Drawing.Size(128, 17);
+        this.DefendingUnitLabel.TabIndex = 33;
+        this.DefendingUnitLabel.Text = "DEFENDING UNIT:";
+        this.DefendingUnitLabel.BackColor = Color.Transparent;
+        // 
+        // DefendingUnitTextBox
+        // 
+        this.DefendingUnitTextBox.Location = new System.Drawing.Point(411, 120);
+        this.DefendingUnitTextBox.Name = "DefendingUnitTextBox";
+        this.DefendingUnitTextBox.ReadOnly = true;
+        this.DefendingUnitTextBox.Size = new System.Drawing.Size(227, 20);
+        this.DefendingUnitTextBox.TabIndex = 34;
+        // 
+        // DefendingUnitStatusLabel
+        // 
+        this.DefendingUnitStatusLabel.AutoSize = true;
+        this.DefendingUnitStatusLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+        this.DefendingUnitStatusLabel.Location = new System.Drawing.Point(283, 147);
+        this.DefendingUnitStatusLabel.Name = "DefendingUnitStatusLabel";
+        this.DefendingUnitStatusLabel.Size = new System.Drawing.Size(103, 17);
+        this.DefendingUnitStatusLabel.TabIndex = 35;
+        this.DefendingUnitStatusLabel.Text = "UNIT STATUS:";
+        this.DefendingUnitStatusLabel.BackColor = Color.Transparent;
+        // 
+        // DefendingUnitStatusTextBox
+        // 
+        this.DefendingUnitStatusTextBox.Location = new System.Drawing.Point(411, 146);
+        this.DefendingUnitStatusTextBox.Name = "DefendingUnitStatusTextBox";
+        this.DefendingUnitStatusTextBox.ReadOnly = true;
+        this.DefendingUnitStatusTextBox.Size = new System.Drawing.Size(227, 20);
+        this.DefendingUnitStatusTextBox.TabIndex = 36;
+        // 
+        // SelectedUnitLabel
+        // 
+        this.SelectedUnitLabel.AutoSize = true;
+        this.SelectedUnitLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+        this.SelectedUnitLabel.Location = new System.Drawing.Point(284, 14);
+        this.SelectedUnitLabel.Name = "SelectedUnitLabel";
+        this.SelectedUnitLabel.Size = new System.Drawing.Size(120, 17);
+        this.SelectedUnitLabel.TabIndex = 37;
+        this.SelectedUnitLabel.Text = "SELECTED UNIT:";
+        this.SelectedUnitLabel.BackColor = Color.Transparent;
+        // 
+        // CombatResultLabel
+        // 
+        this.CombatResultLabel.AutoSize = true;
+        this.CombatResultLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+        this.CombatResultLabel.Location = new System.Drawing.Point(283, 173);
+        this.CombatResultLabel.Name = "CombatResultLabel";
+        this.CombatResultLabel.Size = new System.Drawing.Size(129, 17);
+        this.CombatResultLabel.TabIndex = 38;
+        this.CombatResultLabel.Text = "COMBAT RESULT:";
+        this.CombatResultLabel.BackColor = Color.Transparent;
+        // 
+        // CombatResultTextBox
+        // 
+        this.CombatResultTextBox.Location = new System.Drawing.Point(411, 172);
+        this.CombatResultTextBox.Name = "CombatResultTextBox";
+        this.CombatResultTextBox.ReadOnly = true;
+        this.CombatResultTextBox.Size = new System.Drawing.Size(227, 20);
+        this.CombatResultTextBox.TabIndex = 39;
+        // 
+        // UnitExpLabel
+        // 
+        this.UnitExpLabel.AutoSize = true;
+        this.UnitExpLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+        this.UnitExpLabel.Location = new System.Drawing.Point(284, 41);
+        this.UnitExpLabel.Name = "UnitExpLabel";
+        this.UnitExpLabel.Size = new System.Drawing.Size(75, 17);
+        this.UnitExpLabel.TabIndex = 40;
+        this.UnitExpLabel.Text = "UNIT EXP:";
+        this.UnitExpLabel.BackColor = Color.Transparent;
+        // 
+        // ExpTextBox
+        // 
+        this.ExpTextBox.Location = new System.Drawing.Point(411, 40);
+        this.ExpTextBox.Name = "ExpTextBox";
+        this.ExpTextBox.ReadOnly = true;
+        this.ExpTextBox.Size = new System.Drawing.Size(227, 20);
+        this.ExpTextBox.TabIndex = 41;
+        // 
+        // EndTurnButton
+        // 
+        this.EndTurnButton.Location = new System.Drawing.Point(286, 290);
+        this.EndTurnButton.Name = "EndTurnButton";
+        this.EndTurnButton.Size = new System.Drawing.Size(352, 23);
+        this.EndTurnButton.TabIndex = 42;
+        this.EndTurnButton.Text = "END TURN";
+        this.EndTurnButton.UseVisualStyleBackColor = true;
+        this.EndTurnButton.Click += new System.EventHandler(this.EndTurnButtonClick);
+        // 
+        // TeamTextBox
+        // 
+        this.TeamTextBox.Location = new System.Drawing.Point(13, 13);
+        this.TeamTextBox.Multiline = true;
+        this.TeamTextBox.Name = "TeamTextBox";
+        this.TeamTextBox.Size = new System.Drawing.Size(264, 177);
+        this.TeamTextBox.TabIndex = 43;
+        this.TeamTextBox.ReadOnly = true;
+        // 
+        // SelectedUnitDetail
+        // 
+        this.SelectedUnitDetail.Location = new System.Drawing.Point(13, 197);
+        this.SelectedUnitDetail.Multiline = true;
+        this.SelectedUnitDetail.Name = "SelectedUnitDetail";
+        this.SelectedUnitDetail.Size = new System.Drawing.Size(264, 116);
+        this.SelectedUnitDetail.TabIndex = 44;
+        this.SelectedUnitDetail.ReadOnly = true;
+        // 
+        // GameLogBox
+        // 
+        this.GameLogBox.Location = new System.Drawing.Point(287, 197);
+        this.GameLogBox.Multiline = true;
+        this.GameLogBox.Name = "GameLogBox";
+        this.GameLogBox.Size = new System.Drawing.Size(351, 87);
+        this.GameLogBox.TabIndex = 45;
+        this.GameLogBox.ReadOnly = true;
+        // 
+        // ControllerGUI
+        // 
+        this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
+        this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+        this.ClientSize = new System.Drawing.Size(650, 325);
+        this.Controls.Add(this.GameLogBox);
+        this.Controls.Add(this.SelectedUnitDetail);
+        this.Controls.Add(this.TeamTextBox);
+        this.Controls.Add(this.EndTurnButton);
+        this.Controls.Add(this.ExpTextBox);
+        this.Controls.Add(this.UnitExpLabel);
+        this.Controls.Add(this.CombatResultTextBox);
+        this.Controls.Add(this.CombatResultLabel);
+        this.Controls.Add(this.SelectedUnitLabel);
+        this.Controls.Add(this.DefendingUnitStatusTextBox);
+        this.Controls.Add(this.DefendingUnitStatusLabel);
+        this.Controls.Add(this.DefendingUnitTextBox);
+        this.Controls.Add(this.DefendingUnitLabel);
+        this.Controls.Add(this.ToTextBox);
+        this.Controls.Add(this.ToLabel);
+        this.Controls.Add(this.FromTextBox);
+        this.Controls.Add(this.FromTileLabel);
+        this.Controls.Add(this.UnitStatusLabelTextBox);
+        this.Controls.Add(this.UnitStatusLabel);
+        this.Controls.Add(this.SelectedUnitTextBox);
+        this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
+        this.MaximizeBox = false;
+        this.MinimizeBox = false;
+        this.Name = "ControllerGUI";
+        this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
+        this.BackgroundImage = ImageManager.AuxBackground;
+        this.Text = "Controller";
+        this.ResumeLayout(false);
+        this.TopMost = true;
+        this.PerformLayout();
     }
     /// <summary>
     /// Creates a tether to the given game.
@@ -213,97 +313,122 @@ partial class ControllerGUI
     /// <param name="game"></param>
     public void CreateConnectionWithGame(Game game)
     {
-        _Game = game;
+        this._Game = game;
     }
     /// <summary>
-    /// When the character has been set on the controller.
+    /// Adds the text to the top most right textbox.
+    /// </summary>
+    /// <param name="str">Text to be added.</param>
+    public void RewriteSelectedUnitTextBox(string str)
+    {
+        this.SelectedUnitTextBox.Text = str;
+    }
+    /// <summary>
+    /// Adds text to the second to the top textbox on the right.
+    /// </summary>
+    /// <param name="str">Text to be added.</param>
+    public void RewriteExpTextBox(string str)
+    {
+        this.ExpTextBox.Text = str;
+    }
+    /// <summary>
+    /// Adds text to the third most top textbox on the right
+    /// </summary>
+    /// <param name="str">string to be added.</param>
+    public void RewriteUnitStatusLabelTextBox(string str)
+    {
+        this.UnitStatusLabelTextBox.Text = str;
+    }
+    /// <summary>
+    /// Sets text to the left textbox 4th from the top.
+    /// </summary>
+    /// <param name="str">string to be added</param>
+    public void RewriteFromTextBox(string str)
+    {
+        this.FromTextBox.Text = str;
+    }
+    /// <summary>
+    /// Sets text to the right textbox 4th from the top. 
+    /// </summary>
+    /// <param name="str">string to be added.</param>
+    public void RewriteToTextBox(string str)
+    {
+        this.ToTextBox.Text = str;
+    }
+    /// <summary>
+    /// Sets the textbox for the 5th textbox from the top on the right.
+    /// </summary>
+    /// <param name="str">string to be added.</param>
+    public void RewriteDefendingUnitTextBox(string str)
+    {
+        this.DefendingUnitTextBox.Text = str;
+    }
+    /// <summary>
+    /// Sets the text for the 6th from the top on the right.
+    /// </summary>
+    /// <param name="str">string to be added.</param>
+    public void RewriteDefendingUnitStatus(string str)
+    {
+        this.DefendingUnitStatusTextBox.Text = str;
+    }
+    /// <summary>
+    /// Sets the text for the 7th from the top of the right.
+    /// </summary>
+    /// <param name="str">string to be added.</param>
+    public void RewriteCombatResultTextBox(string str)
+    {
+        this.CombatResultTextBox.Text = str;
+    }
+    /// <summary>
+    /// Appends the given string to the team textbox.
+    /// </summary>
+    /// <param name="str">string to be appended.</param>
+    private void AppendTeamTextBox(string str)
+    {
+        this.TeamTextBox.AppendText(str + "\n");
+    }
+    /// <summary>
+    /// Refreshes the Team Textbox.
+    /// </summary>
+    public void RefreshTeamTextBox()
+    {
+        this.TeamTextBox.Clear();
+        for (int i = 0; i < Player1.TeamSize(); i++)
+        {
+            Character c = Player1.GetCharacterFromTeam(i);
+            this.AppendTeamTextBox(c.ToString());
+        }
+    }
+    /// <summary>
+    /// Appends information to the games log.
+    /// </summary>
+    /// <param name="str"></param>
+    public void AppendToGameLog(string str)
+    {
+        this.GameLogBox.AppendText(Metadata.GameTime() + str + "\n");
+    }
+    /// <summary>
+    /// When the player has decided to attack.
     /// </summary>
     /// <param name="sender"></param>
     /// <param name="e"></param>
-    private void CharacterComboBoxDropdownClosed(object sender, EventArgs e)
+    public void AttackButtonClick(object sender, EventArgs e)
     {
-        Character c = (Character)TeamComboBox.SelectedItem;
-        for (int i = 0; i < c.GetOccuableTileQuantity(); i++)
-        {
-            Tile t = c.GetOccuableTile(i);
-            TilesComboBox.Items.Add(t);
-        }
-        
-        StatsTextbox.Text = c.Status();
-        this.SoftUpdate();
-        TeamComboBox.Enabled = false;
-    }
-    /// <summary>
-    /// Occurs when the combobox of tiles is closed.
-    /// </summary>
-    /// <param name="sender"></param>
-    /// <param name="e"></param>
-    public void TileComboBoxDropdownClosed(object sender, EventArgs e)
-    {
-        Character c = (Character)TeamComboBox.SelectedItem;
-        Tile t = TileLogic.ConvertStringToTile(_Game, TilesComboBox.SelectedItem.ToString());
 
-        _Game.MoveCharacter(c, t);
-
-        for (int i = 0; i < c.GetAttackableCharacterQuantity(); i++)
-        {
-            AttackComboBox.Items.Add(c.GetAttackableEntity(i));
-        }
-
-        this.SoftUpdate();
-        TilesComboBox.Enabled = false;
-    }
-    public void AttakComboBoxDropdownClosed(object sender, EventArgs e)
-    {
-        AttackComboBox.Items.Clear();
         // DO DAMAGE TODO
         // NEED TO IMMPLEMENT
         // UAUAUAUUAUAUA
     }
+    /// <summary>
+    /// When the player decids to end the turn
+    /// </summary>
+    /// <param name="sender"></param>
+    /// <param name="e"></param>
     public void EndTurnButtonClick(object sender, EventArgs e)
     {
-        GiveControls();
-        HardUpdate();
-    }
-    /// <summary>
-    /// Only updates the textual components.
-    /// </summary>
-    public void SoftUpdate()
-    {
-        TeamTexbox.Clear();
-        
-
-        for (int i = 0; i < Player1.TeamSize(); i++)
-        {
-            Character c = Player1.GetCharacterFromTeam(i);
-            TeamTexbox.AppendText(c + ((Character)TeamComboBox.SelectedItem == c ? " << " : "") + "\n");
-        }
-    }
-    /// <summary>
-    /// Updates the controller including all GUI Components.
-    /// </summary>
-    public void HardUpdate()
-    {
-        TeamTexbox.Clear();
-        TeamComboBox.Items.Clear();
-        TilesComboBox.Items.Clear();
-        
-        for (int i = 0; i < Player1.TeamSize(); i++)
-        {
-            Character c = Player1.GetCharacterFromTeam(i);
-            TeamTexbox.AppendText(c + "\n");
-            TeamComboBox.Items.Add(c);
-        }
-    }
-    public void GiveControls()
-    {
-        TeamComboBox.Enabled = true;
-        TilesComboBox.Enabled = true;
-    }
-    public void TakeControls()
-    {
-        TeamComboBox.Enabled = false;
-        TilesComboBox.Enabled = false;
+        _Game.ResetTurn();
+        //socketlogic
+        // and stuff
     }
 
     #endregion

@@ -5,7 +5,6 @@ using System.Windows.Forms;
 /// <summary>
 /// Defines the board where things will be drawn on.
 /// </summary>
-/// 
 public partial class BoardGUI : Form
 {
     private Random random = new Random();
@@ -17,15 +16,9 @@ public partial class BoardGUI : Form
         // TODO
         InitializeComponent();
         this.Controller = new ControllerGUI(p1);
-        this.Game = new Game(p1, p2, this.Controller, this.Display);
-        ///this.Game.InitCharacter("Vairenar","Archer", random.Next(Global.Rows), random.Next(Global.Columns));
-        //this.Game.InitCharacter("Deoxia", "cleric", random.Next(Global.Rows), random.Next(Global.Columns));
+        this.Game = new Game(p1, p2, this.Controller, this.Display, this);
         Controller.Show();
         
-    }
-    private void InitializeBoardState(Player p1, Player p2)
-    {
-
     }
     /// <summary>
     /// Method occurs on paint.
@@ -83,6 +76,7 @@ public partial class BoardGUI : Form
     /// <param name="e"></param>
     public void GameGUI_Press(object sender, KeyPressEventArgs e)
     {
+        Controller.Show();
         /*
         //TODO when the controlelr has been had t acepted button pressed
         //make srue to update the character postion.

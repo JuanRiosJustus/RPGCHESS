@@ -15,7 +15,7 @@ public partial class LobbyGUI : Form
     /// <param name="e"></param>
     private void ClassCombobox_DropDownClosed(object sender, EventArgs e)
     {
-        Archetype a = (Archetype)this.ClassList[this.ClassList.IndexOf(this.ClassCombobox.SelectedItem)];
+        Archetype a = this.ClassList[ClassList.IndexOf((Archetype)ClassCombobox.SelectedItem)];
         string stats = "[HP: " + a.Health + "][DMG: " + a.Damage + "][RNGE: " + a.Range + "][MVMT: " + a.Movement + "]";
         this.classType = a.Type;
         this.StatsTextbox.Text = stats;

@@ -30,6 +30,12 @@ partial class BoardGUI
     private Graphics g;
     private bool backgroundIsDeveloped;
 
+    private Character CurrentChara;
+    private bool HasMoved;
+    private bool HasAttacked;
+    private bool IsMoving;
+    private bool IsAttacking;
+
     /// <summary>
     /// Required method for Designer support - do not modify
     /// the contents of this method with the code editor.
@@ -39,7 +45,12 @@ partial class BoardGUI
         this.Display = new System.Windows.Forms.PictureBox();
         this.MainFont = new Font("Times New Roman", 16.0f);
         this.g = null;
+        this.CurrentChara = null;
         this.backgroundIsDeveloped = false;
+        this.HasMoved = false;
+        this.HasAttacked = false;
+        this.IsMoving = false;
+        this.IsAttacking = false;
         this.SuspendLayout();
         // 
         // Display
@@ -51,6 +62,7 @@ partial class BoardGUI
         this.Display.TabIndex = 1;
         this.Display.BackColor = System.Drawing.Color.Black;
         this.Display.Paint += new System.Windows.Forms.PaintEventHandler(Canvas_Paint);
+        this.Display.MouseClick += new MouseEventHandler(this.MouseClickOnScreen);
         // 
         // BoardGUI
         // 
@@ -70,6 +82,113 @@ partial class BoardGUI
         this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
         this.ResumeLayout(false);
 
+    }
+    /// <summary>
+    /// Determines the actions based on user mouse input 
+    /// </summary>
+    /// <param name="sender"></param>
+    /// <param name="e"></param>
+    public void MouseClickOnScreen(object sender, MouseEventArgs e)
+    {
+        if (this.HasAttacked == true && this.HasMoved == true)
+        {
+            Console.WriteLine("Nothing else to do.....");
+            this.Controller.AppendToGameLog("Turn Over");
+            return;
+        }
+        // Get the respective tile.
+        int col = (int)(e.X / 26.25);
+        int row = (e.Y / 26);
+        Tile t = Game.GetBoardTile(row, col);
+
+        
+        /********** USER IS SELECTING A UNIT/CHARACTER **********/
+        // determine if the player is attacking based on the character they selected.
+        if (CurrentChara == null && t.IsOccupied() == true)
+        {
+            Character c = (Character)t.Occupant;
+            
+            // moving the character.
+            if (c.RELATION_OF_ENTITY == Relation.Friendly && (this.HasAttacked == false || this.HasMoved == false))
+            {
+                this.CurrentChara = c;
+                this.IsMoving = true;
+                Console.WriteLine(c.ToString() + " is selected");
+                this.Controller.RewriteSelectedUnitTextBox(c.ToString());
+                this.Controller.RewriteUnitStatusLabelTextBox(c.GetStatus());
+                this.Controller.RewriteFromTextBox(c.TILE_OF_ENTITY.ToString());
+                this.Controller.RewriteExpTextBox(c.GetExpStatus());
+                this.Controller.RefreshTeamTextBox();
+                return;
+            }
+            Console.WriteLine("W?W?W?W?W?W?W??W?W?W?W?W?W?W?W?W?W?W?W?WW??W?W?W?W?W?W?W");
+        }
+        /********** WERE ATTACKING **********/
+        if (CurrentChara != null && t.IsOccupied() == true && this.HasAttacked == false)
+        {
+            // we are attacking.
+            for (int i = 0; i < this.CurrentChara.GetAttackableCharacterQuantity(); i++)
+            {
+                // check that the player is attackable
+                Character c = (Character)t.Occupant;
+
+                if (this.CurrentChara.GetAttackableEntity(i) == c)
+                {
+                    this.Controller.AppendToGameLog(CurrentChara.NAME_OF_ENTITY + " has attacked " + c.NAME_OF_ENTITY);
+
+                    Console.WriteLine("IMPLEMENT COMBAT BECAUSE YOU HIT SOMEONE >:( ");
+                    //this.Controller.RewriteSelectedUnitTextBox("");
+                    this.Controller.RewriteDefendingUnitTextBox(c.ToString());
+                    this.Controller.RewriteDefendingUnitStatus(c.GetStatus());
+                    this.Controller.RefreshTeamTextBox();
+                    this.CurrentChara = null;
+                    this.HasAttacked = true;
+                    return;
+                }
+            }
+        }
+        /********** WERE MOVING **********/
+        if (CurrentChara != null && t.IsOccupied() == false && this.HasMoved == false)
+        {
+            for (int i = 0; i < this.CurrentChara.GetOccuableTileQuantity(); i++)
+            {
+                if (this.CurrentChara.GetOccuableTile(i) == t)
+                {
+                    this.Controller.AppendToGameLog(CurrentChara.NAME_OF_ENTITY + " has moved from " + CurrentChara.TILE_OF_ENTITY.ToString() + " to " + t.ToString());
+                    
+                    this.Game.MoveCharacter(this.CurrentChara, t);
+                    ////////////////////////////////////////////////////////////
+                    for (int k = 0; k < this.CurrentChara.GetAttackableCharacterQuantity(); k++)
+                    {
+                        this.Controller.AppendToGameLog(CurrentChara.GetAttackableEntity(k).NAME_OF_ENTITY + " is within range of " + CurrentChara.NAME_OF_ENTITY);
+                    }
+                    ///////////////////////////////////////////////////////////
+                    this.Controller.RewriteToTextBox(t.ToString());
+                    this.Controller.RefreshTeamTextBox();
+                    this.CurrentChara = null;
+                    this.HasMoved = true;
+
+                    
+
+                    return;
+                }
+            }
+        }
+        /********** NOTHING WAS DONE THIS TURN ?? **********/
+        Console.WriteLine("Nothing was done this turn");
+        this.RRfresh();
+        if (this.HasAttacked && this.HasMoved)
+        {
+            this.Controller.AppendToGameLog("Turn Over");
+        }
+        this.CurrentChara = null;
+    }
+    public void RRfresh()
+    {
+        this.IsMoving = false;
+        this.IsAttacking = false;
+        this.HasMoved = false;
+        this.HasAttacked = false;
     }
     /// <summary>
     /// Sets the background of the board.
