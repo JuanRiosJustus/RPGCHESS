@@ -27,7 +27,7 @@ partial class GUI
     private System.Windows.Forms.Button FourthButton;
 
     private LobbyGUI Lobby;
-    private BoardGUI Board;
+    private GameGUI Board;
 
     #region Windows Form Designer generated code
 

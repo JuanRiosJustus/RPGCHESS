@@ -6,18 +6,11 @@ using System;
 /// </summary>
 public partial class ControllerGUI : Form
 {
-    public ControllerGUI(Player p1)
+    public ControllerGUI(Game connectedGame)
     {
         InitializeComponent();
-        Player1 = p1;
-    }
-    public void SetAssociatedBoard(Form associatedBoard)
-    {
-        this.AssociatedBoard = associatedBoard;
-    }
-    private void AcceptingButton_Click(object sender, EventArgs e)
-    {
 
-        Console.WriteLine("WOW THIS WAS PRESSED");
+        ConnectedPlayer = Metadata.Player1Instance();
+        ConnectedGame = connectedGame;
     }
 }

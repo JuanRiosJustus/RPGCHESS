@@ -21,7 +21,7 @@ public partial class GUI : Form
             Lobby = new LobbyGUI();
             Lobby.Closed += (s, args) =>
             {
-                Board = new BoardGUI(new Player(Relation.Friendly), new Player(Relation.Enemy));
+                Board = new GameGUI();
                 Board.Closed += (s1, args1) =>
                 {
                     Lobby = null;

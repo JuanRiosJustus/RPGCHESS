@@ -1,4 +1,5 @@
 ﻿using System;
+using System.ComponentModel;
 using System.Drawing;
 
 /// <summary>
@@ -21,12 +22,22 @@ partial class ControllerGUI
         {
             components.Dispose();
         }
-        base.Dispose(disposing);
+        if (ConnectedGame.GameIsOver())
+        {
+            base.Dispose(disposing);
+        }
+    }
+    /// <summary>
+    /// Clean up any resources being used.
+    /// </summary>
+    /// <param name="sender"></param>
+    /// <param name="e"></param>
+    public void ForceDispose(object sender, EventArgs e)
+    {
+        base.Dispose(true);
     }
 
     #region Windows Form Designer generated code
-
-    private System.Windows.Forms.Form AssociatedBoard;
     
     private System.Windows.Forms.TextBox SelectedUnitTextBox;
     private System.Windows.Forms.Label UnitStatusLabel;
@@ -50,8 +61,8 @@ partial class ControllerGUI
     private System.Windows.Forms.TextBox SelectedUnitDetail;
     private System.Windows.Forms.TextBox GameLogBox;
 
-    private Player Player1;
-    private Game _Game;
+    private Player ConnectedPlayer;
+    private Game ConnectedGame;
 
 
     /// <summary>
@@ -80,6 +91,7 @@ partial class ControllerGUI
         this.TeamTextBox = new System.Windows.Forms.TextBox();
         this.SelectedUnitDetail = new System.Windows.Forms.TextBox();
         this.GameLogBox = new System.Windows.Forms.TextBox();
+
         this.SuspendLayout();
         // 
         // SelectedUnitTextBox
@@ -308,14 +320,6 @@ partial class ControllerGUI
         this.PerformLayout();
     }
     /// <summary>
-    /// Creates a tether to the given game.
-    /// </summary>
-    /// <param name="game"></param>
-    public void CreateConnectionWithGame(Game game)
-    {
-        this._Game = game;
-    }
-    /// <summary>
     /// Adds the text to the top most right textbox.
     /// </summary>
     /// <param name="str">Text to be added.</param>
@@ -393,9 +397,9 @@ partial class ControllerGUI
     public void RefreshTeamTextBox()
     {
         this.TeamTextBox.Clear();
-        for (int i = 0; i < Player1.TeamSize(); i++)
+        for (int i = 0; i < ConnectedPlayer.TeamSize(); i++)
         {
-            Character c = Player1.GetCharacterFromTeam(i);
+            Character c = ConnectedPlayer.GetCharacterFromTeam(i);
             this.AppendTeamTextBox(c.ToString());
         }
     }
@@ -426,11 +430,17 @@ partial class ControllerGUI
     /// <param name="e"></param>
     public void EndTurnButtonClick(object sender, EventArgs e)
     {
-        _Game.ResetTurn();
+        ConnectedGame.UpdateAndRefreshGameGui();
         //socketlogic
         // and stuff
     }
 
     #endregion
+    
+    
 
+    protected override void OnClosing(CancelEventArgs e)
+    {
+        return;
+    }
 }
