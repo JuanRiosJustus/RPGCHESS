@@ -38,7 +38,7 @@ public class Item
     }
 
     public string Name { get { return NAME; } }
-    public string Type { get { return REQUIRED_CLASS.Type; } }
+    public string Type { get { return REQUIRED_CLASS.NAME; } }
     public int Movement { get { return MOVEMENT; } }
     public int Health { get { return HEALTH; } }
     public int Resist { get { return RESIST; } }

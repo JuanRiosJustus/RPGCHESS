@@ -6,14 +6,16 @@ using System.Collections.Generic;
 public class Board
 {
     private Tile[,] Map;
-    private Random random = new Random();
-    private List<Character> ListOfEveryCharacter = new List<Character>();
+    private Random NumGenerator;
+    private List<Character> ListOfEveryCharacter;
     /// <summary>
     /// Constructor for the board.
     /// </summary>
-    public Board(List<Character> loec)
+    public Board()
     {
-        loec = ListOfEveryCharacter;
+        NumGenerator = new Random();
+        ListOfEveryCharacter = new List<Character>();
+
         GenerateMap(Global.Rows, Global.Columns);
     }
     /// <summary>
@@ -38,14 +40,15 @@ public class Board
 
             while (tile.IsOccupied())
             {
-                row = random.Next(Global.Rows);
-                col = random.Next(Global.Columns);
+                row = NumGenerator.Next(Global.Rows);
+                col = NumGenerator.Next(Global.Columns);
                 tile = Map[row, col];
             }
 
-            tile.SetOccupant(character);
-            TileLogic.AddOccuableTilesToEntity(Map, character);
-            TileLogic.AddAttackableEntitiesToEntity(Map, character);
+            //tile.SetOccupant(character);
+            character.SetTile(tile);
+            TileSelection.AddOccuableTilesToEntity(Map, character);
+            TileSelection.AddAttackableEntitiesToEntity(Map, character);
             Console.WriteLine(character.NAME_OF_ENTITY + " was added at " + tile.ToCoordinate());
             return true;
         }
@@ -63,10 +66,10 @@ public class Board
         Tile tile = character.TILE_OF_ENTITY;
         tile.RemoveOccupant();
 
-        newTile.SetOccupant(character);
+        character.SetTile(newTile);
         character.ClearOccuableTiles();
-        TileLogic.AddOccuableTilesToEntity(Map, character);
-        TileLogic.AddAttackableEntitiesToEntity(Map, character);
+        TileSelection.AddOccuableTilesToEntity(Map, character);
+        TileSelection.AddAttackableEntitiesToEntity(Map, character);
     }
     /// <summary>
     /// Gets the board size of the given dimension.
@@ -100,7 +103,7 @@ public class Board
         {
             for (int column = 0; column < tiles.GetLength(1); column++)
             {
-                int height = random.Next(-1, 1);
+                int height = NumGenerator.Next(-1, 1);
                 tiles[row, column] = new Tile(row, column, height);
             }
         }

@@ -24,9 +24,13 @@ public class Tile
     /// </summary>
     public int Height { get; private set; }
     /// <summary>
-    /// Represents the type of biome the tile is.
+    /// Represents the type of biome the tile is in shortest format..
     /// </summary>
-    public string Biome { get; private set; }
+    public string BiomeSHORT { get; private set; }
+    /// <summary>
+    /// Represents the type of biome the tile is in longest format.
+    /// </summary>
+    public string BiomeLONG { get; private set; }
 
     public Item Loot { get; private set; }
 
@@ -61,32 +65,38 @@ public class Tile
         if (Height <= -3)
         {
             // Water
-            Biome = "WTR";
+            BiomeSHORT = "WTR";
+            BiomeLONG = "water";
         }
         else if (Height > -3 && Height <= -1)
         {
             // Swanp
-            Biome = "SWP";
+            BiomeSHORT = "SWP";
+            BiomeLONG = "swamp";
         }
         else if (Height > -1 && Height <= 1)
         {
             // Plains
-            Biome = "PLN";
+            BiomeSHORT = "PLN";
+            BiomeLONG = "plain";
         }
         else if (Height > 1 && Height <= 3)
         {
             // Forest
-            Biome = "FRS";
+            BiomeSHORT = "FRS";
+            BiomeLONG = "forest";
         }
         else if (Height > 3 && Height <= 5)
         {
             // Hill
-            Biome = "HLL";
+            BiomeSHORT = "HLL";
+            BiomeLONG = "hill";
         }
         else if (Height > 5)
         {
             // Mountain
-            Biome = "MTN";
+            BiomeSHORT = "MTN";
+            BiomeLONG = "mountain";
         }
     }
     /// <summary>
@@ -130,7 +140,7 @@ public class Tile
     {
         Height = height;
         AdjustBiome();
-        TileImage = ImageManager.DetermineBiomeImage(Biome);
+        TileImage = ImageManager.DetermineBiomeImage(BiomeLONG);
     }
     /// <summary>
     /// Returns a boolean value based on the current affiliation the tile has with an entity.
@@ -154,7 +164,7 @@ public class Tile
     }
     public string ToBiome()
     {
-        return "[" + Biome + "]";
+        return "[" + BiomeSHORT + "]";
     }
     public string ToLevel()
     {
