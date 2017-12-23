@@ -5,7 +5,7 @@
 /// Contains information pertaining to the players.
 /// 
 /// </summary>
-public static class Metadata
+public class Metadata
 {
     static Metadata()
     {
@@ -17,6 +17,21 @@ public static class Metadata
     private static Boolean Localhost = false;
 
     /// <summary>
+    ///  Resets the meta data.
+    /// </summary>
+    public static void ResetMetadata()
+    {
+        if (Player1 != null)
+        {
+            Player1 = null;
+        }
+        if (Player2 != null)
+        {
+            Player2 = null;
+        }
+        Localhost = false;
+    }
+    /// <summary>
     /// Returns the instance of player 1 / this player.
     /// </summary>
     /// <returns></returns>
@@ -24,7 +39,7 @@ public static class Metadata
     {
         if (Player1 == null)
         {
-            Player1 = new Player(Relation.Friendly);
+            Player1 = new Player(Relation.Friend);
             Console.WriteLine("Player one was created");
         }
         return Player1;
@@ -37,7 +52,7 @@ public static class Metadata
     {
         if (Player2 == null)
         {
-            Player2 = new Player(Relation.Enemy);
+            Player2 = new Player(Relation.Foe);
             Console.WriteLine("Player one was created");
         }
         return Player2;
@@ -58,6 +73,13 @@ public static class Metadata
     {
         return Localhost;
     }
-
+    /// <summary>
+    /// Returns the current time represented by a string.
+    /// </summary>
+    /// <returns></returns>
+    public static string GameTime()
+    {
+        return "[" + DateTime.Now.ToString("h:mm:ss tt") + "] >> \t" ;
+    }
 
 }

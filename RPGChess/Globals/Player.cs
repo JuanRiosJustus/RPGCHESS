@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections;
+using System.Collections.Generic;
 
 /// <summary>
 /// 
@@ -8,17 +9,17 @@ using System.Collections;
 /// </summary>
 public class Player
 {
-    /// <summary>
-    /// The list of characters assoiated with the player.
-    /// </summary>
-    private ArrayList Team;
+    private List<Character> Team;
     private string IP;
     private Relation _Relation;
     private string Name;
-    
+    /// <summary>
+    /// Constructor for the Player.
+    /// </summary>
+    /// <param name="relation">The relation of the player to the local host.</param>
     public Player(Relation relation)
     {
-        Team = new ArrayList();
+        Team = new List<Character>();
         IP = null;
         _Relation = relation;
     }
@@ -37,7 +38,15 @@ public class Player
     /// <returns>The character at the given index.</returns>
     public Character GetCharacterFromTeam(int index)
     {
-        return (Character)Team[index];
+        return Team[index];
+    }
+    /// <summary>
+    /// Remoces the given character from the list of characters.
+    /// </summary>
+    /// <param name="c">charaacter to remove</param>
+    public void RemoveCharater(Character c)
+    {
+        Team.Remove(c);
     }
     /// <summary>
     /// Returns the size of the players team.
