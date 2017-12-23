@@ -14,11 +14,10 @@ public class Game
     private List<Character> ListOfEveryCharacter;
     private Queue<Character> TurnQueue;
     private Character FocusedCharacter;
-    private int CurrentCharacterIndex = 0;
     private Player P1;
     private Player P2;
     private Queue<Player> TurnOrder;
-    private int ActionsTaken;
+    private int Actions;
     private ControllerGUI ConnectedControllerGUI;
     private GameGUI ConnectedGameGUI;
 
@@ -33,23 +32,35 @@ public class Game
         P1 = Metadata.Player1Instance();
         P2 = Metadata.Player2Instance();
 
-        ConnectedBoard = new Board();
+        ConnectedBoard = new Board(BoardType.Mountainous);
 
         ConnectedControllerGUI = new ControllerGUI(this);
 
         ConnectedControllerGUI.Show();
         ConnectedGameGUI = connectedGameGUI;
-        
-        GameInitialization.DetermineTurnOrder(P1, P2, TurnOrder);
-        GameInitialization.SetCharactersOnBoard(P1, P2, ConnectedBoard);
 
-        ConnectedBoard.Mountainous();
-        //ConnectedBoard.Oceanic();
+        InitManager.DetermineTurnOrder(P1, P2, TurnOrder);
+        InitManager.SetCharactersOnBoard(P1, P2, ConnectedBoard);
 
-        ActionsTaken = 0;
+        Actions = 0;
         ConnectedControllerGUI.RefreshTeamTextBox();
 
         ConnectedGameGUI.FormClosing += new FormClosingEventHandler(ConnectedControllerGUI.ForceDispose);
+    }
+    /// <summary>
+    /// Determines if the turn is over.
+    /// </summary>
+    /// <returns></returns>
+    public bool TurnIsOver()
+    {
+        return Actions >= Global.ACTIONSPERTURN;
+    }
+    /// <summary>
+    /// Resets the actions taken to refresh the turn.
+    /// </summary>
+    public void ResetTurn()
+    {
+        Actions = 0;
     }
     /// <summary>
     /// Determines if the current game is over
@@ -65,14 +76,14 @@ public class Game
         return false;
     }
     /// <summary>
-    /// Gets a tile at the given x,y coordinate.
+    /// Returns a single tile from the board given a row and column,
     /// </summary>
-    /// <param name="x">X coordinate of the tile.</param>
-    /// <param name="y">Y coordinate of the tile</param>
+    /// <param name="row">row of the tile.</param>
+    /// <param name="col">column of the tile.</param>
     /// <returns></returns>
-    public Tile GetBoardTile(int x, int y)
+    public Tile GetBoardTile(int row, int col)
     {
-        return ConnectedBoard.GetTile(x, y);
+        return ConnectedBoard.GetTile(row, col);
     }
     /// <summary>
     /// Returns the lenght of the given board dimension.
@@ -84,40 +95,27 @@ public class Game
         return ConnectedBoard.GetBoardSize(dimension);
     }
     /// <summary>
-    /// Determines if the focused character can attack the given.
-    /// </summary>
-    /// <param name="defender">character to check.</param>
-    /// <returns></returns>
-    public bool CheckIfAttackableByFocusedCharcter(Character defender)
-    {
-        for (int i = 0; i < FocusedCharacter.GetAttackableCharacterQuantity(); i++)
-        {
-            if (FocusedCharacter.GetAttackableEntity(i) == defender)
-            {
-                return true;
-            }
-        }
-        return false;
-    }
-    /// <summary>
     /// Moves the given character given a direction.
     /// </summary>
     /// <param name="f"></param>
     /// <param name="direction"></param>
-    public void MoveCharacter(Character c, Tile newTile)
+    public void MoveCharacter(Character cha, Tile newTile)
     {
-        Tile t = c.TILE_OF_ENTITY;
-        ConnectedBoard.MoveCharacter(c, newTile);
+        Tile t = cha.TILE_OF_ENTITY;
+        ConnectedBoard.MoveEntity(cha, newTile);
         
-        ConnectedControllerGUI.RewriteSelectedUnitToTextBox(newTile);
-        ConnectedControllerGUI.AppendToGameLog(c.NAME_OF_ENTITY + " has moved from " + t.ToCoordinate() + " to " + c.TILE_OF_ENTITY.ToCoordinate());
-        CheckTargetableCharacters(c);
+        UpdateMainTextBoxes(cha);
+        ConnectedControllerGUI.AppendToGameLog(cha.NAME_OF_ENTITY +
+            " has moved from " + t.ToCoordinate() + " to " + cha.TILE_OF_ENTITY.ToCoordinate());
+        CheckForTargetableEntities(cha);
 
-        FocusedCharacter = null;
-        ActionsTaken++;
 
-        UpdateAndRefreshGameGui();
+        string str = ControllerManager.AuxiliaryText(cha);
+        
+        ConnectedControllerGUI.RewriteAuxiliaryTextBox(str);
         ConnectedControllerGUI.RefreshTeamTextBox();
+
+        EndOfTurn();
     }
     /// <summary>
     /// Updates and refreshes the picturebox of the gui.
@@ -135,30 +133,33 @@ public class Game
     {
         ConnectedControllerGUI.AppendToGameLog(str);
     }
-    private void CheckTargetableCharacters(Character c)
+    /// <summary>
+    /// Prints the available targetable entities of the given entity.
+    /// </summary>
+    /// <param name="c"></param>
+    private void CheckForTargetableEntities(Character c)
     {
-        for (int i = 0; i < c.GetAttackableCharacterQuantity(); i++)
+        List<Entity> targets = ConnectedBoard.GetTargetableEntities(c);
+        for (int i = 0; i < targets.Count; i++)
         {
-            Character k = c.GetAttackableEntity(i);
-            ConnectedControllerGUI.AppendToGameLog(c.NAME_OF_ENTITY + " can target " + k.NAME_OF_ENTITY);
+            Entity k = targets[i];
+            ConnectedControllerGUI.AppendToGameLog(">>" + c.NAME_OF_ENTITY + " can target " + k.NAME_OF_ENTITY);
         }
     }
     /// <summary>
     /// Displayers all the data of the given character to the controller.
     /// </summary>
     /// <param name="c"></param>
-    public void SelectCharacter(Character c)
+    public void Focus(Character c)
     {
-        ConnectedControllerGUI.RewriteSelectedUnitTextBox(c);
-        ConnectedControllerGUI.RewriteExpTextBox(c);
-        ConnectedControllerGUI.RewriteSelectedUnitStatusTextBox(c);
-        ConnectedControllerGUI.RewriteSelectedUnitFromTextBox(c);
-        
+        UpdateMainTextBoxes(c);
+        ConnectedControllerGUI.RewriteAuxiliaryTextBox(c.ToString() + " was selected.");
         if (FocusedCharacter == null)
         {
             ConnectedControllerGUI.AppendToGameLog(c.NAME_OF_ENTITY + " was selected.");
         }
-
+        UpdateLeadTextBoxes(null);
+        ConnectedControllerGUI.RewriteMainUnitInfo(c);
         FocusedCharacter = c;
     }
     /// <summary>
@@ -179,39 +180,117 @@ public class Game
     /// </summary>
     /// <param name="attacker"></param>
     /// <param name="defender"></param>
-    public void CharacterCombat(Character attacker, Character defender)
+    public void CharacterCombat(Character attacker, Character defender, MouseEventArgs e)
     {
         if (attacker == null || defender == null) { return; }
         ConnectedControllerGUI.RefreshTeamTextBox();
-        ConnectedControllerGUI.RewriteSelectedUnitTextBox(attacker);
-        ConnectedControllerGUI.RewriteExpTextBox(attacker);
-        ConnectedControllerGUI.RewriteSelectedUnitStatusTextBox(attacker);
-        ConnectedControllerGUI.RewriteDefendingUnitTextBox(defender);
-        ConnectedControllerGUI.RewriteDefendingUnitStatus(defender);
         ConnectedControllerGUI.AppendToGameLog(attacker.NAME_OF_ENTITY + " attacked " + defender.NAME_OF_ENTITY);
 
         /// combat happens
         /// 
 
+        CombatResult cr = CombatManager.Combat(attacker, defender, e);
+
         /// update result textbox
         /// 
-
-        FocusedCharacter = null;
-        ActionsTaken++;
+        UpdateMainTextBoxes(attacker);
+        UpdateLeadTextBoxes(defender);
+        string s = FormatCombatString(attacker, defender, cr);
+        ConnectedControllerGUI.RewriteAuxiliaryTextBox(s);
+        ConnectedControllerGUI.AppendToGameLog(s);
+        if (defender.IsDead())
+        {
+            ConnectedControllerGUI.AppendToGameLog(defender.NAME_OF_ENTITY + " died.");
+        }
+        EndOfTurn();
     }
     /// <summary>
-    /// Determines if the turn is over.
+    /// Returns a formated string for output based on given input.
     /// </summary>
+    /// <param name="m">main character.</param>
+    /// <param name="l">lead character.</param>
+    /// <param name="c">combat info</param>
     /// <returns></returns>
-    public bool TurnIsOver()
+    private string FormatCombatString(Character m, Character l, CombatResult c)
     {
-        return ActionsTaken >= Global.ACTIONSPERTURN;
+        return m.NAME_OF_ENTITY + " used [ " + c.AttackUsed + " ] for [" + c.DamageDone + " ] damage.";
     }
     /// <summary>
-    /// Resets the actions taken to refresh the turn.
+    /// Updates all the textboxes for the selected lead unit.
     /// </summary>
-    public void ResetTurn()
+    /// <param name="cha"></param>
+    private void UpdateLeadTextBoxes(Character cha)
     {
-        ActionsTaken = 0;
+        ConnectedControllerGUI.RewriteLeadUnitTileTextBox(cha);
+        ConnectedControllerGUI.RewriteLeadUnitTextBox(cha);
+        ConnectedControllerGUI.RewriteLeadUnitStatusTextBox(cha);
+    }
+    /// <summary>
+    /// Updates all the textboxes for the selected main unit.
+    /// </summary>
+    /// <param name="cha">unit to select.</param>
+    private void UpdateMainTextBoxes(Character cha)
+    {
+        ConnectedControllerGUI.RewriteMainUnitTextBox(cha);
+        ConnectedControllerGUI.RewriteMainTileTextBox(cha);
+        ConnectedControllerGUI.RewriteMainUnitStatusTextBox(cha);
+    }
+    /// <summary>
+    /// Occurs at the end of every turn.
+    /// </summary>
+    public void EndOfTurn()
+    {
+        ConnectedBoard.CycleThroughCharacters();
+        UpdateAndRefreshGameGui();
+        IncrementAction();
+        Unfocus();
+    }
+    /// <summary>
+    /// Increases the action counter.
+    /// </summary>
+    public void IncrementAction()
+    {
+        Actions++;
+    }
+    /// <summary>
+    /// Sets the focued character to null.
+    /// </summary>
+    public void Unfocus()
+    {
+        Character c = FocusedCharacter;
+        FocusedCharacter = null;
+        if (c == null) { return; }
+        ConnectedControllerGUI.AppendToGameLog(c.NAME_OF_ENTITY + " was deselected.");
+    }
+    /// <summary>
+    /// <see cref="Board.IsOccuableByEntity(Entity, Tile)"/>
+    /// Determines if an enetity can traverse to the given tile.
+    /// </summary>
+    /// <param name="ent">Entity to check.</param>
+    /// <param name="newTile">new tlle to look at.</param>
+    /// <returns></returns>
+    public bool IsOccuableByEntity(Entity ent, Tile newTile)
+    {
+        return ConnectedBoard.IsOccuableByEntity(ent, newTile);
+    }
+    /// <summary>
+    /// <see cref="Board.GetOccuableTilesFromEntity(Entity)"/>
+    /// Returns the list of occuable tile given an entity.
+    /// </summary>
+    /// <param name="ent">entity to check tile for.</param>
+    /// <returns></returns>
+    public List<Tile> GetOccuableTilesFromEntity(Entity ent)
+    {
+        return ConnectedBoard.GetOccuableTilesFromEntity(ent);
+    }
+    /// <summary>
+    /// Checks to see if the first entity can target the second given entity.
+    /// </summary>
+    /// <param name="ent">first entity doing the action.</param>
+    /// <param name="ent2">second entity doing the action.</param>
+    /// <returns></returns>
+    public bool IsTargetableByEntity(Entity ent, Entity ent2)
+    {
+        return ConnectedBoard.IsTargetableByEntity(ent, ent2);
     }
 }

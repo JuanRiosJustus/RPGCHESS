@@ -1,75 +1,131 @@
 ﻿using System;
-using Apocrypha;
-using System.Collections;
 using System.Collections.Generic;
+
+/// <summary>
+/// Decision enum, shows the options for the board.
+/// </summary>
+public enum BoardType
+{
+    Mountainous,
+    Oceanic,
+    Default,
+};
+/// <summary>
+/// Represents the internal stucturing of the tiles.
+/// </summary>
 
 public class Board
 {
-    private Tile[,] Map;
+    private readonly Tile[,] Map;
     private Random NumGenerator;
-    private List<Character> ListOfEveryCharacter;
+    private List<Entity> ListOfEveryEntity;
     /// <summary>
     /// Constructor for the board.
     /// </summary>
-    public Board()
+    public Board(BoardType type)
     {
         NumGenerator = new Random();
-        ListOfEveryCharacter = new List<Character>();
+        ListOfEveryEntity = new List<Entity>();
 
-        GenerateMap(Global.Rows, Global.Columns);
+        // constructs the board.
+        {
+            Map = new Tile[Global.Rows, Global.Columns];
+
+            for (int row = 0; row < Map.GetLength(0); row++)
+            {
+                for (int column = 0; column < Map.GetLength(1); column++)
+                {
+                    int height = NumGenerator.Next(-1, 1);
+                    Map[row, column] = new Tile(row, column, height);
+                }
+            }
+        }
+        // constructs tiles according to the board type.
+        switch (type)
+        {
+            case BoardType.Default: Default(); break;
+            case BoardType.Mountainous: Mountainous(); break;
+            case BoardType.Oceanic: Oceanic(); break;
+            default: Default(); break;
+        }
     }
     /// <summary>
-    /// <para>Adds a character to the list of characters contained by this board.
-    /// If the list holds an instance of the given character, returns false
-    /// and does not do anything.</para>
-    /// 
-    /// <para> If the tile is not already occupied, tile is set to the character.
-    /// Otherwise, a random tile is selected.</para>
+    /// Cycles through all characters of the baord.
     /// </summary>
-    /// <param name="character">Character to be added.</param>
-    /// <param name="row">Row to add the character to.</param>
-    /// <param name="col">Column to add the character to.</param>
-    /// <returns></returns>
-    public bool AddCharacterToBoard(Character character, int row, int col)
+    public void CycleThroughCharacters()
     {
-        if (ListOfEveryCharacter.Contains(character) == false)
+        for (int i = 0; i < ListOfEveryEntity.Count; i++)
         {
-            ListOfEveryCharacter.Add(character);
+            Character cur = (Character)ListOfEveryEntity[i];
+            CheckToRegen(cur);
+            CheckForDeath(cur);
+        }
+    }
+    /// <summary>
+    /// Increases the amount of current health of the character.
+    /// </summary>
+    /// <param name="c"></param>
+    /// <returns></returns>
+    public int CheckToRegen(Character c)
+    {
+        return c.RegenHealth();
+    }
+    /// <summary>
+    /// Checks the boards if any characters are below 0 health. If so, remove all references.
+    /// </summary>
+    public bool CheckForDeath(Character cha)
+    {
+        if (cha.HEALTH <= 0)
+        {
+            Tile t = cha.TILE_OF_ENTITY;
+            t.RemoveOccupant();
+            ListOfEveryEntity.Remove(cha);
+            Metadata.Player1Instance().RemoveCharater(cha);
+            Metadata.Player2Instance().RemoveCharater(cha);
+            return true;
+        }
+        return false;
+    }
+    /// <summary>
+    /// Sets the given entity to a tile on the board,
+    /// </summary>
+    /// <param name="ent">Entity to be added on the baord.</param>
+    /// <param name="row">row to add the entity to.</param>
+    /// <param name="col">column to add entity to.</param>
+    /// <returns></returns>
+    public bool AddEntityToBoard(Entity ent, int row, int col)
+    {
+        if (ListOfEveryEntity.Contains(ent) == false)
+        {
+            ListOfEveryEntity.Add(ent);
 
             Tile tile = Map[row, col];
 
+            // TODO
             while (tile.IsOccupied())
             {
                 row = NumGenerator.Next(Global.Rows);
                 col = NumGenerator.Next(Global.Columns);
                 tile = Map[row, col];
             }
-
-            //tile.SetOccupant(character);
-            character.SetTile(tile);
-            TileSelection.AddOccuableTilesToEntity(Map, character);
-            TileSelection.AddAttackableEntitiesToEntity(Map, character);
-            Console.WriteLine(character.NAME_OF_ENTITY + " was added at " + tile.ToCoordinate());
+            
+            ent.SetTile(tile);
             return true;
         }
         return false;
     }
     /// <summary>
-    /// Removes the character from it's current tile and 
-    /// sets it to a new tile.
+    /// Moves the given entity to the given tile if capable.
     /// </summary>
-    /// <param name="character">Character to be moved.</param>
-    /// <param name="newTile">New tile to traverse to.</param>
-    public void MoveCharacter(Character character, Tile newTile)
+    /// <param name="ent">entity to move.</param>
+    /// <param name="newTile">tile to move entity to.</param>
+    public void MoveEntity(Entity ent, Tile newTile)
     {
-        if (newTile == null) { return; }
-        Tile tile = character.TILE_OF_ENTITY;
+        if (newTile == null || newTile.IsOccupied()) { return; }
+        Tile tile = ent.TILE_OF_ENTITY;
         tile.RemoveOccupant();
 
-        character.SetTile(newTile);
-        character.ClearOccuableTiles();
-        TileSelection.AddOccuableTilesToEntity(Map, character);
-        TileSelection.AddAttackableEntitiesToEntity(Map, character);
+        ent.SetTile(newTile);
     }
     /// <summary>
     /// Gets the board size of the given dimension.
@@ -81,33 +137,49 @@ public class Board
         return Map.GetLength(dimension);
     }
     /// <summary>
-    /// Retrieves the tile of the given x and y????
+    /// Returns a single tile given a row and column,
     /// </summary>
-    /// <param name="x"></param>
-    /// <param name="y"></param>
+    /// <param name="row">row of the tile.</param>
+    /// <param name="col">column of the tile.</param>
     /// <returns></returns>
-    public Tile GetTile(int x, int y)
+    public Tile GetTile(int row, int col)
     {
-        return Map[x, y];
+        return Map[row, col];
     }
     /// <summary>
-    /// Generates a basic and the default map given a size.
+    /// Determines if the given entity can occupy the given tile.
     /// </summary>
-    /// <param name="mapsize"></param>
+    /// <param name="ent">entity to check.</param>
+    /// <param name="newTile">the tile to try and occupy</param>
     /// <returns></returns>
-    private void GenerateMap(int map_rows, int map_cols)
+    public bool IsOccuableByEntity(Entity ent, Tile newTile)
     {
-        Tile[,] tiles = new Tile[map_rows, map_cols];
-
-        for (int row = 0; row < tiles.GetLength(0); row++)
-        {
-            for (int column = 0; column < tiles.GetLength(1); column++)
-            {
-                int height = NumGenerator.Next(-1, 1);
-                tiles[row, column] = new Tile(row, column, height);
-            }
-        }
-        Map = tiles;
+        //TileManager.GetOccuableTiles(Map, ent);
+        List<Tile> occuableTiles = TileManager.OccuableTiles(Map, ent);
+        return occuableTiles.Contains(newTile);
+    }
+    /// <summary>
+    /// Returns the list of occuable tiles based off a given entity.
+    /// </summary>
+    /// <param name="ent">entity to base the tiles off.</param>
+    /// <returns></returns>
+    public List<Tile> GetOccuableTilesFromEntity(Entity ent)
+    {
+        // TileManager.OccuableTiles(Map, ent);
+        return TileManager.OccuableTiles(Map, ent);
+    }
+    /// <summary>
+    /// Checks if the first given entity can target the second passize entity.
+    /// </summary>
+    /// <param name="active">the ectively participating enetity.</param>
+    /// <param name="passive">the entity being acted on.</param>
+    /// <returns></returns>
+    public bool IsTargetableByEntity(Entity active, Entity passive)
+    {
+        Tile current = active.TILE_OF_ENTITY;
+        Tile to = passive.TILE_OF_ENTITY;
+        List<Entity> targets = TileManager.TargetableEntities(Map, active);
+        return targets.Contains(passive);
     }
     /// <summary>
     /// Develops terrain specifically at a given terrain
@@ -121,16 +193,25 @@ public class Board
         BoardDesigner.DevelopAt(Map, row, col, intensity);
     }
     /// <summary>
+    /// Returns a list of targetable entities for the given entity
+    /// </summary>
+    /// <param name="ent">entity to get targets from.</param>
+    /// <returns></returns>
+    public List<Entity> GetTargetableEntities(Entity ent)
+    {
+        return TileManager.TargetableEntities(Map, ent);
+    }
+    /// <summary>
     /// Generates a mountainous board.
     /// </summary>
-    public void Mountainous()
+    private void Mountainous()
     {
         Random rand = new Random();
-        for (int i = 0; i < 270; i++)
+        for (int i = 0; i < 500; i++)
         {
             int col = rand.Next(Global.Columns);
             int row = rand.Next(Global.Rows);
-            int z = rand.Next(6);
+            int z = rand.Next(8);
             GenerateDevelopAt(row, col, z);
         }
 
@@ -138,21 +219,43 @@ public class Board
         {
             int col = rand.Next(Global.Columns);
             int row = rand.Next(Global.Rows);
-            int z = rand.Next(-6, 0);
+            int z = rand.Next(-4, 0);
+            GenerateDevelopAt(row, col, z);
+        }
+    }
+    /// <summary>
+    /// Generates the defualt style board.
+    /// </summary>
+    private void Default()
+    {
+        Random rand = new Random();
+        for (int i = 0; i < 50; i++)
+        {
+            int col = rand.Next(Global.Columns);
+            int row = rand.Next(Global.Rows);
+            int z = rand.Next(-3, 0);
+            GenerateDevelopAt(row, col, z);
+        }
+
+        for (int i = 0; i < 50; i++)
+        {
+            int col = rand.Next(Global.Columns);
+            int row = rand.Next(Global.Rows);
+            int z = rand.Next(8);
             GenerateDevelopAt(row, col, z);
         }
     }
     /// <summary>
     /// Generates a oceanic board.
     /// </summary>
-    public void Oceanic()
+    private void Oceanic()
     {
         Random rand = new Random();
-        for (int i = 0; i < 270; i++)
+        for (int i = 0; i < 500; i++)
         {
             int col = rand.Next(Global.Columns);
             int row = rand.Next(Global.Rows);
-            int z = rand.Next(-6, 0);
+            int z = rand.Next(-4, 0);
             GenerateDevelopAt(row, col, z);
         }
 
@@ -160,7 +263,7 @@ public class Board
         {
             int col = rand.Next(Global.Columns);
             int row = rand.Next(Global.Rows);
-            int z = rand.Next(6);
+            int z = rand.Next(8);
             GenerateDevelopAt(row, col, z);
         }
     }

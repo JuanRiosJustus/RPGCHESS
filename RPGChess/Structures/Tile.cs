@@ -6,19 +6,15 @@ public class Tile
     /// <summary>
     /// Represents the row the tile is occupying.
     /// </summary>
-    public readonly int ROW;
+    public readonly int Row;
     /// <summary>
     /// Represents the column the tile is occupying.
     /// </summary>
-    public readonly int COL;
+    public readonly int Column;
     /// <summary>
-    /// Represents the X position where the tile is drawn at on the window.
+    /// Represents the tile's point on the screen.
     /// </summary>
-    public readonly int X;
-    /// <summary>
-    /// Represents the Y position where the tile is drawn at on the window.
-    /// </summary>
-    public readonly int Y;
+    public readonly Point Coordinate;
     /// <summary>
     /// Represents the topological height of the tile.
     /// </summary>
@@ -31,9 +27,6 @@ public class Tile
     /// Represents the type of biome the tile is in longest format.
     /// </summary>
     public string BiomeLONG { get; private set; }
-
-    public Item Loot { get; private set; }
-
     /// <summary>
     /// Represents the Character the tile is associated with.
     /// </summary>
@@ -51,10 +44,10 @@ public class Tile
     /// <param name="height">The topological height of the tile.</param>
     public Tile(int row, int col, int height)
     {
-        ROW = row;
-        COL = col;
-        X = Global.STD * COL;
-        Y = Global.STD * ROW;
+        Row = row;
+        Column = col;
+        Height = height;
+        Coordinate = new Point(Global.MULTIPLIER * Column, Global.MULTIPLIER * Row);
         SetHeight(height);
     }
     /// <summary>
@@ -119,20 +112,6 @@ public class Tile
         Occupant = null;
     }
     /// <summary>
-    /// Sets the item of the tile.
-    /// </summary>
-    /// <param name="loot"></param>
-    public void SetLoot(Item loot)
-    {
-        Loot = loot;
-    }
-    public Item LootTile()
-    {
-        Item temp = Loot;
-        Loot = null;
-        return temp;
-    }
-    /// <summary>
     /// Sets the height for the tile.
     /// </summary>
     /// <param name="height">The height to repsect when adjusting the height.</param>
@@ -148,7 +127,7 @@ public class Tile
     /// <returns></returns>
     public bool IsOccupied()
     {
-        return (Occupant == null ? false : true);
+        return Occupant != null;
     }
     /// <summary>
     /// Returns the string representation of the coordinate for this tile.
@@ -156,7 +135,7 @@ public class Tile
     /// <returns></returns>
     public string ToCoordinate()
     {
-        return "[" + COL + "," + ROW + "]";
+        return "[" + Column + "," + Row + "]";
     }
     public string ToTopograph()
     {
@@ -166,43 +145,47 @@ public class Tile
     {
         return "[" + BiomeSHORT + "]";
     }
-    public string ToLevel()
-    {
-        if (Height < 0)
-        {
-            return "[" + "L" + "]";
-        }
-        else if (Height < 5)
-        {
-            return "[" + "M" + "]";
-        }
-        else
-        {
-            return "[" + "H" + "]";
-        }
-    }
-    public string ToStandard()
-    {
-        if (IsOccupied())
-        {
-            return "[XXX]";
-        }
-        else
-        {
-            return ToBiome();
-        }
-    }
+    /// <summary>
+    /// Returns the coordinate position of the given tile.
+    /// </summary>
+    /// <returns></returns>
     public override string ToString()
     {
-        return ToCoordinate();//Height + "";
+        return ToCoordinate();
     }
     /// <summary>
     /// Determines if this tile is equivalent to the given tile.
     /// </summary>
-    /// <param name="obj"></param>
+    /// <param name="t"></param>
     /// <returns></returns>
-    public bool Equals(Tile obj)
+    public bool Equals(Tile t)
     {
-        return obj.ROW == ROW && obj.COL == COL;
+        return t.Row == Row && t.Column == Column;
+    }
+    /// <summary>
+    /// Determines if the given tile is related to the given tiles 
+    /// where both should return true if done on one another.
+    /// </summary>
+    /// <param name="t">tile to check.</param>
+    /// <returns></returns>
+    public bool IsRelative(Tile t)
+    {
+        if (Row == t.Row + 1 || Row == t.Row || Row == t.Row - 1)
+        {
+            if (Column == t.Column + 1 || Column == t.Column || Column == t.Column - 1)
+            {
+                return true;
+            }
+        }
+        return false;
+    }
+    /// <summary>
+    /// returns the distance between the tile and the given tile.
+    /// </summary>
+    /// <param name="t">tile to get to.</param>
+    /// <returns></returns>
+    public int DistanceFrom(Tile t)
+    {
+        return (int)Math.Sqrt(((Row - t.Row) * 2) + ((Column - t.Column) * 2));
     }
 }
