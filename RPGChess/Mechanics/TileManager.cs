@@ -104,32 +104,49 @@ public class TileManager
         }
         return targetableEntities;
     }
+    /// <summary>
+    /// Returns occuable tiles for an entity.
+    /// </summary>
+    /// <param name="map">mpa to locate tiles from.</param>
+    /// <param name="ent">Entity to find tiles for</param>
+    /// <returns></returns>
     public static List<Tile> GetOccuableTiles(Tile [,] map, Entity ent)
     {
-        throw new NotImplementedException("UGHHH. TODO");
-        List<Tile> possibles = GetPotentialTiles(map, ent);
-        return null;
-    }
-    public static List<Tile> GetPotentialTiles(Tile [,] map, Entity ent)
-    {
-        List<Tile> l = new List<Tile>();
-        Tile t = ent.TILE_OF_ENTITY;
+        List<Tile> result = new List<Tile>();
+        Stack<Tile> visiting = new Stack<Tile>();
+        HashSet<Tile> visited = new HashSet<Tile>();
+        visiting.Push(ent.TILE_OF_ENTITY);
+        Tile start = ent.TILE_OF_ENTITY;
         int m = ent.CLASS_OF_ENTITY.MOVEMENT;
-        for (int row = t.Row - m; row <= t.Row + m; row++)
+
+        while (visiting.Count > 0)
         {
-            for (int col = t.Column - m; col <= t.Column + m; col++)
+            Tile tile = visiting.Pop();
+
+            if (visited.Contains(tile)) { continue; }
+            if (tile.Row < start.Row - m || tile.Row > start.Row + m ||
+                tile.Column < start.Column - m || tile.Column > start.Column + m) { continue; }
+            if (IsInHeight(start, tile) == false) { continue; }
+            visited.Add(tile);
+            result.Add(tile);
+
+            // check relatives
+            for (int row = tile.Row - 1; row <= tile.Row + 1; row++)
             {
-                // check bounds.
-                if (IsInBounds(row, col) == false)
+                for (int col = tile.Column - 1; col <= tile.Column + 1; col++)
                 {
-                    continue;
+                    if (IsInBounds(row, col) == false) { continue; }
+                    Tile t = map[row, col];
+                    if (IsInHeight(tile, t) == false) { continue; }
+                    if (tile.IsRelative(t) == false) { continue; }
+
+                    visiting.Push(t);
                 }
-                l.Add(map[row, col]);
             }
         }
-        return l;
+        return result;
     }
-    //[System.Obsolete("")]
+    [System.Obsolete("TODO")]
     /// <summary>
     /// Returns occuable tiles for an entity.
     /// </summary>
@@ -280,8 +297,6 @@ public class TileManager
                     }
                 }
             }
-
-
             moves--;
         }
         return occuableTiles;
@@ -294,11 +309,7 @@ public class TileManager
     /// <returns></returns>
     public static bool IsInHeight(Tile from, Tile to)
     {
-        //if (to.Height <= from.Height + Global.AHTI) { return true; }
-        if (from.Height - to.Height >= Global.AHTI * -1)
-        {
-            return true;
-        }
+        if (to.Height <= from.Height + Global.AHTI) { return true; }
         return false;
     }
     /// <summary>
