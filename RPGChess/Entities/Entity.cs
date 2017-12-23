@@ -28,14 +28,7 @@ public class Entity
     /// Represents if the entity is friendly or an enemy.
     /// </summary>
     protected internal Relation RELATION_OF_ENTITY;
-    /// <summary>
-    /// Represents the x coordinate of the entity.
-    /// </summary>
-    protected internal int ScreenPositionX;
-    /// <summary>
-    /// Represents the y coordinate of the entity.
-    /// </summary>
-    protected internal int ScreenPositionY;
+    protected internal Point COORDINATE_OF_ENTITY;
 
     /// <summary>
     /// Constructor.
@@ -44,8 +37,16 @@ public class Entity
     /// <param name="class_of_entity">Class represented by this entity.</param>
     public Entity(string name_of_entity, Archetype class_of_entity)
     {
-        NAME_OF_ENTITY = name_of_entity;
+        if (name_of_entity.Length > 9)
+        {
+            NAME_OF_ENTITY = name_of_entity.Substring(0, 9);
+        }
+        else
+        {
+            NAME_OF_ENTITY = name_of_entity;
+        }
         CLASS_OF_ENTITY = class_of_entity;
+        COORDINATE_OF_ENTITY = new Point(0, 0);
     }
     /// <summary>
     /// Associates the entity with the given tile.
@@ -54,12 +55,12 @@ public class Entity
     public virtual void SetTile(Tile tile)
     {
         this.TILE_OF_ENTITY = tile;
-        this.ScreenPositionX = tile.COL + 15;
-        this.ScreenPositionY = tile.ROW + 15;
+        this.COORDINATE_OF_ENTITY.X = tile.Coordinate.X;
+        this.COORDINATE_OF_ENTITY.Y = tile.Coordinate.Y;
 
         if (Object.ReferenceEquals(TILE_OF_ENTITY.Occupant, this) == false)
         {
-            TILE_OF_ENTITY.SetOccupant(this);
+            this.TILE_OF_ENTITY.SetOccupant(this);
         }
     }
     /// <summary>
@@ -76,6 +77,6 @@ public class Entity
     /// <returns></returns>
     public override string ToString()
     {
-        return NAME_OF_ENTITY + " the " + CLASS_OF_ENTITY.ToString();
+        return this.NAME_OF_ENTITY;
     }
 }

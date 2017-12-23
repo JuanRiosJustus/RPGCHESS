@@ -16,7 +16,7 @@ public class EntityFactory
     {
         switch (class_of_entity.ToLower())
         {
-            case "archer": return new Character(name, Archetype.ARCHER, relation_of_entity);
+            case "ranger": return new Character(name, Archetype.RANGER, relation_of_entity);
             case "cleric": return new Character(name, Archetype.CLERIC, relation_of_entity);
             case "mage": return new Character(name, Archetype.MAGE, relation_of_entity);
             case "monk": return new Character(name, Archetype.MONK, relation_of_entity);
@@ -25,5 +25,9 @@ public class EntityFactory
             case "generic": return new Character(name, Archetype.GENERIC, relation_of_entity);
             default: return new Character(name, Archetype.MONSTER, relation_of_entity);
         }
+    }
+    public Creature BuildCreature(string name, string class_of_entity, Relation relation)
+    {
+        return null;
     }
 }

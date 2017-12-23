@@ -1,6 +1,9 @@
 ﻿
+/// <summary>
+/// Defines the relation of objects.
+/// </summary>
 public enum Relation
 {
-    Friendly,
-    Enemy,
+    Friend,
+    Foe,
 };
