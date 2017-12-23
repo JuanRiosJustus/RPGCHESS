@@ -28,10 +28,14 @@ partial class GameGUI
     private Game ConnectedGame;
     private Graphics g;
     private bool backgroundIsDeveloped;
+    private float Ax;
+    private float Ay;
 
-    private Character CurrentChara;
+    private Character LatestChara;
+    private Character AttackedChara;
     private bool HasMoved;
     private bool HasAttacked;
+    private bool AnimateAttack;
     private bool IsMoving;
     private bool IsAttacking;
 
@@ -44,12 +48,16 @@ partial class GameGUI
         this.Display = new System.Windows.Forms.PictureBox();
         this.MainFont = new Font("Times New Roman", 16.0f);
         this.g = null;
-        this.CurrentChara = null;
+        this.LatestChara = null;
+        this.AttackedChara = null;
         this.backgroundIsDeveloped = false;
         this.HasMoved = false;
         this.HasAttacked = false;
         this.IsMoving = false;
         this.IsAttacking = false;
+        this.AnimateAttack = false;
+        this.Ax = 0;
+        this.Ay = 0;
         this.ConnectedGame = new Game(this);
         this.SuspendLayout();
         // 
@@ -90,107 +98,70 @@ partial class GameGUI
     /// <param name="e"></param>
     public void MouseClickOnScreen(object sender, MouseEventArgs e)
     {
-
-
-        if (this.HasAttacked == true && this.HasMoved == true)
+        if (this.ConnectedGame.TurnIsOver())
         {
             Console.WriteLine("Nothing else to do.....");
-            this.ConnectedGame.GetController().AppendToGameLog("Turn Over");
+            //this.ConnectedGame.ResetTurn();
             return;
         }
+
         // Get the respective tile.
         int col = (int)(e.X / 26.25);
         int row = (e.Y / 26);
-        Tile t = ConnectedGame.GetBoardTile(row, col);
+        if (row > Global.Rows|| col > Global.Columns-1) { return; }
 
+        Tile currentTile = ConnectedGame.GetBoardTile(row, col);
         
-        /********** USER IS SELECTING A UNIT/CHARACTER **********/
-        // determine if the player is attacking based on the character they selected.
-        if (CurrentChara == null && t.IsOccupied() == true)
+        /********** USER IS SELECTING A UNIT/CHARACTER/ENTITY **********/
+        // Check that the tile has a character and we are not currently holding a chacrarter
+        if (this.ConnectedGame.IsFocusing() == false && currentTile.IsOccupied() == true)
         {
-            Character c = (Character)t.Occupant;
+            Character c = (Character)currentTile.Occupant;
             
-            // moving the character.
-            if (c.RELATION_OF_ENTITY == Relation.Friendly && (this.HasAttacked == false || this.HasMoved == false))
+            // set the character if we have not attacked or moved this turn.
+            if (c.RELATION_OF_ENTITY == Relation.Friend && (this.HasAttacked == false || this.HasMoved == false))
             {
-                this.CurrentChara = c;
-                this.IsMoving = true;
-                Console.WriteLine(c.ToString() + " is selected");
-                this.ConnectedGame.GetController().RewriteSelectedUnitTextBox(c.ToString());
-                this.ConnectedGame.GetController().RewriteUnitStatusLabelTextBox(c.GetStatus());
-                this.ConnectedGame.GetController().RewriteFromTextBox(c.TILE_OF_ENTITY.ToString());
-                this.ConnectedGame.GetController().RewriteExpTextBox(c.GetExpStatus());
-                this.ConnectedGame.GetController().RefreshTeamTextBox();
+                this.ConnectedGame.Focus(c);
                 return;
             }
-            Console.WriteLine("W?W?W?W?W?W?W??W?W?W?W?W?W?W?W?W?W?W?W?WW??W?W?W?W?W?W?W");
         }
+
         /********** WERE ATTACKING **********/
-        if (CurrentChara != null && t.IsOccupied() == true && this.HasAttacked == false)
+        // attacking if we have a selected character and the selecte tile is occupied and we hav not attacked,
+
+        if (this.ConnectedGame.IsFocusing() && currentTile.IsOccupied() == true)
         {
-            // we are attacking.
-            for (int i = 0; i < this.CurrentChara.GetAttackableCharacterQuantity(); i++)
+            // check that the player is attackable
+            Character target = (Character)currentTile.Occupant;
+            Character targeter = this.ConnectedGame.GetFocusedCharcter();
+
+            // chech that the player is attackable.
+            if (this.ConnectedGame.IsTargetableByEntity(targeter, target))
             {
-                // check that the player is attackable
-                Character c = (Character)t.Occupant;
-
-                if (this.CurrentChara.GetAttackableEntity(i) == c)
-                {
-                    this.ConnectedGame.GetController().AppendToGameLog(CurrentChara.NAME_OF_ENTITY + " has attacked " + c.NAME_OF_ENTITY);
-
-                    Console.WriteLine("IMPLEMENT COMBAT BECAUSE YOU HIT SOMEONE >:( ");
-                    //this.Controller.RewriteSelectedUnitTextBox("");
-                    this.ConnectedGame.GetController().RewriteDefendingUnitTextBox(c.ToString());
-                    this.ConnectedGame.GetController().RewriteDefendingUnitStatus(c.GetStatus());
-                    this.ConnectedGame.GetController().RefreshTeamTextBox();
-                    this.CurrentChara = null;
-                    this.HasAttacked = true;
-                    return;
-                }
+                this.AnimateAttack = true;
+                this.LatestChara = target;
+                this.ConnectedGame.CharacterCombat(targeter, target, e);
+                
+                return;
             }
         }
         /********** WERE MOVING **********/
-        if (CurrentChara != null && t.IsOccupied() == false && this.HasMoved == false)
+        if (this.ConnectedGame.IsFocusing() && currentTile.IsOccupied() == false)
         {
-            for (int i = 0; i < this.CurrentChara.GetOccuableTileQuantity(); i++)
+            Character currentCha = this.ConnectedGame.GetFocusedCharcter();
+
+            //Check if entity can occupy the tile
+            if (this.ConnectedGame.IsOccuableByEntity(currentCha, currentTile))
             {
-                if (this.CurrentChara.GetOccuableTile(i) == t)
-                {
-                    this.ConnectedGame.GetController().AppendToGameLog(CurrentChara.NAME_OF_ENTITY + " has moved from " + CurrentChara.TILE_OF_ENTITY.ToString() + " to " + t.ToString());
-                    
-                    this.ConnectedGame.MoveCharacter(this.CurrentChara, t);
-                    ////////////////////////////////////////////////////////////
-                    for (int k = 0; k < this.CurrentChara.GetAttackableCharacterQuantity(); k++)
-                    {
-                        this.ConnectedGame.GetController().AppendToGameLog(CurrentChara.GetAttackableEntity(k).NAME_OF_ENTITY + " is within range of " + CurrentChara.NAME_OF_ENTITY);
-                    }
-                    ///////////////////////////////////////////////////////////
-                    this.ConnectedGame.GetController().RewriteToTextBox(t.ToString());
-                    this.ConnectedGame.GetController().RefreshTeamTextBox();
-                    this.CurrentChara = null;
-                    this.HasMoved = true;
-
-                    
-
-                    return;
-                }
+                this.ConnectedGame.MoveCharacter(currentCha, currentTile);
+                return;
             }
         }
-        /********** NOTHING WAS DONE THIS TURN ?? **********/
-        Console.WriteLine("Nothing was done this turn");
-        this.RRfresh();
-        if (this.HasAttacked && this.HasMoved)
-        {
-            this.ConnectedGame.GetController().AppendToGameLog("Turn Over");
-        }
-        this.CurrentChara = null;
-    }
-    public void RRfresh()
-    {
-        this.IsMoving = false;
-        this.IsAttacking = false;
-        this.HasMoved = false;
-        this.HasAttacked = false;
+
+        /********** NOTHING WAS DONE THIS TURN  **********/
+        this.ConnectedGame.AppendToGameLog("Nothing was done...");
+        this.ConnectedGame.Unfocus();
+        this.ConnectedGame.ResetTurn();
     }
     /// <summary>
     /// Returns the picture box component of this gui.
@@ -216,12 +187,12 @@ partial class GameGUI
             {
                 Tile tile = ConnectedGame.GetBoardTile(row, col);
 
-                g.DrawImage(tile.TileImage, tile.X, tile.Y);
+                g.DrawImage(tile.TileImage, tile.Coordinate.X, tile.Coordinate.Y);
             }
         }
 
-        bitmap.Save(@"..\..\Assets\Tiles\Board.PNG", ImageFormat.Png);
-        Image result = new Bitmap(@"..\..\Assets\Tiles\Board.PNG");
+        bitmap.Save(@"..\..\Assets\Backgrounds\Board.PNG", ImageFormat.Png);
+        Image result = new Bitmap(@"..\..\Assets\Backgrounds\Board.PNG");
         this.backgroundIsDeveloped = true;
        
         return ImageManager.ResizeImage(result, this.Display.Width, this.Display.Height);

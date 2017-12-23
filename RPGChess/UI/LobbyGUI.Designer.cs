@@ -73,6 +73,8 @@ partial class LobbyGUI
         this.UsernameLabel = new System.Windows.Forms.Label();
         this.UsernameTextbox = new System.Windows.Forms.TextBox();
         this.SurvivalButton = new System.Windows.Forms.Button();
+        this.AbilityLabel = new System.Windows.Forms.Label();
+        this.AbilityCombobox = new System.Windows.Forms.ComboBox();
         this.SuspendLayout();
         // 
         // IPv4Label
@@ -122,7 +124,7 @@ partial class LobbyGUI
         // 
         this.ClassCombobox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
         this.ClassCombobox.FormattingEnabled = true;
-        this.ClassCombobox.Location = new System.Drawing.Point(74, 72);
+        this.ClassCombobox.Location = new System.Drawing.Point(74, 63);
         this.ClassCombobox.Name = "ClassCombobox";
         this.ClassCombobox.Size = new System.Drawing.Size(210, 21);
         this.ClassCombobox.TabIndex = 4;
@@ -133,7 +135,7 @@ partial class LobbyGUI
         this.ClassLabel.AutoSize = true;
         this.ClassLabel.BackColor = System.Drawing.Color.Transparent;
         this.ClassLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-        this.ClassLabel.Location = new System.Drawing.Point(12, 72);
+        this.ClassLabel.Location = new System.Drawing.Point(13, 66);
         this.ClassLabel.Name = "ClassLabel";
         this.ClassLabel.Size = new System.Drawing.Size(56, 17);
         this.ClassLabel.TabIndex = 5;
@@ -144,7 +146,7 @@ partial class LobbyGUI
         this.SeperatorLabel.AutoSize = true;
         this.SeperatorLabel.BackColor = System.Drawing.Color.Transparent;
         this.SeperatorLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-        this.SeperatorLabel.Location = new System.Drawing.Point(12, 44);
+        this.SeperatorLabel.Location = new System.Drawing.Point(12, 42);
         this.SeperatorLabel.Name = "SeperatorLabel";
         this.SeperatorLabel.Size = new System.Drawing.Size(623, 17);
         this.SeperatorLabel.TabIndex = 6;
@@ -154,7 +156,7 @@ partial class LobbyGUI
         // StatsTextbox
         // 
         this.StatsTextbox.Enabled = false;
-        this.StatsTextbox.Location = new System.Drawing.Point(74, 101);
+        this.StatsTextbox.Location = new System.Drawing.Point(74, 117);
         this.StatsTextbox.Name = "StatsTextbox";
         this.StatsTextbox.Size = new System.Drawing.Size(210, 20);
         this.StatsTextbox.TabIndex = 7;
@@ -164,7 +166,7 @@ partial class LobbyGUI
         this.StatsLabel.AutoSize = true;
         this.StatsLabel.BackColor = System.Drawing.Color.Transparent;
         this.StatsLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-        this.StatsLabel.Location = new System.Drawing.Point(12, 102);
+        this.StatsLabel.Location = new System.Drawing.Point(13, 120);
         this.StatsLabel.Name = "StatsLabel";
         this.StatsLabel.Size = new System.Drawing.Size(57, 17);
         this.StatsLabel.TabIndex = 8;
@@ -175,7 +177,7 @@ partial class LobbyGUI
         this.NameLabel.AutoSize = true;
         this.NameLabel.BackColor = System.Drawing.Color.Transparent;
         this.NameLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-        this.NameLabel.Location = new System.Drawing.Point(12, 129);
+        this.NameLabel.Location = new System.Drawing.Point(12, 146);
         this.NameLabel.Name = "NameLabel";
         this.NameLabel.Size = new System.Drawing.Size(51, 17);
         this.NameLabel.TabIndex = 9;
@@ -183,7 +185,7 @@ partial class LobbyGUI
         // 
         // NameTextbox
         // 
-        this.NameTextbox.Location = new System.Drawing.Point(74, 128);
+        this.NameTextbox.Location = new System.Drawing.Point(74, 143);
         this.NameTextbox.Name = "NameTextbox";
         this.NameTextbox.Size = new System.Drawing.Size(210, 20);
         this.NameTextbox.TabIndex = 10;
@@ -191,17 +193,17 @@ partial class LobbyGUI
         // 
         // TeamTextbox
         // 
-        this.TeamTextbox.Location = new System.Drawing.Point(15, 183);
+        this.TeamTextbox.Location = new System.Drawing.Point(15, 198);
         this.TeamTextbox.Multiline = true;
         this.TeamTextbox.Name = "TeamTextbox";
         this.TeamTextbox.ReadOnly = true;
-        this.TeamTextbox.Size = new System.Drawing.Size(269, 130);
+        this.TeamTextbox.Size = new System.Drawing.Size(269, 115);
         this.TeamTextbox.TabIndex = 11;
         // 
         // ImortToTeamButton
         // 
         this.ImortToTeamButton.Enabled = false;
-        this.ImortToTeamButton.Location = new System.Drawing.Point(30, 154);
+        this.ImortToTeamButton.Location = new System.Drawing.Point(30, 169);
         this.ImortToTeamButton.Name = "ImortToTeamButton";
         this.ImortToTeamButton.Size = new System.Drawing.Size(113, 23);
         this.ImortToTeamButton.TabIndex = 12;
@@ -212,7 +214,7 @@ partial class LobbyGUI
         // RemoveLatestButton
         // 
         this.RemoveLatestButton.Enabled = false;
-        this.RemoveLatestButton.Location = new System.Drawing.Point(149, 154);
+        this.RemoveLatestButton.Location = new System.Drawing.Point(149, 169);
         this.RemoveLatestButton.Name = "RemoveLatestButton";
         this.RemoveLatestButton.Size = new System.Drawing.Size(113, 23);
         this.RemoveLatestButton.TabIndex = 13;
@@ -248,11 +250,33 @@ partial class LobbyGUI
         this.SurvivalButton.Text = "SURVIVAL";
         this.SurvivalButton.UseVisualStyleBackColor = true;
         // 
+        // AbilityLabel
+        // 
+        this.AbilityLabel.AutoSize = true;
+        this.AbilityLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+        this.AbilityLabel.Location = new System.Drawing.Point(13, 93);
+        this.AbilityLabel.Name = "AbilityLabel";
+        this.AbilityLabel.Size = new System.Drawing.Size(62, 17);
+        this.AbilityLabel.TabIndex = 17;
+        this.AbilityLabel.Text = "ABILITY:";
+        this.AbilityLabel.BackColor = Color.Transparent;
+        // 
+        // AbilityCombobox
+        // 
+        this.AbilityCombobox.FormattingEnabled = true;
+        this.AbilityCombobox.Location = new System.Drawing.Point(74, 90);
+        this.AbilityCombobox.Name = "AbilityCombobox";
+        this.AbilityCombobox.Size = new System.Drawing.Size(210, 21);
+        this.AbilityCombobox.TabIndex = 18;
+        this.AbilityCombobox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+        // 
         // LobbyGUI
         // 
         this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
         this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-        this.ClientSize = new System.Drawing.Size(650, 325);
+        this.ClientSize = new System.Drawing.Size(630, 325);
+        this.Controls.Add(this.AbilityCombobox);
+        this.Controls.Add(this.AbilityLabel);
         this.Controls.Add(this.SurvivalButton);
         this.Controls.Add(this.UsernameTextbox);
         this.Controls.Add(this.UsernameLabel);
@@ -271,9 +295,11 @@ partial class LobbyGUI
         this.Controls.Add(this.TopTextbox);
         this.Controls.Add(this.IPv4Label);
         this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
+        this.BackgroundImage = ImageManager.SubBackground();
         this.MaximizeBox = false;
         this.MinimizeBox = false;
         this.Name = "LobbyGUI";
+        this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
         this.Text = "Lobby";
         this.ResumeLayout(false);
         this.PerformLayout();
@@ -298,7 +324,7 @@ partial class LobbyGUI
     /// </summary>
     private void CheckIfFullTeam()
     {
-        if (CurrentTeam.Count >= Global.TS && UsernameTextbox.Text.Length > 1)
+        if (CurrentTeam.Count >= Global.TEAMSIZE && UsernameTextbox.Text.Length > 1)
         {
             this.ImortToTeamButton.Enabled = false;
             this.ConnectButton.Enabled = true;
@@ -321,4 +347,6 @@ partial class LobbyGUI
 
     #endregion
 
+    private System.Windows.Forms.Label AbilityLabel;
+    private System.Windows.Forms.ComboBox AbilityCombobox;
 }

@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Drawing;
+using System.Threading;
 using System.Windows.Forms;
 
 /// <summary>
@@ -10,9 +12,12 @@ public partial class GameGUI : Form
     private Random random = new Random();
     private ClientSocket cl;
     private ServerSocket ss;
+    private Animation an = new Animation(@"..\unnamed.gif");
     
     public GameGUI()
     {
+        //Animation an = new Animation(@"..\unnamed.gif");
+        an.ReverseAtEnd = true;
         InitializeComponent();
     }
     /// <summary>
@@ -39,28 +44,48 @@ public partial class GameGUI : Form
     /// </summary>
     private void Draw()
     {
+        
+
         for (int row = 0; row < ConnectedGame.GetBoardLength(0); row++)
         {
             for (int col = 0; col < ConnectedGame.GetBoardLength(1); col++)
             {
                 Tile tile = ConnectedGame.GetBoardTile(row, col);
+
                 
+
+
                 if (tile.IsOccupied())
                 {
-                    g.DrawImage(tile.Occupant.IMAGE_OF_ENTITY, tile.X + 5, tile.Y);
+                    g.DrawImage(tile.Occupant.IMAGE_OF_ENTITY, tile.Coordinate.X + 5, tile.Coordinate.Y);
 
                     Character cha = (Character)tile.Occupant;
-                    for (int i = 0; i < cha.GetOccuableTileQuantity(); i++)
+                    
+                    List<Tile> tiles = ConnectedGame.GetOccuableTilesFromEntity(cha);
+
+                    for (int i = 0; i < tiles.Count; i++)
                     {
-                        Tile t = cha.GetOccuableTile(i);
-                        if (tile.Occupant != t.Occupant)
+                        Tile t = tiles[i];
+
+                        if (t != tile)
                         {
-                            g.DrawString(t.Height + "", Font, Brushes.Black, t.X + 15, t.Y + 5);
-                            g.DrawString(t.ToCoordinate(), Font, Brushes.Black, t.X + 5, t.Y + 15);
+                            g.DrawString(t.Height + "", Font, Brushes.Black, t.Coordinate.X + 15, t.Coordinate.Y + 5);
+                            g.DrawString(t.ToCoordinate(), Font, Brushes.Black, t.Coordinate.X + 5, t.Coordinate.Y + 15);
                         }
                     }
                 }
             }
+        }
+        if (this.AnimateAttack == true)
+        {
+            for (int i = 0; i < an.Frames; i++)
+            {
+                Point p = this.LatestChara.COORDINATE_OF_ENTITY;
+                g.DrawImage(an.GetFrame(i), p.X - 100, p.Y);
+                Thread.Sleep(100);
+                Console.WriteLine("GGGg");
+            }
+            this.AnimateAttack = false;
         }
     }
     //

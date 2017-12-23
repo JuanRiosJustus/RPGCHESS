@@ -15,11 +15,14 @@ public partial class LobbyGUI : Form
     /// <param name="e"></param>
     private void ClassCombobox_DropDownClosed(object sender, EventArgs e)
     {
-        Archetype a = this.ClassList[ClassList.IndexOf((Archetype)ClassCombobox.SelectedItem)];
-        string stats = "[HP: " + a.Health + "][DMG: " + a.Damage + "][RNGE: " + a.Range + "][MVMT: " + a.Movement + "]";
-        this.classType = a.Type;
-        this.StatsTextbox.Text = stats;
-        this.CheckIfFullTeam();
+        if (this.ClassCombobox.SelectedItem != null)
+        {
+            Archetype a = this.ClassList[ClassList.IndexOf((Archetype)ClassCombobox.SelectedItem)];
+            string stats = "[HP: " + a.HEALTH + "][DMG: " + a.DAMAGE + "][RNGE: " + a.RANGE + "][MVMT: " + a.MOVEMENT + "]";
+            this.classType = a.NAME;
+            this.StatsTextbox.Text = stats;
+            this.CheckIfFullTeam();
+        }
     }
     /// <summary>
     /// Occurs when the name text box is entered.
@@ -39,8 +42,8 @@ public partial class LobbyGUI : Form
     {
         if (classType != null && classType.Length > 0 && this.ImortToTeamButton.Text.Length > 0)
         {
-            Character c = EntityFactory.BuildCharacter(this.NameTextbox.Text, classType, Relation.Friendly);
-            c.SetRelation(Relation.Friendly);
+            Character c = EntityFactory.BuildCharacter(this.NameTextbox.Text, classType, Relation.Friend);
+            c.SetRelation(Relation.Friend);
             this.CurrentTeam.Add(c);
 
             Console.WriteLine(c + " was created");

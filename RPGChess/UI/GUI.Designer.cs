@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Drawing;
 using System.Windows.Forms;
 
 partial class GUI
@@ -92,7 +93,7 @@ partial class GUI
         this.MinimizeBox = false;
         this.MaximizeBox = false;
         this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
-        this.BackgroundImage = ImageManager.MainBackground;
+        this.BackgroundImage = ImageManager.MainBackground();
         this.Controls.Add(this.FirstButton);
         this.Controls.Add(this.SecondButton);
         this.Controls.Add(this.ThirdButton);

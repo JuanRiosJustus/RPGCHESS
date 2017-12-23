@@ -39,26 +39,23 @@ partial class ControllerGUI
 
     #region Windows Form Designer generated code
     
-    private System.Windows.Forms.TextBox SelectedUnitTextBox;
-    private System.Windows.Forms.Label UnitStatusLabel;
-    private System.Windows.Forms.TextBox UnitStatusLabelTextBox;
-    private System.Windows.Forms.Label FromTileLabel;
-    private System.Windows.Forms.TextBox FromTextBox;
-    private System.Windows.Forms.Label ToLabel;
-    private System.Windows.Forms.TextBox ToTextBox;
-    private System.Windows.Forms.Label DefendingUnitLabel;
-    private System.Windows.Forms.TextBox DefendingUnitTextBox;
-    private System.Windows.Forms.Label DefendingUnitStatusLabel;
-    private System.Windows.Forms.TextBox DefendingUnitStatusTextBox;
-    private System.Windows.Forms.Label SelectedUnitLabel;
+    private System.Windows.Forms.TextBox MainUnitTextBox;
+    private System.Windows.Forms.Label MainStatsLabel;
+    private System.Windows.Forms.TextBox MainUnitStatsTextBox;
+    private System.Windows.Forms.TextBox AuxiliaryTextBox;
+    private System.Windows.Forms.Label LeadUnitLabel;
+    private System.Windows.Forms.TextBox LeadUnitTextBox;
+    private System.Windows.Forms.Label LeadUnitStatsLabel;
+    private System.Windows.Forms.TextBox LeadUnitStatsTextBox;
+    private System.Windows.Forms.Label MainUnitLabel;
 
-    private System.Windows.Forms.Label CombatResultLabel;
-    private System.Windows.Forms.TextBox CombatResultTextBox;
-    private System.Windows.Forms.Label UnitExpLabel;
-    private System.Windows.Forms.TextBox ExpTextBox;
+    private System.Windows.Forms.Label LeadUnitTileLabel;
+    private System.Windows.Forms.TextBox LeadUnitTileTextBox;
+    private System.Windows.Forms.Label MainUnitTileLabel;
+    private System.Windows.Forms.TextBox MainUnitTileTextBox;
     private System.Windows.Forms.Button EndTurnButton;
     private System.Windows.Forms.TextBox TeamTextBox;
-    private System.Windows.Forms.TextBox SelectedUnitDetail;
+    private System.Windows.Forms.TextBox MainUnitInfo;
     private System.Windows.Forms.TextBox GameLogBox;
 
     private Player ConnectedPlayer;
@@ -71,317 +68,297 @@ partial class ControllerGUI
     /// </summary>
     private void InitializeComponent()
     {
-        this.SelectedUnitTextBox = new System.Windows.Forms.TextBox();
-        this.UnitStatusLabel = new System.Windows.Forms.Label();
-        this.UnitStatusLabelTextBox = new System.Windows.Forms.TextBox();
-        this.FromTileLabel = new System.Windows.Forms.Label();
-        this.FromTextBox = new System.Windows.Forms.TextBox();
-        this.ToLabel = new System.Windows.Forms.Label();
-        this.ToTextBox = new System.Windows.Forms.TextBox();
-        this.DefendingUnitLabel = new System.Windows.Forms.Label();
-        this.DefendingUnitTextBox = new System.Windows.Forms.TextBox();
-        this.DefendingUnitStatusLabel = new System.Windows.Forms.Label();
-        this.DefendingUnitStatusTextBox = new System.Windows.Forms.TextBox();
-        this.SelectedUnitLabel = new System.Windows.Forms.Label();
-        this.CombatResultLabel = new System.Windows.Forms.Label();
-        this.CombatResultTextBox = new System.Windows.Forms.TextBox();
-        this.UnitExpLabel = new System.Windows.Forms.Label();
-        this.ExpTextBox = new System.Windows.Forms.TextBox();
-        this.EndTurnButton = new System.Windows.Forms.Button();
-        this.TeamTextBox = new System.Windows.Forms.TextBox();
-        this.SelectedUnitDetail = new System.Windows.Forms.TextBox();
-        this.GameLogBox = new System.Windows.Forms.TextBox();
+            this.MainUnitTextBox = new System.Windows.Forms.TextBox();
+            this.MainStatsLabel = new System.Windows.Forms.Label();
+            this.MainUnitStatsTextBox = new System.Windows.Forms.TextBox();
+            this.AuxiliaryTextBox = new System.Windows.Forms.TextBox();
+            this.LeadUnitLabel = new System.Windows.Forms.Label();
+            this.LeadUnitTextBox = new System.Windows.Forms.TextBox();
+            this.LeadUnitStatsLabel = new System.Windows.Forms.Label();
+            this.LeadUnitStatsTextBox = new System.Windows.Forms.TextBox();
+            this.MainUnitLabel = new System.Windows.Forms.Label();
+            this.LeadUnitTileLabel = new System.Windows.Forms.Label();
+            this.LeadUnitTileTextBox = new System.Windows.Forms.TextBox();
+            this.MainUnitTileLabel = new System.Windows.Forms.Label();
+            this.MainUnitTileTextBox = new System.Windows.Forms.TextBox();
+            this.EndTurnButton = new System.Windows.Forms.Button();
+            this.TeamTextBox = new System.Windows.Forms.TextBox();
+            this.MainUnitInfo = new System.Windows.Forms.TextBox();
+            this.GameLogBox = new System.Windows.Forms.TextBox();
+            this.SuspendLayout();
+            // 
+            // MainUnitTextBox
+            // 
+            this.MainUnitTextBox.Location = new System.Drawing.Point(385, 13);
+            this.MainUnitTextBox.Name = "MainUnitTextBox";
+            this.MainUnitTextBox.ReadOnly = true;
+            this.MainUnitTextBox.Size = new System.Drawing.Size(253, 20);
+            this.MainUnitTextBox.TabIndex = 26;
+            // 
+            // MainStatsLabel
+            // 
+            this.MainStatsLabel.AutoSize = true;
+            this.MainStatsLabel.BackColor = System.Drawing.Color.Transparent;
+            this.MainStatsLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.MainStatsLabel.Location = new System.Drawing.Point(283, 43);
+            this.MainStatsLabel.Name = "MainStatsLabel";
+            this.MainStatsLabel.Size = new System.Drawing.Size(94, 17);
+            this.MainStatsLabel.TabIndex = 27;
+            this.MainStatsLabel.Text = "MAIN STATS:";
+            // 
+            // MainUnitStatsTextBox
+            // 
+            this.MainUnitStatsTextBox.Location = new System.Drawing.Point(385, 42);
+            this.MainUnitStatsTextBox.Name = "MainUnitStatsTextBox";
+            this.MainUnitStatsTextBox.ReadOnly = true;
+            this.MainUnitStatsTextBox.Size = new System.Drawing.Size(253, 20);
+            this.MainUnitStatsTextBox.TabIndex = 28;
+            // 
+            // AuxiliaryTextBox
+            // 
+            this.AuxiliaryTextBox.Location = new System.Drawing.Point(287, 94);
+            this.AuxiliaryTextBox.Name = "AuxiliaryTextBox";
+            this.AuxiliaryTextBox.ReadOnly = true;
+            this.AuxiliaryTextBox.Size = new System.Drawing.Size(351, 20);
+            this.AuxiliaryTextBox.TabIndex = 30;
+            // 
+            // LeadUnitLabel
+            // 
+            this.LeadUnitLabel.AutoSize = true;
+            this.LeadUnitLabel.BackColor = System.Drawing.Color.Transparent;
+            this.LeadUnitLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.LeadUnitLabel.Location = new System.Drawing.Point(283, 121);
+            this.LeadUnitLabel.Name = "LeadUnitLabel";
+            this.LeadUnitLabel.Size = new System.Drawing.Size(84, 17);
+            this.LeadUnitLabel.TabIndex = 33;
+            this.LeadUnitLabel.Text = "LEAD UNIT:";
+            // 
+            // LeadUnitTextBox
+            // 
+            this.LeadUnitTextBox.Location = new System.Drawing.Point(385, 120);
+            this.LeadUnitTextBox.Name = "LeadUnitTextBox";
+            this.LeadUnitTextBox.ReadOnly = true;
+            this.LeadUnitTextBox.Size = new System.Drawing.Size(253, 20);
+            this.LeadUnitTextBox.TabIndex = 34;
+            // 
+            // LeadUnitStatsLabel
+            // 
+            this.LeadUnitStatsLabel.AutoSize = true;
+            this.LeadUnitStatsLabel.BackColor = System.Drawing.Color.Transparent;
+            this.LeadUnitStatsLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.LeadUnitStatsLabel.Location = new System.Drawing.Point(283, 149);
+            this.LeadUnitStatsLabel.Name = "LeadUnitStatsLabel";
+            this.LeadUnitStatsLabel.Size = new System.Drawing.Size(97, 17);
+            this.LeadUnitStatsLabel.TabIndex = 35;
+            this.LeadUnitStatsLabel.Text = "LEAD STATS:";
+            // 
+            // LeadUnitStatsTextBox
+            // 
+            this.LeadUnitStatsTextBox.Location = new System.Drawing.Point(385, 148);
+            this.LeadUnitStatsTextBox.Name = "LeadUnitStatsTextBox";
+            this.LeadUnitStatsTextBox.ReadOnly = true;
+            this.LeadUnitStatsTextBox.Size = new System.Drawing.Size(253, 20);
+            this.LeadUnitStatsTextBox.TabIndex = 36;
+            // 
+            // MainUnitLabel
+            // 
+            this.MainUnitLabel.AutoSize = true;
+            this.MainUnitLabel.BackColor = System.Drawing.Color.Transparent;
+            this.MainUnitLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.MainUnitLabel.Location = new System.Drawing.Point(283, 14);
+            this.MainUnitLabel.Name = "MainUnitLabel";
+            this.MainUnitLabel.Size = new System.Drawing.Size(81, 17);
+            this.MainUnitLabel.TabIndex = 37;
+            this.MainUnitLabel.Text = "MAIN UNIT:";
+            // 
+            // LeadUnitTileLabel
+            // 
+            this.LeadUnitTileLabel.AutoSize = true;
+            this.LeadUnitTileLabel.BackColor = System.Drawing.Color.Transparent;
+            this.LeadUnitTileLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.LeadUnitTileLabel.Location = new System.Drawing.Point(284, 173);
+            this.LeadUnitTileLabel.Name = "LeadUnitTileLabel";
+            this.LeadUnitTileLabel.Size = new System.Drawing.Size(81, 17);
+            this.LeadUnitTileLabel.TabIndex = 38;
+            this.LeadUnitTileLabel.Text = "LEAD TILE:";
+            // 
+            // LeadUnitTileTextBox
+            // 
+            this.LeadUnitTileTextBox.Location = new System.Drawing.Point(385, 172);
+            this.LeadUnitTileTextBox.Name = "LeadUnitTileTextBox";
+            this.LeadUnitTileTextBox.ReadOnly = true;
+            this.LeadUnitTileTextBox.Size = new System.Drawing.Size(253, 20);
+            this.LeadUnitTileTextBox.TabIndex = 39;
+            // 
+            // MainUnitTileLabel
+            // 
+            this.MainUnitTileLabel.AutoSize = true;
+            this.MainUnitTileLabel.BackColor = System.Drawing.Color.Transparent;
+            this.MainUnitTileLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.MainUnitTileLabel.Location = new System.Drawing.Point(284, 69);
+            this.MainUnitTileLabel.Name = "MainUnitTileLabel";
+            this.MainUnitTileLabel.Size = new System.Drawing.Size(78, 17);
+            this.MainUnitTileLabel.TabIndex = 40;
+            this.MainUnitTileLabel.Text = "MAIN TILE:";
+            // 
+            // MainUnitTileTextBox
+            // 
+            this.MainUnitTileTextBox.Location = new System.Drawing.Point(385, 68);
+            this.MainUnitTileTextBox.Name = "MainUnitTileTextBox";
+            this.MainUnitTileTextBox.ReadOnly = true;
+            this.MainUnitTileTextBox.Size = new System.Drawing.Size(253, 20);
+            this.MainUnitTileTextBox.TabIndex = 41;
+            // 
+            // EndTurnButton
+            // 
+            this.EndTurnButton.Location = new System.Drawing.Point(286, 290);
+            this.EndTurnButton.Name = "EndTurnButton";
+            this.EndTurnButton.Size = new System.Drawing.Size(352, 23);
+            this.EndTurnButton.TabIndex = 42;
+            this.EndTurnButton.Text = "END TURN";
+            this.EndTurnButton.UseVisualStyleBackColor = true;
+            this.EndTurnButton.Click += new System.EventHandler(this.EndTurnButtonClick);
+            // 
+            // TeamTextBox
+            // 
+            this.TeamTextBox.Location = new System.Drawing.Point(13, 13);
+            this.TeamTextBox.Multiline = true;
+            this.TeamTextBox.Name = "TeamTextBox";
+            this.TeamTextBox.ReadOnly = true;
+            this.TeamTextBox.Size = new System.Drawing.Size(264, 177);
+            this.TeamTextBox.TabIndex = 43;
+            // 
+            // MainUnitInfo
+            // 
+            this.MainUnitInfo.Location = new System.Drawing.Point(13, 197);
+            this.MainUnitInfo.Multiline = true;
+            this.MainUnitInfo.Name = "MainUnitInfo";
+            this.MainUnitInfo.Size = new System.Drawing.Size(264, 116);
+            this.MainUnitInfo.TabIndex = 44;
+        this.MainUnitInfo.ReadOnly = true;
+            // 
+            // GameLogBox
+            // 
+            this.GameLogBox.Location = new System.Drawing.Point(287, 197);
+            this.GameLogBox.Multiline = true;
+            this.GameLogBox.Name = "GameLogBox";
+            this.GameLogBox.ReadOnly = true;
+            this.GameLogBox.Size = new System.Drawing.Size(351, 87);
+            this.GameLogBox.TabIndex = 45;
+            // 
+            // ControllerGUI
+            // 
+            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
+            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.ClientSize = new System.Drawing.Size(650, 330);
+            this.Controls.Add(this.GameLogBox);
+            this.Controls.Add(this.MainUnitInfo);
+            this.Controls.Add(this.TeamTextBox);
+            this.Controls.Add(this.EndTurnButton);
+            this.Controls.Add(this.MainUnitTileTextBox);
+            this.Controls.Add(this.MainUnitTileLabel);
+            this.Controls.Add(this.LeadUnitTileTextBox);
+            this.Controls.Add(this.LeadUnitTileLabel);
+            this.Controls.Add(this.MainUnitLabel);
+            this.Controls.Add(this.LeadUnitStatsTextBox);
+            this.Controls.Add(this.LeadUnitStatsLabel);
+            this.Controls.Add(this.LeadUnitTextBox);
+            this.Controls.Add(this.LeadUnitLabel);
+            this.Controls.Add(this.AuxiliaryTextBox);
+            this.Controls.Add(this.MainUnitStatsTextBox);
+            this.Controls.Add(this.MainStatsLabel);
+            this.Controls.Add(this.MainUnitTextBox);
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
+            this.MaximizeBox = false;
+            this.MinimizeBox = false;
+            this.Name = "ControllerGUI";
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
+            this.Text = "Controller";
+            this.TopMost = true;
+            this.ResumeLayout(false);
+            this.PerformLayout();
 
-        this.SuspendLayout();
-        // 
-        // SelectedUnitTextBox
-        // 
-        this.SelectedUnitTextBox.Location = new System.Drawing.Point(411, 13);
-        this.SelectedUnitTextBox.Name = "SelectedUnitTextBox";
-        this.SelectedUnitTextBox.ReadOnly = true;
-        this.SelectedUnitTextBox.Size = new System.Drawing.Size(227, 20);
-        this.SelectedUnitTextBox.TabIndex = 26;
-        // 
-        // UnitStatusLabel
-        // 
-        this.UnitStatusLabel.AutoSize = true;
-        this.UnitStatusLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-        this.UnitStatusLabel.Location = new System.Drawing.Point(284, 69);
-        this.UnitStatusLabel.Name = "UnitStatusLabel";
-        this.UnitStatusLabel.Size = new System.Drawing.Size(103, 17);
-        this.UnitStatusLabel.TabIndex = 27;
-        this.UnitStatusLabel.Text = "UNIT STATUS:";
-        this.UnitStatusLabel.BackColor = Color.Transparent;
-        // 
-        // UnitStatusLabelTextBox
-        // 
-        this.UnitStatusLabelTextBox.Location = new System.Drawing.Point(411, 68);
-        this.UnitStatusLabelTextBox.Name = "UnitStatusLabelTextBox";
-        this.UnitStatusLabelTextBox.ReadOnly = true;
-        this.UnitStatusLabelTextBox.Size = new System.Drawing.Size(227, 20);
-        this.UnitStatusLabelTextBox.TabIndex = 28;
-        // 
-        // FromTileLabel
-        // 
-        this.FromTileLabel.AutoSize = true;
-        this.FromTileLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-        this.FromTileLabel.Location = new System.Drawing.Point(284, 95);
-        this.FromTileLabel.Name = "FromTileLabel";
-        this.FromTileLabel.Size = new System.Drawing.Size(52, 17);
-        this.FromTileLabel.TabIndex = 29;
-        this.FromTileLabel.Text = "FROM:";
-        this.FromTileLabel.BackColor = Color.Transparent;
-        // 
-        // FromTextBox
-        // 
-        this.FromTextBox.Location = new System.Drawing.Point(342, 94);
-        this.FromTextBox.Name = "FromTextBox";
-        this.FromTextBox.ReadOnly = true;
-        this.FromTextBox.Size = new System.Drawing.Size(100, 20);
-        this.FromTextBox.TabIndex = 30;
-        // 
-        // ToLabel
-        // 
-        this.ToLabel.AutoSize = true;
-        this.ToLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-        this.ToLabel.Location = new System.Drawing.Point(500, 95);
-        this.ToLabel.Name = "ToLabel";
-        this.ToLabel.Size = new System.Drawing.Size(32, 17);
-        this.ToLabel.TabIndex = 31;
-        this.ToLabel.Text = "TO:";
-        this.ToLabel.BackColor = Color.Transparent;
-        // 
-        // ToTextBox
-        // 
-        this.ToTextBox.Location = new System.Drawing.Point(538, 94);
-        this.ToTextBox.Name = "ToTextBox";
-        this.ToTextBox.ReadOnly = true;
-        this.ToTextBox.Size = new System.Drawing.Size(100, 20);
-        this.ToTextBox.TabIndex = 32;
-        // 
-        // DefendingUnitLabel
-        // 
-        this.DefendingUnitLabel.AutoSize = true;
-        this.DefendingUnitLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-        this.DefendingUnitLabel.Location = new System.Drawing.Point(284, 121);
-        this.DefendingUnitLabel.Name = "DefendingUnitLabel";
-        this.DefendingUnitLabel.Size = new System.Drawing.Size(128, 17);
-        this.DefendingUnitLabel.TabIndex = 33;
-        this.DefendingUnitLabel.Text = "DEFENDING UNIT:";
-        this.DefendingUnitLabel.BackColor = Color.Transparent;
-        // 
-        // DefendingUnitTextBox
-        // 
-        this.DefendingUnitTextBox.Location = new System.Drawing.Point(411, 120);
-        this.DefendingUnitTextBox.Name = "DefendingUnitTextBox";
-        this.DefendingUnitTextBox.ReadOnly = true;
-        this.DefendingUnitTextBox.Size = new System.Drawing.Size(227, 20);
-        this.DefendingUnitTextBox.TabIndex = 34;
-        // 
-        // DefendingUnitStatusLabel
-        // 
-        this.DefendingUnitStatusLabel.AutoSize = true;
-        this.DefendingUnitStatusLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-        this.DefendingUnitStatusLabel.Location = new System.Drawing.Point(283, 147);
-        this.DefendingUnitStatusLabel.Name = "DefendingUnitStatusLabel";
-        this.DefendingUnitStatusLabel.Size = new System.Drawing.Size(103, 17);
-        this.DefendingUnitStatusLabel.TabIndex = 35;
-        this.DefendingUnitStatusLabel.Text = "UNIT STATUS:";
-        this.DefendingUnitStatusLabel.BackColor = Color.Transparent;
-        // 
-        // DefendingUnitStatusTextBox
-        // 
-        this.DefendingUnitStatusTextBox.Location = new System.Drawing.Point(411, 146);
-        this.DefendingUnitStatusTextBox.Name = "DefendingUnitStatusTextBox";
-        this.DefendingUnitStatusTextBox.ReadOnly = true;
-        this.DefendingUnitStatusTextBox.Size = new System.Drawing.Size(227, 20);
-        this.DefendingUnitStatusTextBox.TabIndex = 36;
-        // 
-        // SelectedUnitLabel
-        // 
-        this.SelectedUnitLabel.AutoSize = true;
-        this.SelectedUnitLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-        this.SelectedUnitLabel.Location = new System.Drawing.Point(284, 14);
-        this.SelectedUnitLabel.Name = "SelectedUnitLabel";
-        this.SelectedUnitLabel.Size = new System.Drawing.Size(120, 17);
-        this.SelectedUnitLabel.TabIndex = 37;
-        this.SelectedUnitLabel.Text = "SELECTED UNIT:";
-        this.SelectedUnitLabel.BackColor = Color.Transparent;
-        // 
-        // CombatResultLabel
-        // 
-        this.CombatResultLabel.AutoSize = true;
-        this.CombatResultLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-        this.CombatResultLabel.Location = new System.Drawing.Point(283, 173);
-        this.CombatResultLabel.Name = "CombatResultLabel";
-        this.CombatResultLabel.Size = new System.Drawing.Size(129, 17);
-        this.CombatResultLabel.TabIndex = 38;
-        this.CombatResultLabel.Text = "COMBAT RESULT:";
-        this.CombatResultLabel.BackColor = Color.Transparent;
-        // 
-        // CombatResultTextBox
-        // 
-        this.CombatResultTextBox.Location = new System.Drawing.Point(411, 172);
-        this.CombatResultTextBox.Name = "CombatResultTextBox";
-        this.CombatResultTextBox.ReadOnly = true;
-        this.CombatResultTextBox.Size = new System.Drawing.Size(227, 20);
-        this.CombatResultTextBox.TabIndex = 39;
-        // 
-        // UnitExpLabel
-        // 
-        this.UnitExpLabel.AutoSize = true;
-        this.UnitExpLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-        this.UnitExpLabel.Location = new System.Drawing.Point(284, 41);
-        this.UnitExpLabel.Name = "UnitExpLabel";
-        this.UnitExpLabel.Size = new System.Drawing.Size(75, 17);
-        this.UnitExpLabel.TabIndex = 40;
-        this.UnitExpLabel.Text = "UNIT EXP:";
-        this.UnitExpLabel.BackColor = Color.Transparent;
-        // 
-        // ExpTextBox
-        // 
-        this.ExpTextBox.Location = new System.Drawing.Point(411, 40);
-        this.ExpTextBox.Name = "ExpTextBox";
-        this.ExpTextBox.ReadOnly = true;
-        this.ExpTextBox.Size = new System.Drawing.Size(227, 20);
-        this.ExpTextBox.TabIndex = 41;
-        // 
-        // EndTurnButton
-        // 
-        this.EndTurnButton.Location = new System.Drawing.Point(286, 290);
-        this.EndTurnButton.Name = "EndTurnButton";
-        this.EndTurnButton.Size = new System.Drawing.Size(352, 23);
-        this.EndTurnButton.TabIndex = 42;
-        this.EndTurnButton.Text = "END TURN";
-        this.EndTurnButton.UseVisualStyleBackColor = true;
-        this.EndTurnButton.Click += new System.EventHandler(this.EndTurnButtonClick);
-        // 
-        // TeamTextBox
-        // 
-        this.TeamTextBox.Location = new System.Drawing.Point(13, 13);
-        this.TeamTextBox.Multiline = true;
-        this.TeamTextBox.Name = "TeamTextBox";
-        this.TeamTextBox.Size = new System.Drawing.Size(264, 177);
-        this.TeamTextBox.TabIndex = 43;
-        this.TeamTextBox.ReadOnly = true;
-        // 
-        // SelectedUnitDetail
-        // 
-        this.SelectedUnitDetail.Location = new System.Drawing.Point(13, 197);
-        this.SelectedUnitDetail.Multiline = true;
-        this.SelectedUnitDetail.Name = "SelectedUnitDetail";
-        this.SelectedUnitDetail.Size = new System.Drawing.Size(264, 116);
-        this.SelectedUnitDetail.TabIndex = 44;
-        this.SelectedUnitDetail.ReadOnly = true;
-        // 
-        // GameLogBox
-        // 
-        this.GameLogBox.Location = new System.Drawing.Point(287, 197);
-        this.GameLogBox.Multiline = true;
-        this.GameLogBox.Name = "GameLogBox";
-        this.GameLogBox.Size = new System.Drawing.Size(351, 87);
-        this.GameLogBox.TabIndex = 45;
-        this.GameLogBox.ReadOnly = true;
-        // 
-        // ControllerGUI
-        // 
-        this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
-        this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-        this.ClientSize = new System.Drawing.Size(650, 325);
-        this.Controls.Add(this.GameLogBox);
-        this.Controls.Add(this.SelectedUnitDetail);
-        this.Controls.Add(this.TeamTextBox);
-        this.Controls.Add(this.EndTurnButton);
-        this.Controls.Add(this.ExpTextBox);
-        this.Controls.Add(this.UnitExpLabel);
-        this.Controls.Add(this.CombatResultTextBox);
-        this.Controls.Add(this.CombatResultLabel);
-        this.Controls.Add(this.SelectedUnitLabel);
-        this.Controls.Add(this.DefendingUnitStatusTextBox);
-        this.Controls.Add(this.DefendingUnitStatusLabel);
-        this.Controls.Add(this.DefendingUnitTextBox);
-        this.Controls.Add(this.DefendingUnitLabel);
-        this.Controls.Add(this.ToTextBox);
-        this.Controls.Add(this.ToLabel);
-        this.Controls.Add(this.FromTextBox);
-        this.Controls.Add(this.FromTileLabel);
-        this.Controls.Add(this.UnitStatusLabelTextBox);
-        this.Controls.Add(this.UnitStatusLabel);
-        this.Controls.Add(this.SelectedUnitTextBox);
-        this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
-        this.MaximizeBox = false;
-        this.MinimizeBox = false;
-        this.Name = "ControllerGUI";
-        this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-        this.BackgroundImage = ImageManager.AuxBackground;
-        this.Text = "Controller";
-        this.ResumeLayout(false);
-        this.TopMost = true;
-        this.PerformLayout();
     }
     /// <summary>
     /// Adds the text to the top most right textbox.
     /// </summary>
     /// <param name="str">Text to be added.</param>
-    public void RewriteSelectedUnitTextBox(string str)
+    public void RewriteMainUnitTextBox(Character c)
     {
-        this.SelectedUnitTextBox.Text = str;
+        if (c == null) { return; }
+        this.MainUnitTextBox.Text = c.SelectedView();
     }
     /// <summary>
     /// Adds text to the second to the top textbox on the right.
     /// </summary>
     /// <param name="str">Text to be added.</param>
-    public void RewriteExpTextBox(string str)
+    public void RewriteMainTileTextBox(Character c)
     {
-        this.ExpTextBox.Text = str;
+        if (c == null) { return; }
+        this.MainUnitTileTextBox.Text = c.TileView();
     }
     /// <summary>
     /// Adds text to the third most top textbox on the right
     /// </summary>
     /// <param name="str">string to be added.</param>
-    public void RewriteUnitStatusLabelTextBox(string str)
+    public void RewriteMainUnitStatusTextBox(Character c)
     {
-        this.UnitStatusLabelTextBox.Text = str;
+        if (c == null) { return; }
+        this.MainUnitStatsTextBox.Text = c.StatusView();
     }
     /// <summary>
     /// Sets text to the left textbox 4th from the top.
     /// </summary>
     /// <param name="str">string to be added</param>
-    public void RewriteFromTextBox(string str)
+    public void RewriteAuxiliaryTextBox(string str)
     {
-        this.FromTextBox.Text = str;
-    }
-    /// <summary>
-    /// Sets text to the right textbox 4th from the top. 
-    /// </summary>
-    /// <param name="str">string to be added.</param>
-    public void RewriteToTextBox(string str)
-    {
-        this.ToTextBox.Text = str;
+        if (str == null) { return; }
+        this.AuxiliaryTextBox.Text = str;
     }
     /// <summary>
     /// Sets the textbox for the 5th textbox from the top on the right.
     /// </summary>
     /// <param name="str">string to be added.</param>
-    public void RewriteDefendingUnitTextBox(string str)
+    public void RewriteLeadUnitTextBox(Character c)
     {
-        this.DefendingUnitTextBox.Text = str;
+        if (c == null) { this.LeadUnitTextBox.Clear(); return; }
+        this.LeadUnitTextBox.Text = c.SelectedView();
     }
     /// <summary>
     /// Sets the text for the 6th from the top on the right.
     /// </summary>
     /// <param name="str">string to be added.</param>
-    public void RewriteDefendingUnitStatus(string str)
+    public void RewriteLeadUnitStatusTextBox(Character c)
     {
-        this.DefendingUnitStatusTextBox.Text = str;
+        if (c == null) { this.LeadUnitStatsTextBox.Clear(); return; }
+        this.LeadUnitStatsTextBox.Text = c.StatusView();
     }
     /// <summary>
     /// Sets the text for the 7th from the top of the right.
     /// </summary>
     /// <param name="str">string to be added.</param>
-    public void RewriteCombatResultTextBox(string str)
+    public void RewriteLeadUnitTileTextBox(Character c)
     {
-        this.CombatResultTextBox.Text = str;
+        if (c == null) { this.LeadUnitTileTextBox.Clear(); return; }
+        this.LeadUnitTileTextBox.Text = c.TileView();
+    }
+    /// <summary>
+    /// Rewrites info for the bottom left box of the controller.
+    /// </summary>
+    /// <param name="c"></param>
+    public void RewriteMainUnitInfo(Character c)
+    {
+        this.MainUnitInfo.Text = "[LEFT-CLICK]: " + "Basic Attack ( " + c.DAMAGE + " base ). \n";
+        this.MainUnitInfo.AppendText("[RIGHT-CLICK]: " + c.CLASS_OF_ENTITY.ULTIMATE.NAME 
+            + "( " + (c.CLASS_OF_ENTITY.ULTIMATE.POTENCY + c.DAMAGE) + " base )\n");
+        this.MainUnitInfo.AppendText("[TARGET RANGE]: " + c.CLASS_OF_ENTITY.RANGE + "\n");
+        this.MainUnitInfo.AppendText("[MOVE RANGE]: " + c.CLASS_OF_ENTITY.MOVEMENT);
+        //this.MainUnitInfo.AppendText(c.C + " HP PER TURN");
+        //
+        //
+        //
+        //
+        //
     }
     /// <summary>
     /// Appends the given string to the team textbox.
@@ -400,7 +377,7 @@ partial class ControllerGUI
         for (int i = 0; i < ConnectedPlayer.TeamSize(); i++)
         {
             Character c = ConnectedPlayer.GetCharacterFromTeam(i);
-            this.AppendTeamTextBox(c.ToString());
+            this.AppendTeamTextBox(c.TeamView());
         }
     }
     /// <summary>
@@ -409,6 +386,7 @@ partial class ControllerGUI
     /// <param name="str"></param>
     public void AppendToGameLog(string str)
     {
+        if (this.GameLogBox.Text.Length > 1000) { this.GameLogBox.Clear(); }
         this.GameLogBox.AppendText(Metadata.GameTime() + str + "\n");
     }
     /// <summary>
@@ -424,23 +402,37 @@ partial class ControllerGUI
         // UAUAUAUUAUAUA
     }
     /// <summary>
+    /// Updates the existing scene fields to match the current interacton
+    /// </summary>
+    /// <param name="c1"></param>
+    /// <param name="c2"></param>
+    public void UpdateScene(Character c1, Character c2)
+    {
+
+    }
+    /// <summary>
     /// When the player decids to end the turn
     /// </summary>
     /// <param name="sender"></param>
     /// <param name="e"></param>
     public void EndTurnButtonClick(object sender, EventArgs e)
     {
-        ConnectedGame.UpdateAndRefreshGameGui();
+        this.MainUnitTextBox.Clear();
+        this.MainUnitTileTextBox.Clear();
+        this.MainUnitStatsTextBox.Clear();
+        this.AuxiliaryTextBox.Clear();
+
+        this.LeadUnitTextBox.Clear();
+        this.LeadUnitStatsTextBox.Clear();
+        this.LeadUnitTileTextBox.Clear();
+
+        this.RefreshTeamTextBox();
+        this.AppendToGameLog("Waiting for other player...(TODO)");
+        this.ConnectedGame.ResetTurn();
+        //ConnectedGame.UpdateAndRefreshGameGui();
         //socketlogic
         // and stuff
     }
 
     #endregion
-    
-    
-
-    protected override void OnClosing(CancelEventArgs e)
-    {
-        return;
-    }
 }
