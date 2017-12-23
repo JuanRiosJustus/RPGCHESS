@@ -65,7 +65,7 @@ public class ImageManager
     /// <returns>The resized image.</returns>
     public static Bitmap ResizeImage(Image image, int width, int height)
     {
-        var destRect = new Rectangle(0, 0, width, height - 5);
+        var destRect = new Rectangle(0, 0, width - 1, height - 2);
         var destImage = new Bitmap(width, height);
 
         destImage.SetResolution(image.HorizontalResolution, image.VerticalResolution);

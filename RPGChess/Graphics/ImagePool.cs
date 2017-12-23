@@ -38,7 +38,7 @@ public class ImagePool
             string path = @"..\..\Assets\Tiles\" + file.Name;
             string name = file.Name.Substring(0, file.Name.IndexOf("."));
             Bitmap b = new Bitmap(path);
-            ImagePoolNode ipn = new ImagePoolNode(b, name, Relation.Enemy);
+            ImagePoolNode ipn = new ImagePoolNode(b, name, Relation.Foe);
             Bitmaps.Add(ipn);
         }
 
@@ -52,7 +52,7 @@ public class ImagePool
             string name = file.Name.Substring(0, file.Name.IndexOf("."));
             Console.WriteLine(file.Name);
             Bitmap b = new Bitmap(path);
-            ImagePoolNode ipn = new ImagePoolNode(b,name, Relation.Friendly);
+            ImagePoolNode ipn = new ImagePoolNode(b,name, Relation.Friend);
             Bitmaps.Add(ipn);
         }
 
@@ -66,7 +66,7 @@ public class ImagePool
             string name = file.Name.Substring(0, file.Name.IndexOf("."));
             Console.WriteLine(file.Name);
             Bitmap b = new Bitmap(path);
-            ImagePoolNode ipn = new ImagePoolNode(b, name, Relation.Enemy);
+            ImagePoolNode ipn = new ImagePoolNode(b, name, Relation.Foe);
             Bitmaps.Add(ipn);
         }
 
