@@ -40,6 +40,15 @@ public class InitManager
             }
             playerQueue = q;
         }
+        private void SetEntitysInColumn(Board b, Player plyer, int col)
+        {
+            for (int i = 0; i < plyer.TeamSize(); i++)
+            {
+                if (i == Global.TEAMSIZE) { break; }
+                Character c = plyer.GetCharacterFromTeam(i);
+                b.AddEntityToBoard(c, 5 + (i * Global.TEAMSPACING), col);
+            }
+        }
         /// <summary>
         /// Sets all characters of both given players on the given board.
         /// </summary>
@@ -50,40 +59,33 @@ public class InitManager
         {
             if (Metadata.IsLocalHost())
             {
-                for (int i = 0; i < p1.TeamSize(); i++)
-                {
-                    if (i == Global.TEAMSIZE) { break; }
-
-                    Character c = p1.GetCharacterFromTeam(i);
-                    b.AddEntityToBoard(c, 5 + (i * 3), 3);
-                }
-
-                for (int i = 0; i < p2.TeamSize(); i++)
-                {
-                    if (i == Global.TEAMSIZE) { break; }
-
-                    Character c = p2.GetCharacterFromTeam(i);
-                    b.AddEntityToBoard(c, 5 + (i * 3), 46);
-                }
+                SetEntitysInColumn(b, p1, 10);
+                SetEntitysInColumn(b, p2, 40);
+                SetUpGenerics(b, p2, 30);
+                SetUpGenerics(b, p1, 20);
             }
             else
             {
-                for (int i = 0; i < p1.TeamSize(); i++)
-                {
-                    if (i == Global.TEAMSIZE) { break; }
-
-                    Character c = p1.GetCharacterFromTeam(i);
-                    b.AddEntityToBoard(c, 5 + (i * 6), 46);
-                }
-
-                for (int i = 0; i < p2.TeamSize(); i++)
-                {
-                    if (i == Global.TEAMSIZE) { break; }
-
-                    Character c = p2.GetCharacterFromTeam(i);
-                    b.AddEntityToBoard(c, 5 + (i * 6), 3);
-                }
+                SetEntitysInColumn(b, p1, 40);
+                SetEntitysInColumn(b, p2, 10);
+                SetUpGenerics(b, p1, 30);
+                SetUpGenerics(b, p2, 20);
             }
+        }
+    }
+    /// <summary>
+    /// Adds the generics for the team.
+    /// </summary>
+    /// <param name="b"></param>
+    /// <param name="plyr"></param>
+    /// <param name="col"></param>
+    private static void SetUpGenerics(Board b, Player plyr, int col)
+    {
+        for (int i = 0; i < Global.TEAMSIZE+1; i++)
+        {
+            Character c = EntityFactory.BuildCharacter("Pawn " + (i + 1), "generic", plyr.RELATION);
+            plyr.AddCharacterToTeam(c);
+            b.AddEntityToBoard(c, 5 + (i * (Global.TEAMSPACING - 4)), col);
         }
     }
     private static Singleton GetSingletonInstance()

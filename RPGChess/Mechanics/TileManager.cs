@@ -1,12 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 
+/// <summary>
+/// Class which manages holds the different functions 
+/// to be used on tiles.
+/// </summary>
 public class TileManager
 {
-    protected TileManager()
-    {
-        // constructor
-    }
+    protected TileManager() { }
     
     /// <summary>
     /// Given the movement, counts the available spaces to be traversed.
@@ -14,7 +15,7 @@ public class TileManager
     /// <param name="movement">move of movement</param>
     /// <param name="count">iteration.</param>
     /// <returns></returns>
-    private static int AvailableSteps(int movement, int count)
+    public static int AvailableSteps(int movement, int count)
     {
         if (movement == 1)
         {
@@ -42,6 +43,40 @@ public class TileManager
             return DeniedSteps(movement - 1, count + 1) + 7 + (4 * (count - 1));
         }
     }
+    public static bool HasOccuableRelatives(Tile[,] map, Tile tile)
+    {
+        throw new NotImplementedException();
+        for (int row = tile.Row - 1; row <= tile.Row + 1; row++)
+        {
+            for (int col = tile.Column - 1; col <= tile.Column + 1; col++)
+            {
+                // get the tile.
+                int realrow = WrapNumber(row, Global.ROWS);
+                int realcol = WrapNumber(col, Global.COLUMNS);
+                Tile t = map[realrow, realcol];
+
+                if (IsNeighbor(tile, t) == false) { continue; }
+                if (IsInHeight(tile, t) == false) { continue; }
+                return true;
+            }
+        }
+        return false;
+    }
+    public static bool IsNeighbor(Tile a, Tile b)
+    {
+        for (int row = a.Row - 1; row <= a.Row + 1; row++)
+        {
+            for (int col = a.Column - 1; col <= a.Column + 1; col++)
+            {
+                // get the tile.
+                int realrow = WrapNumber(row, Global.ROWS);
+                int realcol = WrapNumber(col, Global.COLUMNS);
+                
+                if (realcol == b.Column || realrow == b.Row) { return true; }
+            }
+        }
+        return false;
+    }
     /// <summary>
     /// Returns a tile based on a given string from the game.
     /// </summary>
@@ -66,45 +101,6 @@ public class TileManager
         throw new Exception("PARSING ERROR: NULL TILE.");
     }
     /// <summary>
-    /// Returns the list of targetable entities of the given entity, based of the given map.
-    /// </summary>
-    /// <param name="map">map to check.</param>
-    /// <param name="ent">entity to check for.</param>
-    /// <returns></returns>
-    public static List<Entity> TargetableEntities(Tile[,] map, Entity ent)
-    {
-        List<Entity> targetableEntities = new List<Entity>();
-        
-        int range = ent.CLASS_OF_ENTITY.RANGE;
-        Tile currentTile = ent.TILE_OF_ENTITY;
-
-        for (int row = currentTile.Row - range; row <= currentTile.Row + range; row++)
-        {
-            for (int col = currentTile.Column - range; col <= currentTile.Column + range; col++)
-            {
-                // check if in bounds.
-                if (col < 0 || row < 0 || col > Global.Columns-1 || row > Global.Rows-1)
-                {
-                    continue;
-                }
-                Tile t = map[row, col];
-
-                if (t.IsOccupied() == false)
-                {
-                    continue;
-                }
-                if(IsInHeight(currentTile, t) == false)
-                {
-                    continue;
-                }
-
-                Character c = (Character)t.Occupant;
-                targetableEntities.Add(c);
-            }
-        }
-        return targetableEntities;
-    }
-    /// <summary>
     /// Returns occuable tiles for an entity.
     /// </summary>
     /// <param name="map">mpa to locate tiles from.</param>
@@ -113,196 +109,117 @@ public class TileManager
     public static List<Tile> GetOccuableTiles(Tile [,] map, Entity ent)
     {
         List<Tile> result = new List<Tile>();
-        Stack<Tile> visiting = new Stack<Tile>();
+        Queue<Tile> visiting = new Queue<Tile>();
         HashSet<Tile> visited = new HashSet<Tile>();
-        visiting.Push(ent.TILE_OF_ENTITY);
         Tile start = ent.TILE_OF_ENTITY;
-        int m = ent.CLASS_OF_ENTITY.MOVEMENT;
+        visiting.Enqueue(ent.TILE_OF_ENTITY);
 
         while (visiting.Count > 0)
         {
-            Tile tile = visiting.Pop();
+            Tile tile = visiting.Dequeue();
 
-            if (visited.Contains(tile)) { continue; }
-            if (tile.Row < start.Row - m || tile.Row > start.Row + m ||
-                tile.Column < start.Column - m || tile.Column > start.Column + m) { continue; }
+            if (visited.Contains(tile)) { continue;  }
             if (IsInHeight(start, tile) == false) { continue; }
+            if (IsInMovementRange(map, tile, ent) == false) { continue; }
+
+            // add tile to available tiles and search for relatives.
             visited.Add(tile);
             result.Add(tile);
-
+            
             // check relatives
             for (int row = tile.Row - 1; row <= tile.Row + 1; row++)
             {
                 for (int col = tile.Column - 1; col <= tile.Column + 1; col++)
                 {
-                    if (IsInBounds(row, col) == false) { continue; }
-                    Tile t = map[row, col];
-                    if (IsInHeight(tile, t) == false) { continue; }
-                    if (tile.IsRelative(t) == false) { continue; }
+                    // get the tile.
+                    int realrow = WrapNumber(row, Global.ROWS);
+                    int realcol = WrapNumber(col, Global.COLUMNS);
+                    Tile t = map[realrow, realcol];
 
-                    visiting.Push(t);
+                    // add relative to queue.
+                    visiting.Enqueue(t);
                 }
             }
         }
         return result;
     }
-    [System.Obsolete("TODO")]
     /// <summary>
-    /// Returns occuable tiles for an entity.
+    /// Checks to see if the given entity can potentially move to the given tile
     /// </summary>
-    /// <param name="map">mpa to locate tiles from.</param>
-    /// <param name="ent">Entity to find tiles for</param>
+    /// <param name="map">map to check.</param>
+    /// <param name="to">tile to check.</param>
+    /// <param name="ent">entity given.</param>
     /// <returns></returns>
-    public static List<Tile> OccuableTiles(Tile[,] map, Entity ent)
+    public static bool IsInMovementRange(Tile[,] map, Tile to, Entity ent)
     {
-        List<Tile> occuableTiles = new List<Tile>();
-        Queue<Tile> toVisit = new Queue<Tile>();
-        HashSet<Tile> visited = new HashSet<Tile>();
+        Character c = (Character)ent;
+        Tile from = c.TILE_OF_ENTITY;
+        int cMove = c.CLASS_OF_ENTITY.MOVEMENT;
 
-        Tile tile = map[ent.TILE_OF_ENTITY.Row, ent.TILE_OF_ENTITY.Column];
-        toVisit.Enqueue(tile);
-
-        int row = tile.Row;
-        int col = tile.Column;
-        int ogrow = row;
-        int ogcol = col;
-        int moves = AvailableSteps(ent.CLASS_OF_ENTITY.MOVEMENT, 1);
-        int max = ent.CLASS_OF_ENTITY.MOVEMENT;
-
-        int maximumHeight = ent.TILE_OF_ENTITY.Height + Global.AHMI;
-
-        // traverse tiles
-        while (toVisit.Count > 0 && moves > 0)
+        for (int row = from.Row - cMove; row <= from.Row + cMove; row++)
         {
-            bool above = false, right = false, left = false, below = false;
-            tile = toVisit.Dequeue();
+            for (int col = from.Column - cMove; col <= from.Column + cMove; col++)
+            {
+                Tile current = map[WrapNumber(row, Global.ROWS), WrapNumber(col, Global.COLUMNS)];
 
-            // List of rules for skipping a particular tile.
-
-            /********** RULES FOR BEING ABLE TO OCCUPY A TILES **********/
-            if (visited.Contains(tile) || tile.Height - ent.TILE_OF_ENTITY.Height > Global.AHMI)
-            {
-                continue;
-            }
-            if (tile.Row > ogrow + max || tile.Row < ogrow - max)
-            {
-                continue;
-            }
-            if (tile.Column > ogcol + max || tile.Column < ogcol - max)
-            {
-                continue;
-            }
-            if (tile.Occupant != null && toVisit.Count != 0)
-            {
-                continue;
-            }
-            /********************/
-
-            occuableTiles.Add(tile);
-            visited.Add(tile);
-
-            row = tile.Row;
-            col = tile.Column;
-
-            if (row > 0)
-            {
-                if (visited.Contains(map[row - 1, col]) == false)
+                if (to == current)
                 {
-                    // MAKE SURE THE TILE IS THE SAME 
-                    if (map[row - 1, col].Height <= maximumHeight)
-                    {
-                        toVisit.Enqueue(map[row - 1, col]);
-                    }
-                }
-                above = true;
-            }
-            if (row < Global.Rows - 1)
-            {
-                if (visited.Contains(map[row + 1, col]) == false)
-                {
-                    if (map[row + 1, col].Height <= maximumHeight)
-                    {
-                        toVisit.Enqueue(map[row + 1, col]);
-                    }
-                }
-                below = true;
-            }
-            // Check the right and left bounds.
-            if (col > 0)
-            {
-                if (visited.Contains(map[row, col - 1]) == false)
-                {
-                    if (map[row, col - 1].Height <= maximumHeight)
-                    {
-                        toVisit.Enqueue(map[row, col - 1]);
-                    }
-                }
-                left = true;
-            }
-            if (col < Global.Columns - 1)
-            {
-                if (visited.Contains(map[row, col + 1]) == false)
-                {
-                    if (map[row, col + 1].Height <= maximumHeight)
-                    {
-                        toVisit.Enqueue(map[row, col + 1]);
-                    }
-                }
-                right = true;
-            }
-
-            if (below)
-            {
-                if (right && col > 0)
-                {
-                    if (visited.Contains(map[row + 1, col - 1]) == false)
-                    {
-                        if (map[row + 1, col - 1].Height <= maximumHeight)
-                        {
-                            toVisit.Enqueue(map[row + 1, col - 1]);
-                        }
-                    }
-                }
-                if (left && col < Global.Columns - 1)
-                {
-                    if (visited.Contains(map[row + 1, col + 1]) == false)
-                    {
-                        if (map[row + 1, col + 1].Height <= maximumHeight)
-                        {
-                            toVisit.Enqueue(map[row + 1, col + 1]);
-                        }
-                    }
+                    return true;
                 }
             }
-            if (above)
-            {
-                if (right && row > 0)
-                {
-                    if (visited.Contains(map[row - 1, col + 1]) == false)
-                    {
-                        if (map[row - 1, col + 1].Height <= maximumHeight)
-                        {
-                            toVisit.Enqueue(map[row - 1, col + 1]);
-                        }
-                    }
-                }
-                if (left && row < Global.Rows - 1)
-                {
-                    if (visited.Contains(map[row - 1, col - 1]) == false)
-                    {
-                        if (map[row - 1, col - 1].Height <= maximumHeight)
-                        {
-                            toVisit.Enqueue(map[row - 1, col - 1]);
-                        }
-                    }
-                }
-            }
-            moves--;
         }
-        return occuableTiles;
+        return false;
     }
     /// <summary>
-    /// Represents the check to check if a given tile can interact with another tile.
+    /// Returns a list of all possible tiles an entity may move to.
+    /// </summary>
+    /// <param name="map">map to check.</param>
+    /// <param name="ent">entity to base check off of.</param>
+    /// <returns></returns>
+    public static List<Tile> AllPossibleTiles(Tile[,] map,Entity ent)
+    {
+        List<Tile> tiles = new List<Tile>();
+        Character c = (Character)ent;
+        Tile from = c.TILE_OF_ENTITY;
+        int cMove = c.CLASS_OF_ENTITY.MOVEMENT;
+        // check row and column
+
+        for (int row = from.Row - cMove; row <= from.Row + cMove; row++)
+        {
+            for (int col = from.Column - cMove; col <= from.Column + cMove; col++)
+            {
+                Tile current = map[WrapNumber(row, Global.ROWS), WrapNumber(col, Global.COLUMNS)];
+                tiles.Add(current);
+            }
+        }
+        return tiles;
+    }
+    /// <summary>
+    /// Returns the distance of the two tiles.
+    /// </summary>
+    /// <param name="t1"></param>
+    /// <param name="t2"></param>
+    /// <returns></returns>
+    public static int Distance(Tile t1, Tile t2)
+    {
+        int rowSquared = (t1.Row - t2.Row) * 2;
+        int colSquared = (t1.Column - t2.Column) * 2;
+        return (int)Math.Sqrt(colSquared + rowSquared);
+    }
+    /// <summary>
+    /// Wraps the number given a total.
+    /// </summary>
+    /// <param name="num">number to wrap.</param>
+    /// <param name="total">wrap base</param>
+    /// <returns></returns>
+    public static int WrapNumber(int num, int total)
+    {
+        if (num < 0) return num + total;
+        else if (num >= total) return num % total;
+        else return num;
+    }
+    /// <summary>
+    /// the  check if a given tile can interact with another tile.
     /// </summary>
     /// <param name="from">Current tile</param>
     /// <param name="to">Tile to target.</param>
@@ -313,6 +230,18 @@ public class TileManager
         return false;
     }
     /// <summary>
+    /// The check if a given tile can interact with another tile.
+    /// </summary>
+    /// <param name="from">starting tile.</param>
+    /// <param name="to">ending tile</param>
+    /// <param name="limit">limit to not exceed.</param>
+    /// <returns></returns>
+    public static bool IsInHeight(Tile from, Tile to, int limit)
+    {
+        if (to.Height <= from.Height + limit) { return true; }
+        return false;
+    }
+    /// <summary>
     /// Returns true if the coordinate is within bounds of the global parameters asigned globally*
     /// </summary>
     /// <param name="row">row to check.</param>
@@ -320,6 +249,6 @@ public class TileManager
     /// <returns></returns>
     public static bool IsInBounds(int row, int col)
     {
-        return (row >= 0 && row < Global.Rows && col >= 0 && col < Global.Columns);
+        return (row >= 0 && row < Global.ROWS && col >= 0 && col < Global.COLUMNS);
     }
 }

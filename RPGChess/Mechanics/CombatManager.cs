@@ -16,9 +16,7 @@ public static class CombatManager
     /// <returns></returns>
     public static CombatResult Combat(Character attacker, Character defender, MouseEventArgs e)
     {
-        // check what player selected.
-        
-        // Player is using regula attack.
+        // Player is using regular attack.
         if (e.Button == MouseButtons.Left)
         {
             string attackName = Ability.BASICATTACK.NAME;
@@ -29,19 +27,18 @@ public static class CombatManager
         // player is using ultimate.
         if (e.Button == MouseButtons.Right)
         {
-            string attackName = attacker.CLASS_OF_ENTITY.ULTIMATE.NAME;
-            // do ultimate attack
-            int damageDone = DoUltimateDamage(attacker, defender);
-            return new CombatResult(attackName, damageDone);
-
+            //player is using ultimate
             if (CanUseUltimate(attacker))
             {
-                // do ultimate
-                Console.WriteLine("ULTIMATE WAS USED");
+                string attackName = attacker.CLASS_OF_ENTITY.ULTIMATE.NAME;
+                // do ultimate attack
+                int damageDone = DoUltimateDamage(attacker, defender);
+                return new CombatResult(attackName, damageDone);
                 
             }
         }
-        return new CombatResult("BLANK", 0);
+
+        return new CombatResult("struggle", 0);
     }
     /// <summary>
     /// Does damage ultimate based on attacker
@@ -62,10 +59,8 @@ public static class CombatManager
             attkr.ExpendManaForUltimate();
             return (damage + attkr.DAMAGE * -1);
         }
-
         
         dfndr.TAKEDAMAGE = damageDone;
-
         attkr.ExpendManaForUltimate();
         return damageDone;
     }
