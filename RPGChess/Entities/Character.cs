@@ -1,6 +1,5 @@
 ﻿/// <summary>
-/// Defines an instance of a character.
-/// To be manipulated within the context of a <see cref="Game"/>.
+/// Defines an Character.
 /// </summary>
 public class Character : Entity
 {
@@ -15,8 +14,8 @@ public class Character : Entity
     /// <param name="relation">Defines the relation of this entity.</param>
     public Character(string name_of_entity, Archetype class_of_entity, Relation relation) : base(name_of_entity, class_of_entity)
     {
-        RELATION_OF_ENTITY = relation;
-        IMAGE_OF_ENTITY = ImageManager.DetermineCharacterImage(CLASS_OF_ENTITY, RELATION_OF_ENTITY);
+        RelationOfEntity = relation;
+        ImageOfEntity = ImageManager.DetermineCharacterImage(ClassOfEntity, relation);
 
         Stats = new Statistics(class_of_entity);
     }
@@ -53,7 +52,7 @@ public class Character : Entity
     /// </summary>
     public void ExpendManaForUltimate()
     {
-        Stats.ExpendMana(CLASS_OF_ENTITY.ULTIMATE.MANA);
+        Stats.ExpendMana(ClassOfEntity.Ultimate.Mana);
     }
     /// <summary>
     /// Increases the amount of current health.
@@ -61,43 +60,55 @@ public class Character : Entity
     /// <returns></returns>
     public int RegenHealth()
     {
-        return Stats.RegenHealth();
+        return Stats.GainHealth();
     }
     /// <summary>
-    /// Returns the current level of the character.
+    /// Returns the Level of the character.
     /// </summary>
-    public int LEVEL { get{ return Stats.GetCurrentLevel; } }
+    public int Level { get{ return Stats.GetCurrentLevel; } }
     /// <summary>
     /// Returns the last amount of experience gained by the character.
     /// </summary>
-    public int EXPGAINED { get { return Stats.GetLastGainedExp; } }
+    public int ExpGained { get { return Stats.GetLastGainedExp; } }
     /// <summary>
-    /// Returns the current amount of mana crom the chrarcter.
+    /// Returns the current amount of mana of the chrarcter.
     /// </summary>
-    public int MANA { get { return Stats.GetCurrentMana; } }
+    public int Mana { get { return Stats.GetCurrentMana; } }
     /// <summary>
     /// Returns the current damage of the character.
     /// </summary>
-    public int DAMAGE { get { return Stats.GetCurrentDamage; } }
+    public int Damage { get { return Stats.GetCurrentDamage; } }
     /// <summary>
     /// Returns the current armor of the character.
     /// </summary>
-    public int ARMOR { get { return Stats.GetCurrentArmor; } }
+    public int Armor { get { return Stats.GetCurrentArmor; } }
     /// <summary>
     /// Returns the current amount of health of the character.
     /// </summary>
-    public int HEALTH { get { return Stats.GetCurrentHealth; } }
+    public int Health { get { return Stats.GetCurrentHealth; } }
     /// <summary>
     /// Sets the current health of the character with respect to the damage taken
     /// </summary>
-    public int TAKEDAMAGE
+    public int TakeDamage
     {
         set
         {
-            Stats.SetCurrentHealth =  Stats.GetCurrentHealth - value;
-            if (Stats.GetCurrentHealth > Stats.GetMaxHealth)
+            int damageDone = value;
+            if (damageDone > 0)
             {
-                Stats.SetCurrentHealth = Stats.GetMaxHealth;
+                Stats.SetCurrentHealth = Stats.GetCurrentHealth - value;
+                if (Stats.GetCurrentHealth > Stats.GetMaxHealth)
+                {
+                    Stats.SetCurrentHealth = Stats.GetMaxHealth;
+                }
+            }
+            else
+            {
+                Stats.SetCurrentHealth = Stats.GetCurrentHealth - 1;
+                if (Stats.GetCurrentHealth > Stats.GetMaxHealth)
+                {
+                    Stats.SetCurrentHealth = Stats.GetMaxHealth;
+                }
             }
         }
     }
@@ -114,9 +125,9 @@ public class Character : Entity
     /********** STRING VISUALIZATION LOGIC **********/
     public string TileView()
     {
-        if (TILE_OF_ENTITY == null) { return ""; }
-        Tile t = TILE_OF_ENTITY;
-        return "[TILE: " + t.ToCoordinate() + " ] " +
+        if (TileOfEntity == null) { return ""; }
+        Tile t = TileOfEntity;
+        return "[TILE: " + t.ToPosition() + " ] " +
                 "[BIOME: " + t.ToBiome() + " ] " +
                 "[TOPO: " + t.ToTopograph() + " ] ";
     }
@@ -129,18 +140,22 @@ public class Character : Entity
     public string TeamView()
     {
         return "[LVL: " + Stats.GetCurrentLevel + " ]" + 
-            "[NME: " + NAME_OF_ENTITY + " the " + CLASS_OF_ENTITY.NAME + " ]" + 
+            "[NME: " + NameOfEntity + " (" + ClassOfEntity.Name + ") ]" + 
             "[HP: " + Stats.GetCurrentHealth + " / " + Stats.GetMaxHealth + " ]";
     }
     public string SelectedView()
     {
         return "[LVL: " + Stats.GetCurrentLevel + " ]" + 
-            "[NME: " + NAME_OF_ENTITY + " ] " +
+            "[NME: " + NameOfEntity + " ] " +
             "[EXP: " + Stats.GetCurrentExp + "/" + Stats.GetCurrentExpNeeded + " ]" +
             "[MAN: " + Stats.GetCurrentMana + "/" + Stats.GetMaxMana + " ]";
     }
+    public string NameEmphasized()
+    {
+        return "[ " + NameOfEntity + " ]";
+    }
     public override string ToString()
     {
-        return NAME_OF_ENTITY;
+        return NameOfEntity;
     }
 }

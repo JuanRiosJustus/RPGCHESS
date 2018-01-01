@@ -2,81 +2,49 @@
 using System.Drawing;
 
 /// <summary>
-/// 
-/// Defines the most basic form of a tile occupant.
-/// 
+/// Defines the most basic form of an occupant.
 /// </summary>
 public class Entity
 {
-    /// <summary>
-    /// Represents the name of the entity.
-    /// </summary>
-    protected internal readonly string NAME_OF_ENTITY;
-    /// <summary>
-    /// Represents the class-archetype of the entity.
-    /// </summary>
-    protected internal readonly Archetype CLASS_OF_ENTITY;
-    /// <summary>
-    /// The tile associated with the entity.
-    /// </summary>
-    protected internal Tile TILE_OF_ENTITY { get; private set; }
-    /// <summary>
-    /// The image associated with the entiy.
-    /// </summary>
-    protected internal Image IMAGE_OF_ENTITY;
-    /// <summary>
-    /// Represents if the entity is friendly or an enemy.
-    /// </summary>
-    protected internal Relation RELATION_OF_ENTITY;
-    protected internal Point COORDINATE_OF_ENTITY;
+    protected internal readonly string NameOfEntity;
+    protected internal readonly Archetype ClassOfEntity;
+    protected internal Tile TileOfEntity { get; private set; }
+    protected internal Image ImageOfEntity;
+    protected internal Relation RelationOfEntity;
 
     /// <summary>
-    /// Constructor.
+    /// Constructor for Entity instance.
     /// </summary>
-    /// <param name="name_of_entity">Name representing the entity.</param>
-    /// <param name="class_of_entity">Class represented by this entity.</param>
-    public Entity(string name_of_entity, Archetype class_of_entity)
+    public Entity(string nameOfEntity, Archetype classOfEntity)
     {
-        if (name_of_entity.Length > 9)
-        {
-            NAME_OF_ENTITY = name_of_entity.Substring(0, 9);
-        }
-        else
-        {
-            NAME_OF_ENTITY = name_of_entity;
-        }
-        CLASS_OF_ENTITY = class_of_entity;
-        COORDINATE_OF_ENTITY = new Point(0, 0);
+        if (nameOfEntity.Length > 9) { NameOfEntity = nameOfEntity.Substring(0, 9); }
+        else { NameOfEntity = nameOfEntity; }
+        ClassOfEntity = classOfEntity;
     }
     /// <summary>
     /// Associates the entity with the given tile.
     /// </summary>
-    /// <param name="tile">The tile to associate the entity with.</param>
     public virtual void SetTile(Tile tile)
     {
-        this.TILE_OF_ENTITY = tile;
-        this.COORDINATE_OF_ENTITY.X = tile.Coordinate.X;
-        this.COORDINATE_OF_ENTITY.Y = tile.Coordinate.Y;
+        this.TileOfEntity = tile;
 
-        if (Object.ReferenceEquals(TILE_OF_ENTITY.Occupant, this) == false)
+        if (Object.ReferenceEquals(TileOfEntity.Occupant, this) == false)
         {
-            this.TILE_OF_ENTITY.SetOccupant(this);
+            this.TileOfEntity.SetOccupant(this);
         }
     }
     /// <summary>
-    /// Sets the relation of enttiy.
+    /// Sets the relation of entity.
     /// </summary>
-    /// <param name="relation"></param>
     public virtual void SetRelation(Relation relation)
     {
-        this.RELATION_OF_ENTITY = relation;
+        this.RelationOfEntity = relation;
     }
     /// <summary>
     /// Basic string representation of the entity.
     /// </summary>
-    /// <returns></returns>
     public override string ToString()
     {
-        return this.NAME_OF_ENTITY;
+        return this.NameOfEntity;
     }
 }

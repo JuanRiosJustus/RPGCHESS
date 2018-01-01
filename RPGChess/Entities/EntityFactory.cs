@@ -1,29 +1,24 @@
 ﻿
 /// <summary>
-/// 
 /// Basic factory design for classes deriving from entity.
-/// 
 /// </summary>
 public class EntityFactory
 {
     /// <summary>
     /// Factory for character creation.
     /// </summary>
-    /// <param name="name">Name of the character to be created.</param>
-    /// <param name="class_of_entity">Class of the character to be created.</param>
-    /// <returns></returns>
-    public static Character BuildCharacter(string name, string class_of_entity, Relation relation_of_entity)
+    public static Character BuildCharacter(string name, string classOfEntity, Relation relationOfEntity)
     {
-        switch (class_of_entity.ToLower())
+        switch (classOfEntity.ToLower())
         {
-            case "ranger": return new Character(name, Archetype.RANGER, relation_of_entity);
-            case "cleric": return new Character(name, Archetype.CLERIC, relation_of_entity);
-            case "mage": return new Character(name, Archetype.MAGE, relation_of_entity);
-            case "monk": return new Character(name, Archetype.MONK, relation_of_entity);
-            case "rogue": return new Character(name, Archetype.ROGUE, relation_of_entity);
-            case "warrior": return new Character(name, Archetype.WARRIOR, relation_of_entity);
-            case "generic": return new Character(name, Archetype.GENERIC, relation_of_entity);
-            default: return new Character(name, Archetype.MONSTER, relation_of_entity);
+            case "ranger": return new Character(name, Archetype.Ranger, relationOfEntity);
+            case "cleric": return new Character(name, Archetype.Cleric, relationOfEntity);
+            case "magician": return new Character(name, Archetype.Magician, relationOfEntity);
+            case "monk": return new Character(name, Archetype.Monk, relationOfEntity);
+            case "rogue": return new Character(name, Archetype.Rogue, relationOfEntity);
+            case "fighter": return new Character(name, Archetype.Fighter, relationOfEntity);
+            case "generic": return new Character(name, Archetype.Generic, relationOfEntity);
+            default: return new Character(name, Archetype.Monster, relationOfEntity);
         }
     }
     public Creature BuildCreature(string name, string class_of_entity, Relation relation)

@@ -6,4 +6,5 @@ public enum Relation
 {
     Friend,
     Foe,
+    Neutral,
 };

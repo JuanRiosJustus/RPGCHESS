@@ -1,146 +1,125 @@
 ﻿using System.Collections.Generic;
 
 /// <summary>
-/// 
-/// Defines the different available archetypes.
-/// Some of these archetypes include: Cleric, Monk, and Mage.
-/// <see cref="Character"/> should reflect attributes of an <see cref="Archetype"/>.
-/// 
+/// Defines the available archetypes for an entity.
 /// </summary>
 public class Archetype
 {
-    public static readonly Archetype CLERIC = new Archetype("Cleric", 1, 120, 100, 5, 5, 15, 3);
-    public static readonly Archetype MAGE = new Archetype("Mage", 1, 100, 150, 1, 5, 40, 3);
-    public static readonly Archetype MONK = new Archetype("Monk", 4, 120, 110, 1, 7, 15, 1);
-    public static readonly Archetype RANGER = new Archetype("Ranger", 2, 100, 100, 1, 5, 15, 4);
-    public static readonly Archetype ROGUE = new Archetype("Rogue", 2, 100, 100, 1, 7, 30, 1);
-    public static readonly Archetype WARRIOR = new Archetype("Warrior", 3, 150, 100, 1, 10, 20, 1);
-    
-    public static readonly Archetype MONSTER = new Archetype("Monster", 1, 200, 100, 5, 20, 30, 3);
-    public static readonly Archetype GENERIC = new Archetype("Generic", 1, 50, 50, 1, 0, 0, 2);
-    public static readonly Archetype BYSTANDER = new Archetype("Bystander", 1, 50, 50, 1, 0, 0, 2);
+    /// <summary>
+    /// The Fighter archetype, associated with High health and armor.
+    /// </summary>
+    public static readonly Archetype Fighter = new Archetype("Fighter", 2, 100, 30, 1, 10, 12);
+    /// <summary>
+    /// The Magician archetype, associated with ranged, high damage.
+    /// </summary>
+    public static readonly Archetype Magician = new Archetype("Magician", 1, 60, 50, 3, 5, 20);
+    /// <summary>
+    /// The Ranger archetype, associated with high damage from afar.
+    /// </summary>
+    public static readonly Archetype Ranger = new Archetype("Ranger", 1, 60, 50, 4, 5, 12);
+    /// <summary>
+    /// The Cleric archetype, associated with restoration and ranged damage,
+    /// </summary>
+    public static readonly Archetype Cleric = new Archetype("Cleric", 1, 60, 50, 2, 5, 8);
+    /// <summary>
+    /// The Monk archetype, associated close range along with agility.
+    /// </summary>
+    public static readonly Archetype Monk = new Archetype("Monk", 3, 80, 40, 1, 7, 10);
+    /// <summary>
+    /// The Rogue archetype, assoiated with close range and high damage.
+    /// </summary>
+    public static readonly Archetype Rogue = new Archetype("Rogue", 2, 80, 40, 1, 7, 18);
+    /// <summary>
+    /// The Generic archetype, default.
+    /// </summary>
+    public static readonly Archetype Generic = new Archetype("Generic", 1, 100, 50, 2, 10, 5);
+    /// <summary>
+    /// Default archetype for comp...
+    /// </summary>
+    public static readonly Archetype Bystander = new Archetype("Bystander", 1, 50, 10, 1, 1, 1);
+    /// <summary>
+    /// The Monster archetype, asociate with large stats, for large enemies
+    /// </summary>
+    public static readonly Archetype Monster = new Archetype("Monster", 1, 200, 10, 5, 15, 30);
 
-    /// <summary>
-    /// Represents the name of the class.
-    /// </summary>
-    private readonly string CLASS_NAME;
-    /// <summary>
-    /// Represents the base value of tiles that can be traversed.
-    /// </summary>
-    private readonly int BASE_MOVEMENT;
-    /// <summary>
-    /// Represents the base  total amount of health.
-    /// </summary>
-    private readonly int BASE_HEALTH;
-    /// <summary>
-    /// Represents the base total amount of mana.
-    /// </summary>
-    private readonly int BASE_MANA;
-    /// <summary>
-    /// Represents the base amount of health that will can be regenerated.
-    /// </summary>
-    private readonly int BASE_REGEN;
-    /// <summary>
-    /// Represents the base total mount of damage that will be mitigated.
-    /// </summary>
-    private readonly int BASE_ARMOR;
-    /// <summary>
-    /// Represents the base amount of damage being done.
-    /// </summary>
-    private readonly int BASE_DAMAGE;
-    /// <summary>
-    /// Represents the base range of the archetype.
-    /// </summary>
-    private readonly int BASE_RANGE;
-    /// <summary>
-    /// The unique ability of the archtype.
-    /// </summary>
-    private readonly Ability BASE_ABILITY;
-    
+    private readonly string BaseName;
+    private readonly int BaseMovement;
+    private readonly int BaseHealth;
+    private readonly int BaseMana;
+    private readonly int BaseRange;
+    private readonly int BaseArmor;
+    private readonly int BaseDamage;
+    private readonly Ability BaseAbility;
     
     /// <summary>
-    /// Constructs an instance of an Archetype.
+    /// Constructor for Archetype instance.
     /// </summary>
-    /// <param name="class_name">The string representation of the class/archetype</param>
-    /// <param name="base_movement">The base movement of the instance.</param>
-    /// <param name="base_health">The base health of the instance.</param>
-    /// <param name="base_mana">The base mana of the instance.</param>
-    /// <param name="base_regen">The base health regen of the instance.</param>
-    /// <param name="base_armor">The base armor of the instance.</param>
-    /// <param name="base_damage">The base damage of the instance.</param>
-    /// <param name="base_range">The base range of the instance.</param>
-    public Archetype(string class_name, int base_movement, int base_health, int base_mana, int base_regen, int base_armor, int base_damage, int base_range)
+    public Archetype(string name, int movement, int health, int mana, int range, int armor, int damage)
     {
-        CLASS_NAME = class_name;
-        BASE_MOVEMENT = base_movement;
-        BASE_HEALTH = base_health;
-        BASE_MANA = base_mana;
-        BASE_REGEN = base_regen;
-        BASE_ARMOR = base_armor;
-        BASE_DAMAGE = base_damage;
-        BASE_RANGE = base_range;
-        BASE_ABILITY= Ability.GetUniqueAbility(this);
+        BaseName = name;
+        BaseMovement = movement;
+        BaseHealth = health;
+        BaseMana = mana;
+        BaseArmor = armor;
+        BaseDamage = damage;
+        BaseRange = range;
+        BaseAbility= Ability.GetUniqueAbility(this);
     }
     /// <summary>
-    /// Offers an iterable collection of the Archetypes.
+    /// Offers an iterable collection of the archetypes.
     /// </summary>
     public static IEnumerable<Archetype> Values
     {
         get
         {
-            yield return CLERIC;
-            yield return MAGE;
-            yield return MONK;
-            yield return RANGER;
-            yield return ROGUE;
-            yield return WARRIOR;
-            yield return MONSTER;
-            yield return GENERIC;
-            yield return BYSTANDER;
+            yield return Fighter;
+            yield return Magician;
+            yield return Ranger;
+            yield return Cleric;
+            yield return Monk;
+            yield return Rogue;
+            yield return Generic;
+            yield return Bystander;
+            yield return Monster;
         }
     }
     /// <summary>
-    /// Returns the type of the archetype represented by a string.
+    /// Returns the name of the archetype.
     /// </summary>
-    public string NAME { get { return CLASS_NAME; } }
+    public string Name { get { return BaseName; } }
     /// <summary>
-    /// Returns the movement of the archetype represented by an integer.
+    /// Returns the movement of the archetype.
     /// </summary>
-    public int MOVEMENT { get { return BASE_MOVEMENT; } }
+    public int Movement { get { return BaseMovement; } }
     /// <summary>
-    /// Returns health of the archetype represented by an integer.
+    /// Returns the health of the archetype.
     /// </summary>
-    public int HEALTH { get { return BASE_HEALTH; } }
+    public int Health { get { return BaseHealth; } }
     /// <summary>
-    /// Returns the mana of the archetype represented by an integer.
+    /// Returns the mana of the archetype.
     /// </summary>
-    public int MANA { get { return BASE_MANA; } }
+    public int Mana { get { return BaseMana; } }
     /// <summary>
-    /// Returns the regeneration of the archetype represented by an integer.
+    /// Returns the armor of the archetype.
     /// </summary>
-    public int REGEN { get { return BASE_REGEN; } }
+    public int Armor { get { return BaseArmor; } }
     /// <summary>
-    /// Returns the resistance of the archetype represented by an integer.
+    /// Retunrnst the damage of the archetype.
     /// </summary>
-    public int ARMOR { get { return BASE_ARMOR; } }
+    public int Damage { get { return BaseDamage; } }
     /// <summary>
-    /// Returns the damage of the archetype represented by an integer.
+    /// Returns the range of the archetype.
     /// </summary>
-    public int DAMAGE { get { return BASE_DAMAGE; } }
+    public int Range { get { return BaseRange; } }
     /// <summary>
-    /// Returns the range of the archetype represented by an integer.
+    /// Returns the ability associated witht he archetype.
     /// </summary>
-    public int RANGE { get { return BASE_RANGE; } }
+    public Ability Ultimate { get { return BaseAbility; } }
     /// <summary>
-    /// Returns the ability of the archetype.
+    /// Returns the name of the archetype.
     /// </summary>
-    public Ability ULTIMATE { get { return BASE_ABILITY; } }
-    /// <summary>
-    /// The basic representation of the Archetype. 
-    /// </summary>
-    /// <returns></returns>
     public override string ToString()
     {
-        return CLASS_NAME;
+        return BaseName;
     }
 }

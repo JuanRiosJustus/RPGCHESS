@@ -4,13 +4,11 @@ using System;
 /// <summary>
 /// Defines the stats of an entity.
 /// </summary>
-
 public class Statistics
 {
     private readonly int MaxMovement;
     private int MaxMana;
     private int MaxHealth;
-    private readonly int MaxRegen;
     private readonly int MaxArmor;
     private readonly int MaxDamage;
     private readonly int MaxRange;
@@ -18,7 +16,6 @@ public class Statistics
     private readonly int CurrentMovement;
     private int CurrentMana;
     private int CurrentHealth;
-    private int CurrentRegen;
     private int CurrentArmor;
     private int CurrentDamage;
     private readonly int CurrentRange;
@@ -26,14 +23,13 @@ public class Statistics
     private int CurrentExp;
     private int CurrentExpNeededToLevel;
     private int LastGainedExp;
-    
 
     private int CurrentLevel;
     private Archetype CurrentArchetype;
+    private Random randomNumGenerator;
     
     public int GetMaxHealth { get { return MaxHealth; } }
     public int GetCurrentHealth { get { return CurrentHealth; } }
-    public int GetCurrentRegen { get { return CurrentRegen; } }
     public int GetCurrentArmor { get { return CurrentArmor; } }
     public int GetCurrentDamage { get { return CurrentDamage; } }
     public int GetCurrentExp { get { return CurrentExp; } }
@@ -50,21 +46,19 @@ public class Statistics
     /// <param name="arc">Used to construct stats.</param>
     public Statistics(Archetype arc)
     {
-        MaxMovement = arc.MOVEMENT;
-        MaxMana = arc.MANA;
-        MaxHealth = arc.HEALTH;
-        MaxRegen = arc.REGEN;
-        MaxArmor = arc.ARMOR;
-        MaxDamage = arc.DAMAGE;
-        MaxRange = arc.RANGE;
+        MaxMovement = arc.Movement;
+        MaxMana = arc.Mana;
+        MaxHealth = arc.Health;
+        MaxArmor = arc.Armor;
+        MaxDamage = arc.Damage;
+        MaxRange = arc.Range;
 
-        CurrentMovement = arc.MOVEMENT;
+        CurrentMovement = arc.Movement;
         CurrentMana = 0;
-        CurrentHealth = arc.HEALTH;
-        CurrentRegen = arc.REGEN;
-        CurrentArmor = arc.ARMOR;
-        CurrentDamage = arc.DAMAGE;
-        CurrentRange = arc.RANGE;
+        CurrentHealth = arc.Health;
+        CurrentArmor = arc.Armor;
+        CurrentDamage = arc.Damage;
+        CurrentRange = arc.Range;
 
         CurrentArchetype = arc;
 
@@ -72,35 +66,35 @@ public class Statistics
         CurrentLevel = 1;
         LastGainedExp = 0;
         CurrentExpNeededToLevel = 4;
+        randomNumGenerator = new Random(585);
     }
     /// <summary>
-    /// Increases the amount of current health is applicable.
+    /// Increases the amount of current health.
     /// </summary>
-    /// <returns></returns>
-    public int RegenHealth()
+    public int GainHealth()
     {
-        CurrentHealth = CurrentHealth + CurrentRegen;
-        if (GetCurrentHealth > MaxHealth) { CurrentHealth = MaxHealth; }
-        return CurrentRegen;
+        CurrentHealth = CurrentHealth + randomNumGenerator.Next(CurrentLevel) + 1;
+        if (CurrentHealth > MaxHealth)
+        {
+            CurrentHealth = MaxHealth;
+        }
+        return CurrentHealth;
     }
     /// <summary>
     /// Increases the amount of current mana.
     /// </summary>
-    /// <returns></returns>
-    public bool GainMana()
+    public int GainMana()
     {
-        if (CurrentMana < MaxMana)
+        CurrentMana = CurrentMana + randomNumGenerator.Next(CurrentLevel) + 1;
+        if (CurrentMana > MaxMana)
         {
-            CurrentMana = CurrentMana + new Random().Next(5);
-            return true;
+            CurrentMana = MaxMana;
         }
-        return false;
+        return CurrentMana;
     }
     /// <summary>
-    /// Decreases amount of mana.
+    /// Decreases amount of current mana.
     /// </summary>
-    /// <param name="man"></param>
-    /// <returns></returns>
     public int ExpendMana(int man)
     {
         CurrentMana = CurrentMana - man;
@@ -109,29 +103,27 @@ public class Statistics
     /// <summary>
     /// Increases the amount of experience by the amount given.
     /// </summary>
-    /// <param name="exp"></param>
-    /// <returns></returns>
     public int GainExperience(int exp)
     {
         LastGainedExp = exp;
         CurrentExp = CurrentExp + exp;
-        LevelUp();
+        CheckForLevelUp();
         return exp;
     }
     /// <summary>
-    /// Increases the amount of experience (default).
+    /// Increases the amount of experience (ambient).
     /// </summary>
     public int GainExperience()
     {
         LastGainedExp = new Random().Next(CurrentLevel) + 1;
         CurrentExp = CurrentExp + LastGainedExp;
-        LevelUp();
+        CheckForLevelUp();
         return LastGainedExp;
     }
     /// <summary>
     /// Checks to see if can level up.
     /// </summary>
-    private bool LevelUp()
+    private bool CheckForLevelUp()
     {
         // check if can level up.
         if (CurrentExp >= CurrentExpNeededToLevel)
@@ -148,19 +140,19 @@ public class Statistics
     /// <summary>
     /// Increases stats respective of archetype.
     /// </summary>
-    /// <param name="arc">archetype to respect.</param>
     private void IncreaseStatistics(Archetype arc)
     {
-        string str = arc.NAME.ToLower();
+        string str = arc.Name.ToLower();
         switch(str)
         {
             case "cleric": IncreaseAsCleric(); break;
-            case "mage": IncreaseAsMage(); break;
+            case "magician": IncreaseAsMagician(); break;
             case "monk": IncreaseAsMonk(); break;
             case "ranger": IncreaseAsRanger(); break;
             case "rogue": IncreaseAsRogue(); break;
-            case "warrior": IncreaseAsWarrior(); break;
+            case "fighter": IncreaseAsFighter(); break;
             case "generic": IncreaseAsGeneric(); break;
+            case "bystander": IncreaseAsBystander(); break;
             default: IncreaseAsMonster(); break;
         }
     }
@@ -173,22 +165,20 @@ public class Statistics
         MaxHealth = MaxHealth + 50;
 
         CurrentHealth = CurrentHealth + 50;
-        CurrentRegen = CurrentRegen + 5;
-        CurrentArmor = CurrentArmor + 1 + BONUSVARIANCE();
-        CurrentDamage = CurrentDamage + 5 + BONUSVARIANCE();
+        CurrentArmor = CurrentArmor + randomNumGenerator.Next(2);
+        CurrentDamage = CurrentDamage + 2 + randomNumGenerator.Next(2);
     }
     /// <summary>
-    /// Increases stats for a mage.
+    /// Increases stats for a magician.
     /// </summary>
-    private void IncreaseAsMage()
+    private void IncreaseAsMagician()
     {
         MaxMana = MaxMana + 50;
         MaxHealth = MaxHealth + 25;
 
         CurrentHealth = CurrentHealth + 25;
-        CurrentRegen = CurrentRegen + 1;
-        CurrentArmor = CurrentArmor + 1 + BONUSVARIANCE();
-        CurrentDamage = CurrentDamage + 20 + BONUSVARIANCE();
+        CurrentArmor = CurrentArmor + randomNumGenerator.Next(2);
+        CurrentDamage = CurrentDamage + 10 + randomNumGenerator.Next(10);
     }
     /// <summary>
     /// Increases stats for a monk
@@ -199,9 +189,8 @@ public class Statistics
         MaxHealth = MaxHealth + 50;
         
         CurrentHealth = CurrentHealth + 50;
-        CurrentRegen = CurrentRegen + 3;
-        CurrentArmor = CurrentArmor + 3 + BONUSVARIANCE();
-        CurrentDamage = CurrentDamage + 10 + BONUSVARIANCE();
+        CurrentArmor = CurrentArmor + randomNumGenerator.Next(3);
+        CurrentDamage = CurrentDamage + 5 + +randomNumGenerator.Next(5);
     }
     /// <summary>
     /// Increases stats for a ranger.
@@ -212,9 +201,8 @@ public class Statistics
         MaxHealth = MaxHealth + 25;
 
         CurrentHealth = CurrentHealth + 25;
-        CurrentRegen = CurrentRegen + 1;
-        CurrentArmor = CurrentArmor + 1 + BONUSVARIANCE();
-        CurrentDamage = CurrentDamage + 10 + BONUSVARIANCE();
+        CurrentArmor = CurrentArmor + randomNumGenerator.Next(2);
+        CurrentDamage = CurrentDamage + 7 + randomNumGenerator.Next(7);
     }
     /// <summary>
     /// Increases stats for a rogue.
@@ -225,25 +213,23 @@ public class Statistics
         MaxHealth = MaxHealth + 25;
 
         CurrentHealth = CurrentHealth + 25;
-        CurrentRegen = CurrentRegen + 1;
-        CurrentArmor = CurrentArmor + 2 + BONUSVARIANCE();
-        CurrentDamage = CurrentDamage + 15 + BONUSVARIANCE();
+        CurrentArmor = CurrentArmor + randomNumGenerator.Next(3);
+        CurrentDamage = CurrentDamage + 9 + randomNumGenerator.Next(9);
     }
     /// <summary>
-    /// Increases stats for a warrior.
+    /// Increases stats for a fighter.
     /// </summary>
-    private void IncreaseAsWarrior()
+    private void IncreaseAsFighter()
     {
         MaxMana = MaxMana + 5;
         MaxHealth = MaxHealth + 50;
 
         CurrentHealth = CurrentHealth + 50;
-        CurrentRegen = CurrentRegen + 1;
-        CurrentArmor = CurrentArmor + 5 + BONUSVARIANCE();
-        CurrentDamage = CurrentDamage + 10 + BONUSVARIANCE();
+        CurrentArmor = CurrentArmor + 1 + randomNumGenerator.Next(5);
+        CurrentDamage = CurrentDamage + 5 + randomNumGenerator.Next(5);
     }
     /// <summary>
-    /// Increases stats for a genric or default.
+    /// Increases stats for a generic or default.
     /// </summary>
     private void IncreaseAsGeneric()
     {
@@ -251,26 +237,31 @@ public class Statistics
         MaxHealth = MaxHealth + 25;
 
         CurrentHealth = CurrentHealth + 25;
-        CurrentRegen = CurrentRegen + 2;
-        CurrentArmor = CurrentArmor + 2;
-        CurrentDamage = CurrentDamage + 5;
+        CurrentArmor = CurrentArmor + randomNumGenerator.Next(5);
+        CurrentDamage = CurrentDamage + randomNumGenerator.Next(5);
     }
     /// <summary>
     /// Increases stats for a monster.
     /// </summary>
     private void IncreaseAsMonster()
     {
-        Random rand = new Random();
         MaxMana = MaxMana + 50;
         MaxHealth = MaxHealth + 200;
 
         CurrentHealth = CurrentHealth + 200;
-        CurrentRegen = CurrentRegen + 1 + rand.Next(CurrentLevel);
-        CurrentArmor = CurrentArmor + 1 + rand.Next(CurrentLevel);
-        CurrentDamage = CurrentDamage + 50 + rand.Next(CurrentLevel);
+        CurrentArmor = CurrentArmor + 1 + randomNumGenerator.Next(CurrentLevel);
+        CurrentDamage = CurrentDamage + 25 + randomNumGenerator.Next(CurrentLevel);
     }
-    public int BONUSVARIANCE()
+    /// <summary>
+    /// Increases stats for a generic or default.
+    /// </summary>
+    private void IncreaseAsBystander()
     {
-        return new Random().Next(Global.VARIANCE * -1,Global.VARIANCE);
+        MaxMana = MaxMana + 5;
+        MaxHealth = MaxHealth + 25;
+
+        CurrentHealth = CurrentHealth + 10;
+        CurrentArmor = CurrentArmor + 1;
+        CurrentDamage = CurrentDamage + 1;
     }
 }
