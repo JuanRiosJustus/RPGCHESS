@@ -5,6 +5,7 @@ public class Animation
 {
     private Image gifImage;
     private FrameDimension dimension;
+    private Point center;
     private int frameCount;
     private int currentFrame = 0;
     private bool reverse;
@@ -13,6 +14,7 @@ public class Animation
     public Animation(string path)
     {
         gifImage = Image.FromFile(path);
+        center = new Point((int)gifImage.PhysicalDimension.Height, (int)gifImage.PhysicalDimension.Width);
         //initialize
         dimension = new FrameDimension(gifImage.FrameDimensionsList[0]);
         //gets the GUID

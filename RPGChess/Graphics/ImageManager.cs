@@ -36,6 +36,14 @@ public class ImageManager
         return IM.GetSubBackground();
     }
     /// <summary>
+    /// Returns the attack animation.
+    /// </summary>
+    public static Animation AttackAnimation()
+    {
+        GetImagePoolInstance();
+        return IM.GetAttackAnimation();
+    }
+    /// <summary>
     /// Returns a bitmap based on the given archetype and relatio.
     /// </summary>
     /// <param name="class_type">archetype to find</param>
@@ -44,7 +52,7 @@ public class ImageManager
     public static Bitmap DetermineCharacterImage(Archetype class_type, Relation relation)
     {
         GetImagePoolInstance();
-        return IM.GetImage(class_type.NAME, relation);
+        return IM.GetCharacterImage(class_type.Name, relation);
     }
     /// <summary>
     /// Returns the appropriate image of the givne biome.
@@ -54,7 +62,35 @@ public class ImageManager
     public static Bitmap DetermineBiomeImage(String biome)
     {
         GetImagePoolInstance();
-        return IM.GetImage(biome);
+        return IM.GetBiomeImage(biome);
+    }
+    /// <summary>
+    /// Sets the background of the board.
+    /// </summary>
+    /// <param name="g"></param>
+    /// <returns></returns>
+    private Image SetBackground(Graphics g)
+    {
+        /*
+        Bitmap bitmap = new Bitmap(Convert.ToInt32(this.Display.Width * 2), Convert.ToInt32(this.Display.Height + 800), PixelFormat.Format32bppArgb);
+        g = Graphics.FromImage(bitmap);
+
+        for (int row = 0; row < ConnectedGame.GetBoardLength(0); row++)
+        {
+            for (int col = 0; col < ConnectedGame.GetBoardLength(1); col++)
+            {
+                Tile tile = ConnectedGame.GetBoardTile(row, col);
+
+                g.DrawImage(tile.TileImage, tile.Coordinate.X, tile.Coordinate.Y);
+            }
+        }
+
+        bitmap.Save(@"..\..\Assets\Backgrounds\Board.PNG", ImageFormat.Png);
+        Image result = new Bitmap(@"..\..\Assets\Backgrounds\Board.PNG");
+        this.backgroundIsDeveloped = true;
+
+        return ImageManager.ResizeImage(result, this.Display.Width, this.Display.Height);*/
+            return null; ;
     }
     /// <summary>
     /// Resize the image to the specified width and height.
