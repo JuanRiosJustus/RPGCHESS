@@ -1,10 +1,10 @@
 ﻿
+using System;
 using System.Net;
 using System.Net.Sockets;
 
 public class NetworkManager
 {
-
     /// <summary>
     /// Helper method that gets the users local IPv4 connection.
     /// </summary>
@@ -20,5 +20,11 @@ public class NetworkManager
             }
         }
         return "No network adapters with an IPv4 address found in the system!";
+    }
+    // check is valid ipaddress
+    public static bool IsValidIP(string addrString)
+    {
+        Console.WriteLine(IPAddress.TryParse(addrString, out IPAddress taddress) + " <<< is valid ip?");
+        return IPAddress.TryParse(addrString, out IPAddress address);
     }
 }
