@@ -1,18 +1,12 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Windows.Forms;
 
 /// <summary>
-/// 
 /// The definition of a game.
-/// 
 /// </summary>
 public class Game
 {
     private Board ConnectedBoard;
-    private List<Character> ListOfEveryCharacter;
-    private Queue<Character> TurnQueue;
     private Character FocusedCharacter;
     private Player P1;
     private Player P2;
@@ -32,7 +26,7 @@ public class Game
         P1 = Metadata.Player1Instance();
         P2 = Metadata.Player2Instance();
 
-        ConnectedBoard = new Board(BoardType.Mountainous);
+        ConnectedBoard = new Board(BoardType.Default);
 
         ConnectedControllerGUI = new ControllerGUI(this);
 
@@ -53,7 +47,7 @@ public class Game
     /// <returns></returns>
     public bool TurnIsOver()
     {
-        return Actions >= Global.ACTIONSPERTURN;
+        return Actions == Global.ActionsPerTurn;
     }
     /// <summary>
     /// Resets the actions taken to refresh the turn.
@@ -101,19 +95,20 @@ public class Game
     /// <param name="direction"></param>
     public void MoveCharacter(Character cha, Tile newTile)
     {
-        Tile t = cha.TILE_OF_ENTITY;
+        Tile t = cha.TileOfEntity;
+        ConnectedControllerGUI.RefreshTeamTextBox();
         ConnectedBoard.MoveEntity(cha, newTile);
         
         UpdateMainTextBoxes(cha);
-        ConnectedControllerGUI.AppendToGameLog(cha.NAME_OF_ENTITY +
-            " has moved from " + t.ToCoordinate() + " to " + cha.TILE_OF_ENTITY.ToCoordinate());
+        ConnectedControllerGUI.AppendToGameLog(cha.NameEmphasized() +
+            " has moved from " + t.ToPosition() + " to " + cha.TileOfEntity.ToPosition());
         CheckForTargetableEntities(cha);
-
-
-        string str = ControllerManager.AuxiliaryText(cha);
+        
+        string str = AuxiliaryInputManager.AuxiliaryText(cha);
         
         ConnectedControllerGUI.RewriteAuxiliaryTextBox(str);
         ConnectedControllerGUI.RefreshTeamTextBox();
+        ConnectedControllerGUI.RewriteMainUnitInfo(cha);
 
         EndOfTurn();
     }
@@ -143,7 +138,10 @@ public class Game
         for (int i = 0; i < targets.Count; i++)
         {
             Entity k = targets[i];
-            ConnectedControllerGUI.AppendToGameLog(">>" + c.NAME_OF_ENTITY + " can target " + k.NAME_OF_ENTITY);
+            if (k != c)
+            {
+                ConnectedControllerGUI.AppendToGameLog(c.NameEmphasized() + " can target " + k.NameOfEntity);
+            }
         }
     }
     /// <summary>
@@ -153,10 +151,10 @@ public class Game
     public void Focus(Character c)
     {
         UpdateMainTextBoxes(c);
-        ConnectedControllerGUI.RewriteAuxiliaryTextBox(c.ToString() + " was selected.");
+        ConnectedControllerGUI.RewriteAuxiliaryTextBox(c.NameOfEntity + " was selected.");
         if (FocusedCharacter == null)
         {
-            ConnectedControllerGUI.AppendToGameLog(c.NAME_OF_ENTITY + " was selected.");
+            ConnectedControllerGUI.AppendToGameLog(c.NameEmphasized() + " was selected.");
         }
         UpdateLeadTextBoxes(null);
         ConnectedControllerGUI.RewriteMainUnitInfo(c);
@@ -184,13 +182,14 @@ public class Game
     {
         if (attacker == null || defender == null) { return; }
         ConnectedControllerGUI.RefreshTeamTextBox();
-        ConnectedControllerGUI.AppendToGameLog(attacker.NAME_OF_ENTITY + " attacked " + defender.NAME_OF_ENTITY);
+        ConnectedControllerGUI.AppendToGameLog(attacker.NameEmphasized() + " attacked " + defender.NameOfEntity);
 
         /// combat happens
         /// 
 
         CombatResult cr = CombatManager.Combat(attacker, defender, e);
 
+        if (defender.IsDead()) { attacker.GainExp(defender.Damage); }
         /// update result textbox
         /// 
         UpdateMainTextBoxes(attacker);
@@ -198,11 +197,10 @@ public class Game
         string s = FormatCombatString(attacker, defender, cr);
         ConnectedControllerGUI.RewriteAuxiliaryTextBox(s);
         ConnectedControllerGUI.AppendToGameLog(s);
-        if (defender.IsDead())
-        {
-            ConnectedControllerGUI.AppendToGameLog(defender.NAME_OF_ENTITY + " died.");
-        }
+        ConnectedControllerGUI.RefreshTeamTextBox();
+        ConnectedControllerGUI.RewriteMainUnitInfo(attacker);
         EndOfTurn();
+        if (defender.IsDead()) { ConnectedControllerGUI.AppendToGameLog(defender.NameOfEntity + " died."); }
     }
     /// <summary>
     /// Returns a formated string for output based on given input.
@@ -213,7 +211,7 @@ public class Game
     /// <returns></returns>
     private string FormatCombatString(Character m, Character l, CombatResult c)
     {
-        return m.NAME_OF_ENTITY + " used [ " + c.AttackUsed + " ] for [" + c.DamageDone + " ] damage.";
+        return m.NameOfEntity + " used [ " + c.AttackUsed + " ] for [" + c.DamageDone + " ] damage.";
     }
     /// <summary>
     /// Updates all the textboxes for the selected lead unit.
@@ -235,20 +233,28 @@ public class Game
         ConnectedControllerGUI.RewriteMainTileTextBox(cha);
         ConnectedControllerGUI.RewriteMainUnitStatusTextBox(cha);
     }
+    private void CheckForEndTurn()
+    {
+        if (TurnIsOver())
+        {
+            ConnectedControllerGUI.AppendToGameLog("End of turn.");
+        }
+    }
     /// <summary>
     /// Occurs at the end of every turn.
     /// </summary>
     public void EndOfTurn()
     {
-        ConnectedBoard.CycleThroughCharacters();
+        ConnectedBoard.UpdateCharacterState();
         UpdateAndRefreshGameGui();
         IncrementAction();
         Unfocus();
+        CheckForEndTurn();
     }
     /// <summary>
     /// Increases the action counter.
     /// </summary>
-    public void IncrementAction()
+    private void IncrementAction()
     {
         Actions++;
     }
@@ -260,7 +266,7 @@ public class Game
         Character c = FocusedCharacter;
         FocusedCharacter = null;
         if (c == null) { return; }
-        ConnectedControllerGUI.AppendToGameLog(c.NAME_OF_ENTITY + " was deselected.");
+        ConnectedControllerGUI.AppendToGameLog(c.NameEmphasized() + " was deselected.");
     }
     /// <summary>
     /// <see cref="Board.IsOccuableByEntity(Entity, Tile)"/>

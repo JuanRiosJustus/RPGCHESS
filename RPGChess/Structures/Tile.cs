@@ -47,7 +47,7 @@ public class Tile
         Row = row;
         Column = col;
         Height = height;
-        Coordinate = new Point(Global.MULTIPLIER * Column, Global.MULTIPLIER * Row);
+        Coordinate = new Point(Global.TileSize * Column, Global.TileSize * Row);
         SetHeight(height);
     }
     /// <summary>
@@ -58,48 +58,47 @@ public class Tile
         if (Height <= -3)
         {
             // Water
-            BiomeSHORT = "WTR";
-            BiomeLONG = "water";
+            BiomeSHORT = "DWTR";
+            BiomeLONG = "deepwater";
         }
         else if (Height > -3 && Height <= -1)
         {
             // Swanp
-            BiomeSHORT = "SWP";
-            BiomeLONG = "swamp";
+            BiomeSHORT = "SWTR";
+            BiomeLONG = "shallowwater";
         }
         else if (Height > -1 && Height <= 1)
         {
             // Plains
-            BiomeSHORT = "PLN";
-            BiomeLONG = "plain";
+            BiomeSHORT = "SAND";
+            BiomeLONG = "sand";
         }
-        else if (Height > 1 && Height <= 3)
+        else if (Height > 1 && Height <= 4)
         {
             // Forest
-            BiomeSHORT = "FRS";
+            BiomeSHORT = "FRST";
             BiomeLONG = "forest";
         }
-        else if (Height > 3 && Height <= 5)
+        else if (Height > 4 && Height <= 6)
         {
             // Hill
-            BiomeSHORT = "HLL";
+            BiomeSHORT = "HILL";
             BiomeLONG = "hill";
         }
-        else if (Height > 5)
+        else
         {
             // Mountain
-            BiomeSHORT = "MTN";
+            BiomeSHORT = "MOTN";
             BiomeLONG = "mountain";
         }
     }
     /// <summary>
     /// Sets the association with the tile and given entity with one another.
     /// </summary>
-    /// <param name="occupant">The entity to be associated with the tile.</param>
     public void SetOccupant(Entity occupant)
     {
         Occupant = occupant;
-        if (Object.ReferenceEquals(Occupant.TILE_OF_ENTITY, this) == false)
+        if (Object.ReferenceEquals(Occupant.TileOfEntity, this) == false)
         {
             Occupant.SetTile(this);
         }
@@ -114,7 +113,6 @@ public class Tile
     /// <summary>
     /// Sets the height for the tile.
     /// </summary>
-    /// <param name="height">The height to repsect when adjusting the height.</param>
     public void SetHeight(int height)
     {
         Height = height;
@@ -122,9 +120,8 @@ public class Tile
         TileImage = ImageManager.DetermineBiomeImage(BiomeLONG);
     }
     /// <summary>
-    /// Returns a boolean value based on the current affiliation the tile has with an entity.
+    /// Returns a boolean value based on value of the current occupant.
     /// </summary>
-    /// <returns></returns>
     public bool IsOccupied()
     {
         return Occupant != null;
@@ -132,8 +129,7 @@ public class Tile
     /// <summary>
     /// Returns the string representation of the coordinate for this tile.
     /// </summary>
-    /// <returns></returns>
-    public string ToCoordinate()
+    public string ToPosition()
     {
         return "[" + Column + "," + Row + "]";
     }
@@ -148,16 +144,13 @@ public class Tile
     /// <summary>
     /// Returns the coordinate position of the given tile.
     /// </summary>
-    /// <returns></returns>
     public override string ToString()
     {
-        return ToCoordinate();
+        return ToPosition();
     }
     /// <summary>
     /// Determines if this tile is equivalent to the given tile.
-    /// </summary>
-    /// <param name="t"></param>
-    /// <returns></returns>
+    /// </summary>=
     public bool Equals(Tile t)
     {
         return t.Row == Row && t.Column == Column;
@@ -166,8 +159,6 @@ public class Tile
     /// Determines if the given tile is related to the given tiles 
     /// where both should return true if done on one another.
     /// </summary>
-    /// <param name="t">tile to check.</param>
-    /// <returns></returns>
     public bool IsRelative(Tile t)
     {
         if (Row == t.Row + 1 || Row == t.Row || Row == t.Row - 1)
@@ -182,8 +173,6 @@ public class Tile
     /// <summary>
     /// returns the distance between the tile and the given tile.
     /// </summary>
-    /// <param name="t">tile to get to.</param>
-    /// <returns></returns>
     public int DistanceFrom(Tile t)
     {
         return (int)Math.Sqrt(((Row - t.Row) * 2) + ((Column - t.Column) * 2));

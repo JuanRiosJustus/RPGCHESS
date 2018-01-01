@@ -2,10 +2,10 @@
 
 public class Item
 {
-    public static readonly Item ARCHMAGES_STAFF = new Item("Archmage's Staff", Archetype.MAGE, 0, 0, 0, 0, 0);
-    public static readonly Item ARTYOMS_TRUEBLADE = new Item("Artyom's Trueblade", Archetype.WARRIOR, 0, 0, 0, 0, 0);
-    public static readonly Item AEGIS_OF_APOLLO = new Item("Aegis of Apollo", Archetype.GENERIC, 0, 0, 0, 0, 0);
-    public static readonly Item SAVANTES_RING = new Item("Savante's Ring", Archetype.GENERIC, 0, 0, 0, 0, 0);
+    public static readonly Item ARCHMAGES_STAFF = new Item("Archmage's Staff", Archetype.Magician, 0, 0, 0, 0, 0);
+    public static readonly Item ARTYOMS_TRUEBLADE = new Item("Artyom's Trueblade", Archetype.Fighter, 0, 0, 0, 0, 0);
+    public static readonly Item AEGIS_OF_APOLLO = new Item("Aegis of Apollo", Archetype.Generic, 0, 0, 0, 0, 0);
+    public static readonly Item SAVANTES_RING = new Item("Savante's Ring", Archetype.Generic, 0, 0, 0, 0, 0);
 
     private readonly string NAME;
     private readonly Archetype REQUIRED_CLASS;
@@ -38,7 +38,7 @@ public class Item
     }
 
     public string Name { get { return NAME; } }
-    public string Type { get { return REQUIRED_CLASS.NAME; } }
+    public string Type { get { return REQUIRED_CLASS.Name; } }
     public int Movement { get { return MOVEMENT; } }
     public int Health { get { return HEALTH; } }
     public int Resist { get { return RESIST; } }

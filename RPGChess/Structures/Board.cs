@@ -49,35 +49,33 @@ public class Board
             default: Default(); break;
         }
     }
+    public Tile[,] GetUnderlyingMap()
+    {
+        return Map;
+    }
     /// <summary>
     /// Cycles through all characters of the baord.
     /// </summary>
-    public void CycleThroughCharacters()
+    public void UpdateCharacterState()
     {
         for (int i = 0; i < ListOfEveryEntity.Count; i++)
         {
             Character cur = (Character)ListOfEveryEntity[i];
-            CheckToRegen(cur);
-            CheckForDeath(cur);
+            cur.RegenHealth();
+            IsDead(cur);
+            // ambient exp gain
+            cur.GainExp(NumGenerator.Next(cur.Level + 1));
+            cur.GainMana();
         }
-    }
-    /// <summary>
-    /// Increases the amount of current health of the character.
-    /// </summary>
-    /// <param name="c"></param>
-    /// <returns></returns>
-    public int CheckToRegen(Character c)
-    {
-        return c.RegenHealth();
     }
     /// <summary>
     /// Checks the boards if any characters are below 0 health. If so, remove all references.
     /// </summary>
-    public bool CheckForDeath(Character cha)
+    private bool IsDead(Character cha)
     {
-        if (cha.HEALTH <= 0)
+        if (cha.Health <= 0)
         {
-            Tile t = cha.TILE_OF_ENTITY;
+            Tile t = cha.TileOfEntity;
             t.RemoveOccupant();
             ListOfEveryEntity.Remove(cha);
             Metadata.Player1Instance().RemoveCharater(cha);
@@ -95,13 +93,17 @@ public class Board
     /// <returns></returns>
     public bool AddEntityToBoard(Entity ent, int row, int col)
     {
+        if (TileManager.IsInBounds(row,col) == false) { return false; }
         if (ListOfEveryEntity.Contains(ent) == false)
         {
             ListOfEveryEntity.Add(ent);
 
             Tile tile = Map[row, col];
 
-            // TODO
+            ent.SetTile(tile);
+
+            // assure we can travel
+            //List<Tile> moves = TileManager.GetOccuableTiles(Map, ent);
             while (tile.IsOccupied())
             {
                 row = NumGenerator.Next(Global.Rows);
@@ -109,7 +111,6 @@ public class Board
                 tile = Map[row, col];
             }
             
-            ent.SetTile(tile);
             return true;
         }
         return false;
@@ -122,7 +123,7 @@ public class Board
     public void MoveEntity(Entity ent, Tile newTile)
     {
         if (newTile == null || newTile.IsOccupied()) { return; }
-        Tile tile = ent.TILE_OF_ENTITY;
+        Tile tile = ent.TileOfEntity;
         tile.RemoveOccupant();
 
         ent.SetTile(newTile);
@@ -154,8 +155,7 @@ public class Board
     /// <returns></returns>
     public bool IsOccuableByEntity(Entity ent, Tile newTile)
     {
-        //TileManager.GetOccuableTiles(Map, ent);
-        List<Tile> occuableTiles = TileManager.OccuableTiles(Map, ent);
+        List<Tile> occuableTiles = PathManager.BasicPath2(Map, ent);
         return occuableTiles.Contains(newTile);
     }
     /// <summary>
@@ -165,8 +165,7 @@ public class Board
     /// <returns></returns>
     public List<Tile> GetOccuableTilesFromEntity(Entity ent)
     {
-        // TileManager.OccuableTiles(Map, ent);
-        return TileManager.OccuableTiles(Map, ent);
+        return PathManager.BasicPath2(Map, ent);
     }
     /// <summary>
     /// Checks if the first given entity can target the second passize entity.
@@ -176,9 +175,9 @@ public class Board
     /// <returns></returns>
     public bool IsTargetableByEntity(Entity active, Entity passive)
     {
-        Tile current = active.TILE_OF_ENTITY;
-        Tile to = passive.TILE_OF_ENTITY;
-        List<Entity> targets = TileManager.TargetableEntities(Map, active);
+        Tile current = active.TileOfEntity;
+        Tile to = passive.TileOfEntity;
+        List<Entity> targets = LineOfSightManager.TargetableEntities(Map, active);
         return targets.Contains(passive);
     }
     /// <summary>
@@ -190,7 +189,7 @@ public class Board
     /// <param name="intensity"></param>
     private void GenerateDevelopAt(int row, int col, int intensity)
     {
-        BoardDesigner.DevelopAt(Map, row, col, intensity);
+        TileManager.DevelopAt(Map, row, col, intensity);
     }
     /// <summary>
     /// Returns a list of targetable entities for the given entity
@@ -199,7 +198,7 @@ public class Board
     /// <returns></returns>
     public List<Entity> GetTargetableEntities(Entity ent)
     {
-        return TileManager.TargetableEntities(Map, ent);
+        return LineOfSightManager.TargetableEntities(Map, ent);
     }
     /// <summary>
     /// Generates a mountainous board.
@@ -207,7 +206,7 @@ public class Board
     private void Mountainous()
     {
         Random rand = new Random();
-        for (int i = 0; i < 500; i++)
+        for (int i = 0; i < 400; i++)
         {
             int col = rand.Next(Global.Columns);
             int row = rand.Next(Global.Rows);
@@ -222,6 +221,7 @@ public class Board
             int z = rand.Next(-4, 0);
             GenerateDevelopAt(row, col, z);
         }
+        Quartify(-4);
     }
     /// <summary>
     /// Generates the defualt style board.
@@ -233,7 +233,7 @@ public class Board
         {
             int col = rand.Next(Global.Columns);
             int row = rand.Next(Global.Rows);
-            int z = rand.Next(-3, 0);
+            int z = rand.Next(-4, 0);
             GenerateDevelopAt(row, col, z);
         }
 
@@ -244,6 +244,7 @@ public class Board
             int z = rand.Next(8);
             GenerateDevelopAt(row, col, z);
         }
+        Quartify(2);
     }
     /// <summary>
     /// Generates a oceanic board.
@@ -251,7 +252,7 @@ public class Board
     private void Oceanic()
     {
         Random rand = new Random();
-        for (int i = 0; i < 500; i++)
+        for (int i = 0; i < 400; i++)
         {
             int col = rand.Next(Global.Columns);
             int row = rand.Next(Global.Rows);
@@ -265,6 +266,21 @@ public class Board
             int row = rand.Next(Global.Rows);
             int z = rand.Next(8);
             GenerateDevelopAt(row, col, z);
+        }
+        Quartify(3);
+    }
+    /// <summary>
+    /// Divides the board into four sections.
+    /// </summary>
+    public void Quartify(int val)
+    {
+        for (int row = 0; row < Global.Rows; row++)
+        {
+            GenerateDevelopAt(row, Global.Columns / 2, val);
+        }
+        for (int col = 0; col < Global.Columns; col++)
+        {
+            GenerateDevelopAt(Global.Rows/2, col, val);
         }
     }
 }
