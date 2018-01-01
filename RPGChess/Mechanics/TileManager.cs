@@ -51,8 +51,8 @@ public class TileManager
             for (int col = tile.Column - 1; col <= tile.Column + 1; col++)
             {
                 // get the tile.
-                int realrow = WrapNumber(row, Global.ROWS);
-                int realcol = WrapNumber(col, Global.COLUMNS);
+                int realrow = WrapNumber(row, Global.Rows);
+                int realcol = WrapNumber(col, Global.Columns);
                 Tile t = map[realrow, realcol];
 
                 if (IsNeighbor(tile, t) == false) { continue; }
@@ -69,8 +69,8 @@ public class TileManager
             for (int col = a.Column - 1; col <= a.Column + 1; col++)
             {
                 // get the tile.
-                int realrow = WrapNumber(row, Global.ROWS);
-                int realcol = WrapNumber(col, Global.COLUMNS);
+                int realrow = WrapNumber(row, Global.Rows);
+                int realcol = WrapNumber(col, Global.Columns);
                 
                 if (realcol == b.Column || realrow == b.Row) { return true; }
             }
@@ -111,8 +111,8 @@ public class TileManager
         List<Tile> result = new List<Tile>();
         Queue<Tile> visiting = new Queue<Tile>();
         HashSet<Tile> visited = new HashSet<Tile>();
-        Tile start = ent.TILE_OF_ENTITY;
-        visiting.Enqueue(ent.TILE_OF_ENTITY);
+        Tile start = ent.TileOfEntity;
+        visiting.Enqueue(ent.TileOfEntity);
 
         while (visiting.Count > 0)
         {
@@ -132,8 +132,8 @@ public class TileManager
                 for (int col = tile.Column - 1; col <= tile.Column + 1; col++)
                 {
                     // get the tile.
-                    int realrow = WrapNumber(row, Global.ROWS);
-                    int realcol = WrapNumber(col, Global.COLUMNS);
+                    int realrow = WrapNumber(row, Global.Rows);
+                    int realcol = WrapNumber(col, Global.Columns);
                     Tile t = map[realrow, realcol];
 
                     // add relative to queue.
@@ -142,6 +142,59 @@ public class TileManager
             }
         }
         return result;
+    }
+    /// <summary>
+    /// Develops the hight arount a certain cordinate on a given map.
+    /// </summary>
+    public static void DevelopAt(Tile[,] map, int row, int col, int intensity)
+    {
+        bool aboveBottomEdge = false, belowTopEdge = false, leftOfRightEdge = false, rightOfLeftEdge = false;
+        map[row, col].SetHeight(map[row, col].Height + intensity);
+        // Check to top and bottom bounds
+        if (row > 0)
+        {
+            map[row - 1, col].SetHeight(map[row - 1, col].Height + intensity / 2);
+            belowTopEdge = true;
+        }
+        if (row < map.GetLength(0) - 1)
+        {
+            map[row + 1, col].SetHeight(map[row + 1, col].Height + intensity / 2);
+            aboveBottomEdge = true;
+        }
+        // Check the right and left bounds.
+        if (col > 0)
+        {
+            map[row, col - 1].SetHeight(map[row, col - 1].Height + intensity / 2);
+            rightOfLeftEdge = true;
+        }
+        if (col < map.GetLength(1) - 1)
+        {
+            map[row, col + 1].SetHeight(map[row, col + 1].Height + intensity / 2);
+            leftOfRightEdge = true;
+        }
+
+        if (aboveBottomEdge)
+        {
+            if (leftOfRightEdge && col > 0)
+            {
+                map[row + 1, col - 1].SetHeight(map[row + 1, col - 1].Height + intensity / 2);
+            }
+            if (rightOfLeftEdge && col < map.GetLength(1) - 1)
+            {
+                map[row + 1, col + 1].SetHeight(map[row + 1, col + 1].Height + intensity / 2);
+            }
+        }
+        if (belowTopEdge)
+        {
+            if (leftOfRightEdge && row > 0)
+            {
+                map[row - 1, col + 1].SetHeight(map[row - 1, col + 1].Height + intensity / 2);
+            }
+            if (rightOfLeftEdge && row < map.GetLength(0) - 1)
+            {
+                map[row - 1, col - 1].SetHeight(map[row - 1, col - 1].Height + intensity / 2);
+            }
+        }
     }
     /// <summary>
     /// Checks to see if the given entity can potentially move to the given tile
@@ -153,14 +206,14 @@ public class TileManager
     public static bool IsInMovementRange(Tile[,] map, Tile to, Entity ent)
     {
         Character c = (Character)ent;
-        Tile from = c.TILE_OF_ENTITY;
-        int cMove = c.CLASS_OF_ENTITY.MOVEMENT;
+        Tile from = c.TileOfEntity;
+        int cMove = c.ClassOfEntity.Movement;
 
         for (int row = from.Row - cMove; row <= from.Row + cMove; row++)
         {
             for (int col = from.Column - cMove; col <= from.Column + cMove; col++)
             {
-                Tile current = map[WrapNumber(row, Global.ROWS), WrapNumber(col, Global.COLUMNS)];
+                Tile current = map[WrapNumber(row, Global.Rows), WrapNumber(col, Global.Columns)];
 
                 if (to == current)
                 {
@@ -180,15 +233,15 @@ public class TileManager
     {
         List<Tile> tiles = new List<Tile>();
         Character c = (Character)ent;
-        Tile from = c.TILE_OF_ENTITY;
-        int cMove = c.CLASS_OF_ENTITY.MOVEMENT;
+        Tile from = c.TileOfEntity;
+        int cMove = c.ClassOfEntity.Movement;
         // check row and column
 
         for (int row = from.Row - cMove; row <= from.Row + cMove; row++)
         {
             for (int col = from.Column - cMove; col <= from.Column + cMove; col++)
             {
-                Tile current = map[WrapNumber(row, Global.ROWS), WrapNumber(col, Global.COLUMNS)];
+                Tile current = map[WrapNumber(row, Global.Rows), WrapNumber(col, Global.Columns)];
                 tiles.Add(current);
             }
         }
@@ -226,7 +279,7 @@ public class TileManager
     /// <returns></returns>
     public static bool IsInHeight(Tile from, Tile to)
     {
-        if (to.Height <= from.Height + Global.AHTI) { return true; }
+        if (to.Height <= from.Height + Global.AttackableHeightPerTurn) { return true; }
         return false;
     }
     /// <summary>
@@ -249,6 +302,6 @@ public class TileManager
     /// <returns></returns>
     public static bool IsInBounds(int row, int col)
     {
-        return (row >= 0 && row < Global.ROWS && col >= 0 && col < Global.COLUMNS);
+        return (row >= 0 && row < Global.Rows && col >= 0 && col < Global.Columns);
     }
 }

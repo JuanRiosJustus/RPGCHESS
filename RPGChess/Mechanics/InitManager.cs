@@ -44,7 +44,7 @@ public class InitManager
         {
             for (int i = 0; i < plyer.TeamSize(); i++)
             {
-                if (i == Global.TEAMSIZE) { break; }
+                if (i == Global.TeamSize) { break; }
                 Character c = plyer.GetCharacterFromTeam(i);
                 b.AddEntityToBoard(c, 5 + (i * Global.TEAMSPACING), col);
             }
@@ -81,7 +81,7 @@ public class InitManager
     /// <param name="col"></param>
     private static void SetUpGenerics(Board b, Player plyr, int col)
     {
-        for (int i = 0; i < Global.TEAMSIZE+1; i++)
+        for (int i = 0; i < Global.TeamSize+1; i++)
         {
             Character c = EntityFactory.BuildCharacter("Pawn " + (i + 1), "generic", plyr.RELATION);
             plyr.AddCharacterToTeam(c);

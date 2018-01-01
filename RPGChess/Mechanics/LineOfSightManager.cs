@@ -16,15 +16,15 @@ public class LineOfSightManager
     {
         List<Entity> targetableEntities = new List<Entity>();
 
-        int range = ent.CLASS_OF_ENTITY.RANGE;
-        Tile currentTile = ent.TILE_OF_ENTITY;
+        int range = ent.ClassOfEntity.Range;
+        Tile currentTile = ent.TileOfEntity;
 
         for (int row = currentTile.Row - range; row <= currentTile.Row + range; row++)
         {
             for (int col = currentTile.Column - range; col <= currentTile.Column + range; col++)
             {
-                int realrow = TileManager.WrapNumber(row, Global.ROWS);
-                int realcol = TileManager.WrapNumber(col, Global.COLUMNS);
+                int realrow = TileManager.WrapNumber(row, Global.Rows);
+                int realcol = TileManager.WrapNumber(col, Global.Columns);
                 Tile t = map[realrow, realcol];
 
                 if (t.IsOccupied() == false)

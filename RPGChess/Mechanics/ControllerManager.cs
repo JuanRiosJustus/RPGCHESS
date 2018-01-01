@@ -8,10 +8,11 @@ public class AuxiliaryInputManager
 {
     public static string AuxiliaryText(Character cha)
     {
-        if (cha.LEVEL < Global.LEVELFORULTIMATE)
+        if (cha.Mana < cha.ClassOfEntity.Ultimate.Mana)
         {
-            string str = cha.CLASS_OF_ENTITY.ULTIMATE.MANA + " mana needed to use ultimate after level 4.";
-            return cha.EXPGAINED + " experience was gained. " + str;
+            int diff = cha.ClassOfEntity.Ultimate.Mana - cha.Mana;
+            string str = diff + " mana needed till ultimate.";
+            return cha.ExpGained + " experience was gained. " + str;
         }
         return "Ha";
     }

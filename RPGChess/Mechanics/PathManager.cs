@@ -20,14 +20,14 @@ public class PathManager
         List<Tile> result = new List<Tile>();
         Queue<Tile> visiting = new Queue<Tile>();
         HashSet<Tile> visited = new HashSet<Tile>();
-        Tile start = ent.TILE_OF_ENTITY;
-        visiting.Enqueue(ent.TILE_OF_ENTITY);
+        Tile start = ent.TileOfEntity;
+        visiting.Enqueue(ent.TileOfEntity);
         visiting.Enqueue(null);
         int bounds = 0;
         while (visiting.Count > 0)
         {
             Tile tile = visiting.Dequeue();
-            if (bounds == ent.CLASS_OF_ENTITY.MOVEMENT + 1) { continue; }
+            if (bounds == ent.ClassOfEntity.Movement + 1) { continue; }
             if (tile == null) { visiting.Enqueue(null); bounds++; continue; }
             if (visited.Contains(tile)) { continue; }
             if (TileManager.IsInHeight(start, tile) == false) { continue; }
@@ -42,8 +42,8 @@ public class PathManager
                 for (int col = tile.Column - 1; col <= tile.Column + 1; col++)
                 {
                     // get the tile.
-                    int realrow = TileManager.WrapNumber(row, Global.ROWS);
-                    int realcol = TileManager.WrapNumber(col, Global.COLUMNS);
+                    int realrow = TileManager.WrapNumber(row, Global.Rows);
+                    int realcol = TileManager.WrapNumber(col, Global.Columns);
                     Tile t = map[realrow, realcol];
                     if (TileManager.IsInHeight(tile, t, 2) == false) { continue; }
                     // add relative to queue.
@@ -66,17 +66,17 @@ public class PathManager
         Queue<Tile> toVisit = new Queue<Tile>();
         HashSet<Tile> visited = new HashSet<Tile>();
 
-        Tile tile = map[ent.TILE_OF_ENTITY.Row, ent.TILE_OF_ENTITY.Column];
+        Tile tile = map[ent.TileOfEntity.Row, ent.TileOfEntity.Column];
         toVisit.Enqueue(tile);
 
         int row = tile.Row;
         int col = tile.Column;
         int ogrow = row;
         int ogcol = col;
-        int moves = TileManager.AvailableSteps(ent.CLASS_OF_ENTITY.MOVEMENT, 1);
-        int max = ent.CLASS_OF_ENTITY.MOVEMENT;
+        int moves = TileManager.AvailableSteps(ent.ClassOfEntity.Movement, 1);
+        int max = ent.ClassOfEntity.Movement;
 
-        int maximumHeight = ent.TILE_OF_ENTITY.Height + Global.AHMI;
+        int maximumHeight = ent.TileOfEntity.Height + Global.HeightIncreasePerTurn;
 
         // traverse tiles
         while (toVisit.Count > 0 && moves > 0)
@@ -87,7 +87,7 @@ public class PathManager
             // List of rules for skipping a particular tile.
 
             /********** RULES FOR BEING ABLE TO OCCUPY A TILES **********/
-            if (visited.Contains(tile) || tile.Height - ent.TILE_OF_ENTITY.Height > Global.AHMI)
+            if (visited.Contains(tile) || tile.Height - ent.TileOfEntity.Height > Global.HeightIncreasePerTurn)
             {
                 continue;
             }
@@ -123,7 +123,7 @@ public class PathManager
                 }
                 above = true;
             }
-            if (row < Global.ROWS - 1)
+            if (row < Global.Rows - 1)
             {
                 if (visited.Contains(map[row + 1, col]) == false)
                 {
@@ -146,7 +146,7 @@ public class PathManager
                 }
                 left = true;
             }
-            if (col < Global.COLUMNS - 1)
+            if (col < Global.Columns - 1)
             {
                 if (visited.Contains(map[row, col + 1]) == false)
                 {
@@ -170,7 +170,7 @@ public class PathManager
                         }
                     }
                 }
-                if (left && col < Global.COLUMNS - 1)
+                if (left && col < Global.Columns - 1)
                 {
                     if (visited.Contains(map[row + 1, col + 1]) == false)
                     {
@@ -193,7 +193,7 @@ public class PathManager
                         }
                     }
                 }
-                if (left && row < Global.ROWS - 1)
+                if (left && row < Global.Rows - 1)
                 {
                     if (visited.Contains(map[row - 1, col - 1]) == false)
                     {

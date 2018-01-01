@@ -1,4 +1,6 @@
-﻿
+﻿/// <summary>
+/// Defines the results of combat.
+/// </summary>
 public class CombatResult
 {
     public readonly int DamageDone;
