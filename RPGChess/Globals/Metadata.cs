@@ -7,72 +7,65 @@
 /// </summary>
 public class Metadata
 {
-    static Metadata()
+    private Player LocalPlayer;
+    private Player RemotePlayer;
+    private bool _IsSurvival;
+    private BoardType _TypeOfBoard;
+    private bool _IsLocalHost;
+    private Tile[,] map;
+    
+    public Metadata()
     {
-        
+        LocalPlayer = new Player(Relation.Friend);
+        RemotePlayer = new Player(Relation.Foe);
+        _IsSurvival = true;
+        _IsLocalHost = false;
     }
+    public bool IsSurvival { get { return _IsSurvival; } set { _IsSurvival = value; } }
+    public Player GetLocalPlayer { get { return LocalPlayer; } }
+    public Player GetRemotePlayer { get { return RemotePlayer; } }
+    public BoardType TypeOfBoard { get { return _TypeOfBoard; } set { _TypeOfBoard = value; } }
 
-    private static Player Player1 = null;
-    private static Player Player2 = null;
-    private static Boolean Localhost = false;
-
-    /// <summary>
-    ///  Resets the meta data.
-    /// </summary>
-    public static void ResetMetadata()
+    public void AddCharactorToLocalPlayer(Character c)
     {
-        if (Player1 != null)
-        {
-            Player1 = null;
-        }
-        if (Player2 != null)
-        {
-            Player2 = null;
-        }
-        Localhost = false;
+        LocalPlayer.AddCharacterToTeam(c);
     }
     /// <summary>
-    /// Returns the instance of player 1 / this player.
+    /// Sets the map.
     /// </summary>
-    /// <returns></returns>
-    public static Player Player1Instance()
-    {
-        if (Player1 == null)
-        {
-            Player1 = new Player(Relation.Friend);
-            Console.WriteLine("Player one was created");
-        }
-        return Player1;
-    }
+    public Tile[,] MAP { get { return map; } set { map = value; } }
     /// <summary>
-    /// Returns the instance of player 2 / opposing player.
+    /// Adds a character to the remote plater.
     /// </summary>
-    /// <returns></returns>
-    public static Player Player2Instance()
-    {
-        if (Player2 == null)
-        {
-            Player2 = new Player(Relation.Foe);
-            Console.WriteLine("Player one was created");
-        }
-        return Player2;
-    }
+    public void AddCharactorToRemotePlayer(Character c) { RemotePlayer.AddCharacterToTeam(c); }
     /// <summary>
-    /// Sets the value depending on whether the host is local or not.
+    /// Gets or sets the port of the remote player.
     /// </summary>
-    /// <param name="isHost"></param>
-    public static void IsLocalHost(bool isHost)
-    {
-        Localhost = isHost;
-    }
+    public int RemotePlayerPort { get { return RemotePlayer.Port; } set { RemotePlayer.Port = value; } }
     /// <summary>
-    /// Returns the host statis of local pc.
+    /// Gets or sets the port of the local player.
     /// </summary>
-    /// <returns></returns>
-    public static bool IsLocalHost()
-    {
-        return Localhost;
-    }
+    public int LocalPlayerPort { get { return LocalPlayer.Port; } set { LocalPlayer.Port = value; } }
+    /// <summary>
+    /// Gets or sets the local host of remote player 
+    /// </summary>
+    public bool IsLocalHost { get { return _IsLocalHost; } set { _IsLocalHost = value; } }
+    /// <summary>
+    /// Gets or sets the local player name.
+    /// </summary>
+    public string LocalPlayerName { get { return LocalPlayer.Name; } set { LocalPlayer.Name = value; } }
+    /// <summary>
+    /// Gets or sets the remote player name.
+    /// </summary>
+    public string RemotePlayerName { get { return RemotePlayer.Name; } set { RemotePlayer.Name = value; } }
+    /// <summary>
+    /// Gets or sets the ip of the remote player.
+    /// </summary>
+    public string RemotePlayerIP { get { return RemotePlayer.IP; } set { RemotePlayer.IP = value; } }
+    /// <summary>
+    /// Gets or sets the ip of the local player.
+    /// </summary>
+    public string LocalPlayerIP { get { return LocalPlayer.IP; } set { LocalPlayer.IP = value; } }
     /// <summary>
     /// Returns the current time represented by a string.
     /// </summary>
