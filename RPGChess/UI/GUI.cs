@@ -29,21 +29,13 @@ public partial class GUI : Form
         p2.AddCharacterToTeam(EntityFactory.BuildCharacter("Wrathlos", "Rogue", Relation.Foe));
         */
 
-        if (Lobby == null && Board == null)
+        if (Lobby == null)
         {
             Hide();
-            Lobby = new LobbyGUI();
+            Lobby = new LobbyGUI(Data);
             Lobby.Closed += (s, args) =>
             {
-                Board = new GameGUI();
-                Board.Closed += (s1, args1) =>
-                {
-                    Lobby = null;
-                    Board = null;
-                    Metadata.ResetMetadata();
-                    Show();
-                };
-                Board.Show();
+                this.Show();
             };
             Lobby.Show();
         }
