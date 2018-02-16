@@ -13,12 +13,7 @@ namespace RPGChess
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new GameGUI());
-            //Application.Run(new ControllerGUI());
-
-            
-            //BoardStart();
-            Console.ReadKey();
+            Application.Run(new GUI());
         }
     }
 }
